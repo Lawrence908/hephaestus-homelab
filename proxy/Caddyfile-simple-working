@@ -1,0 +1,4 @@
+# Simple Caddyfile that should work
+:80 {
+    reverse_proxy portainer:9000
+}

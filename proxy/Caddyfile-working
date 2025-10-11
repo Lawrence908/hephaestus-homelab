@@ -1,0 +1,59 @@
+# Simple working Caddyfile with password protection
+{
+    admin off
+    auto_https off
+    http_port 80
+}
+
+# Portainer with basic auth
+portainer.hephaestus.chrislawrence.ca {
+    basicauth {
+        admin $2a$14$CwYPyc/eyU1IQSZvLGya3u5yAw6W7R5xI6K1P3D5z8H9J2L4M6N8P0
+    }
+    reverse_proxy portainer:9000
+}
+
+# Grafana with basic auth
+grafana.hephaestus.chrislawrence.ca {
+    basicauth {
+        admin $2a$14$CwYPyc/eyU1IQSZvLGya3u5yAw6W7R5xI6K1P3D5z8H9J2L4M6N8P0
+    }
+    reverse_proxy grafana:3000
+}
+
+# Uptime Kuma with basic auth
+uptime.hephaestus.chrislawrence.ca {
+    basicauth {
+        admin $2a$14$CwYPyc/eyU1IQSZvLGya3u5yAw6W7R5xI6K1P3D5z8H9J2L4M6N8P0
+    }
+    reverse_proxy uptime-kuma:3001
+}
+
+# Prometheus with basic auth
+prometheus.hephaestus.chrislawrence.ca {
+    basicauth {
+        admin $2a$14$CwYPyc/eyU1IQSZvLGya3u5yAw6W7R5xI6K1P3D5z8H9J2L4M6N8P0
+    }
+    reverse_proxy prometheus:9090
+}
+
+# cAdvisor with basic auth
+cadvisor.hephaestus.chrislawrence.ca {
+    basicauth {
+        admin $2a$14$CwYPyc/eyU1IQSZvLGya3u5yAw6W7R5xI6K1P3D5z8H9J2L4M6N8P0
+    }
+    reverse_proxy cadvisor:8080
+}
+
+# Glances with basic auth
+glances.hephaestus.chrislawrence.ca {
+    basicauth {
+        admin $2a$14$CwYPyc/eyU1IQSZvLGya3u5yAw6W7R5xI6K1P3D5z8H9J2L4M6N8P0
+    }
+    reverse_proxy glances:61208
+}
+
+# Default redirect
+hephaestus.chrislawrence.ca {
+    redir https://portainer.hephaestus.chrislawrence.ca permanent
+}
