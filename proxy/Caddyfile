@@ -8,11 +8,11 @@
     http_port 80
 }
 
-# Portainer - Docker management
+# Default route - Portainer (when accessing via IP or main domain)
 :80 {
     # Basic authentication for all services
     basic_auth {
-        admin $2a$14$UjGJMl2JVJxMzuczdbLGduQP4PFH8JulwH7CJXGHzpxE70f7N/xlu
+        admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
     }
     
     # Route to Portainer by default
@@ -27,47 +27,58 @@
     }
 }
 
-# Alternative: If you want separate subdomains for each service
-# (Uncomment and configure Cloudflare routes if needed)
+# Main domain - Portainer
+hephaestus.chrislawrence.ca {
+    basic_auth {
+        admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
+    }
+    reverse_proxy portainer:9000
+}
 
-# portainer.hephaestus.chrislawrence.ca {
-#     basic_auth {
-#         admin $2a$14$CwYPyc/eyU1IQSZvLGya3u5yAw6W7R5xI6K1P3D5z8H9J2L4M6N8P0
-#     }
-#     reverse_proxy portainer:9000
-# }
+# Portainer subdomain
+portainer.hephaestus.chrislawrence.ca {
+    basic_auth {
+        admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
+    }
+    reverse_proxy portainer:9000
+}
 
-# grafana.hephaestus.chrislawrence.ca {
-#     basic_auth {
-#         admin $2a$14$CwYPyc/eyU1IQSZvLGya3u5yAw6W7R5xI6K1P3D5z8H9J2L4M6N8P0
-#     }
-#     reverse_proxy grafana:3000
-# }
+# Grafana - Metrics dashboard
+grafana.hephaestus.chrislawrence.ca {
+    basic_auth {
+        admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
+    }
+    reverse_proxy grafana:3000
+}
 
-# uptime.hephaestus.chrislawrence.ca {
-#     basic_auth {
-#         admin $2a$14$CwYPyc/eyU1IQSZvLGya3u5yAw6W7R5xI6K1P3D5z8H9J2L4M6N8P0
-#     }
-#     reverse_proxy uptime-kuma:3001
-# }
+# Uptime Kuma - Monitoring
+uptime.hephaestus.chrislawrence.ca {
+    basic_auth {
+        admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
+    }
+    reverse_proxy uptime-kuma:3001
+}
 
-# prometheus.hephaestus.chrislawrence.ca {
-#     basic_auth {
-#         admin $2a$14$CwYPyc/eyU1IQSZvLGya3u5yAw6W7R5xI6K1P3D5z8H9J2L4M6N8P0
-#     }
-#     reverse_proxy prometheus:9090
-# }
+# Prometheus - Metrics collection
+prometheus.hephaestus.chrislawrence.ca {
+    basic_auth {
+        admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
+    }
+    reverse_proxy prometheus:9090
+}
 
-# cadvisor.hephaestus.chrislawrence.ca {
-#     basic_auth {
-#         admin $2a$14$CwYPyc/eyU1IQSZvLGya3u5yAw6W7R5xI6K1P3D5z8H9J2L4M6N8P0
-#     }
-#     reverse_proxy cadvisor:8080
-# }
+# cAdvisor - Container metrics
+cadvisor.hephaestus.chrislawrence.ca {
+    basic_auth {
+        admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
+    }
+    reverse_proxy cadvisor:8080
+}
 
-# glances.hephaestus.chrislawrence.ca {
-#     basic_auth {
-#         admin $2a$14$CwYPyc/eyU1IQSZvLGya3u5yAw6W7R5xI6K1P3D5z8H9J2L4M6N8P0
-#     }
-#     reverse_proxy glances:61208
-# }
+# Glances - System monitoring
+glances.hephaestus.chrislawrence.ca {
+    basic_auth {
+        admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
+    }
+    reverse_proxy glances:61208
+}
