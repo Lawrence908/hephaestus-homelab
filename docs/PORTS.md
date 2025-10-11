@@ -5,21 +5,21 @@ Complete port mapping and connectivity guide for Hephaestus homelab.
 ## 🌐 Network Architecture
 
 ```
-Internet → Cloudflare Tunnel → Caddy (Port 80) → Docker Services
+Internet → Cloudflare Tunnel → Docker Services (Direct)
 ```
+
+**Note**: Services are accessed directly via Cloudflare Tunnel, bypassing Caddy for simplified routing.
 
 ## 📊 Port Mapping Table
 
 | Service | Internal Port | External Access | Purpose | Status |
 |---------|--------------|-----------------|---------|--------|
-| **Caddy** | 80 | Via Cloudflare Tunnel | Reverse Proxy | 🟡 Pending |
-| **Caddy** | 443 | Via Cloudflare Tunnel | HTTPS Proxy | 🟡 Pending |
-| **Portainer** | 9000 | LAN Only | Docker Management | 🟡 Pending |
-| **Uptime Kuma** | 3001 | Via Caddy/Tunnel | Monitoring | 🟡 Pending |
-| **Grafana** | 3000 | Via Caddy/Tunnel | Metrics Dashboard | 🟡 Pending |
-| **Prometheus** | 9090 | Via Caddy/Tunnel | Metrics Collection | 🟡 Pending |
-| **Glances** | 61208 | LAN Only | System Monitor | 🟡 Pending |
-| **cAdvisor** | 8080 | LAN Only | Container Metrics | 🟡 Pending |
+| **Portainer** | 9000 | Via Cloudflare Tunnel | Docker Management | 🟢 Running |
+| **Uptime Kuma** | 3001 | Via Cloudflare Tunnel | Monitoring | 🟢 Running |
+| **Grafana** | 3000 | Via Cloudflare Tunnel | Metrics Dashboard | 🟢 Running |
+| **Prometheus** | 9090 | Via Cloudflare Tunnel | Metrics Collection | 🟢 Running |
+| **Glances** | 61208 | LAN Only | System Monitor | 🟢 Running |
+| **cAdvisor** | 8080 | LAN Only | Container Metrics | 🟢 Running |
 | **Node Exporter** | 9100 | LAN Only | Host Metrics | 🟡 Pending |
 
 Local on X2Go:
@@ -34,21 +34,32 @@ Glances (System monitoring) - http://10.0.0.252:61208
 
 | Application | Internal Port | External Access | Purpose | Status |
 |-------------|--------------|-----------------|---------|--------|
-| **Magic Pages API** | 8000 | Via Caddy/Tunnel | Django API | 🟡 Pending |
-| **CapitolScope** | 8001 | Via Caddy/Tunnel | FastAPI App | 🟡 Pending |
-| **SchedShare** | 8002 | Via Caddy/Tunnel | Flask App | 🟡 Pending |
-| **Portfolio** | 8003 | Via Caddy/Tunnel | Flask App | 🟡 Pending |
-| **Magic Pages Frontend** | 80 | Via Caddy/Tunnel | Static Site | 🟡 Pending |
+| **Magic Pages API** | 8000 | Via Cloudflare Tunnel | Django API | 🟡 Pending |
+| **Magic Pages Frontend** | 80 | Via Cloudflare Tunnel | Static Site | 🟡 Pending |
+| **Portfolio** | 8010 | Via Cloudflare Tunnel | Flask App | 🟡 Pending |
+| **CapitolScope** | 8020 | Via Cloudflare Tunnel | FastAPI App | 🟡 Pending |
+| **SchedShare** | 8030 | Via Cloudflare Tunnel | Flask App | 🟡 Pending |
+
+### 📋 Port Range Organization
+
+```
+8000-8009: Magic Pages ecosystem
+8010-8019: Portfolio & personal projects  
+8020-8029: CapitolScope & political tools
+8030-8039: SchedShare & scheduling tools
+8040-8049: Future services
+8050-8059: Development/testing
+```
 
 ## 🔒 Security Zones
 
 ### **Public Access (via Cloudflare Tunnel)**
 - All web applications
-- Monitoring dashboards (Grafana, Uptime Kuma)
+- Monitoring dashboards (Grafana, Uptime Kuma, Prometheus)
 - API endpoints
+- Portainer (Docker management)
 
 ### **LAN Only Access**
-- Portainer (Docker management)
 - Glances (system monitoring)
 - cAdvisor (container metrics)
 - Node Exporter (host metrics)
@@ -59,16 +70,16 @@ Glances (System monitoring) - http://10.0.0.252:61208
 
 ## 🌍 Domain Mapping
 
-| Domain | Service | Internal Target |
-|--------|---------|----------------|
-| `hephaestus.chrislawrence.ca` | Admin Panel | Portainer |
-| `portfolio.chrislawrence.ca` | Portfolio | Portfolio App |
-| `api.chrislawrence.ca` | API | Magic Pages API |
-| `capitolscope.chrislawrence.ca` | CapitolScope | CapitolScope App |
-| `schedshare.chrislawrence.ca` | SchedShare | SchedShare App |
-| `magicpages.chrislawrence.ca` | Frontend | Magic Pages Frontend |
-| `uptime.chrislawrence.ca` | Monitoring | Uptime Kuma |
-| `grafana.chrislawrence.ca` | Metrics | Grafana |
+| Domain | Service | Internal Target | Port |
+|--------|---------|----------------|------|
+| `hephaestus.chrislawrence.ca` | Admin Panel | Portainer | 9000 |
+| `uptime.chrislawrence.ca` | Monitoring | Uptime Kuma | 3001 |
+| `grafana.chrislawrence.ca` | Metrics | Grafana | 3000 |
+| `api.magicpages.chrislawrence.ca` | API | Magic Pages API | 8000 |
+| `magicpages.chrislawrence.ca` | Frontend | Magic Pages Frontend | 80 |
+| `portfolio.chrislawrence.ca` | Portfolio | Portfolio App | 8010 |
+| `capitolscope.chrislawrence.ca` | CapitolScope | CapitolScope App | 8020 |
+| `schedshare.chrislawrence.ca` | SchedShare | SchedShare App | 8030 |
 
 ## 🐳 Docker Network Configuration
 
@@ -109,10 +120,14 @@ docker exec caddy wget -O- http://uptime-kuma:3001
 ```bash
 # Test Cloudflare Tunnel
 curl -I https://hephaestus.chrislawrence.ca
+curl -I https://uptime.chrislawrence.ca
+curl -I https://grafana.chrislawrence.ca
 
-# Test application endpoints
+# Test application endpoints (when deployed)
 curl -I https://portfolio.chrislawrence.ca
-curl -I https://api.chrislawrence.ca/health
+curl -I https://api.magicpages.chrislawrence.ca/health
+curl -I https://capitolscope.chrislawrence.ca
+curl -I https://schedshare.chrislawrence.ca
 ```
 
 ## 🚨 Port Conflicts
@@ -210,17 +225,17 @@ nmap -p 80,443,3000,3001,9000,9090,61208 172.20.0.0/16
 ## 📋 Quick Reference
 
 ### **Essential Ports**
-- **80**: Caddy (HTTP)
-- **443**: Caddy (HTTPS)
 - **9000**: Portainer
 - **3001**: Uptime Kuma
 - **3000**: Grafana
+- **9090**: Prometheus
 
 ### **Application Ports**
 - **8000**: Magic Pages API
-- **8001**: CapitolScope
-- **8002**: SchedShare
-- **8003**: Portfolio
+- **80**: Magic Pages Frontend
+- **8010**: Portfolio
+- **8020**: CapitolScope
+- **8030**: SchedShare
 
 ### **Monitoring Ports**
 - **9090**: Prometheus
@@ -230,5 +245,29 @@ nmap -p 80,443,3000,3001,9000,9090,61208 172.20.0.0/16
 
 ---
 
-*Last Updated: $(date)*
-*Status: 🟡 Pending Setup*
+## 🔧 Cloudflare Tunnel Configuration
+
+### **Tunnel Details**
+- **Tunnel ID**: `7bbb8d12-6cf4-4556-8c5f-006fb7bab126`
+- **Tunnel Name**: `hephaestus-homelab`
+- **Config File**: `~/.cloudflared/config.yml`
+- **Credentials**: `~/.cloudflared/7bbb8d12-6cf4-4556-8c5f-006fb7bab126.json`
+
+### **Tunnel Management**
+```bash
+# Start tunnel manually (for testing)
+cloudflared tunnel run hephaestus-homelab
+
+# Install as system service
+sudo cloudflared service install
+sudo systemctl enable cloudflared
+sudo systemctl start cloudflared
+
+# Check tunnel status
+sudo systemctl status cloudflared
+```
+
+---
+
+*Last Updated: October 11, 2024*
+*Status: 🟢 Cloudflare Tunnel Active*
