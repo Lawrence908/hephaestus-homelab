@@ -1,0 +1,174 @@
+# Hephaestus Homelab - Caddy Configuration
+# Reverse proxy for all services with automatic HTTPS
+
+{
+    # Global options
+    email {$CLOUDFLARE_EMAIL}
+    
+    # Enable admin API
+    admin off
+}
+
+# ============================================================================
+# INFRASTRUCTURE SERVICES
+# ============================================================================
+
+portainer.{$DOMAIN} {
+    reverse_proxy portainer:9000
+    
+    log {
+        output file /data/logs/portainer.log {
+            roll_size 10mb
+            roll_keep 5
+        }
+    }
+}
+
+uptime.{$DOMAIN} {
+    reverse_proxy uptime-kuma:3001
+    
+    log {
+        output file /data/logs/uptime.log {
+            roll_size 10mb
+            roll_keep 5
+        }
+    }
+}
+
+grafana.{$DOMAIN} {
+    reverse_proxy grafana:3000
+    
+    log {
+        output file /data/logs/grafana.log {
+            roll_size 10mb
+            roll_keep 5
+        }
+    }
+}
+
+prometheus.{$DOMAIN} {
+    reverse_proxy prometheus:9090
+    
+    # Optional: Add basic auth for Prometheus
+    # basicauth {
+    #     admin $2a$14$...your-bcrypt-hash...
+    # }
+    
+    log {
+        output file /data/logs/prometheus.log {
+            roll_size 10mb
+            roll_keep 5
+        }
+    }
+}
+
+cadvisor.{$DOMAIN} {
+    reverse_proxy cadvisor:8080
+    
+    log {
+        output file /data/logs/cadvisor.log {
+            roll_size 10mb
+            roll_keep 5
+        }
+    }
+}
+
+glances.{$DOMAIN} {
+    reverse_proxy glances:61208
+    
+    log {
+        output file /data/logs/glances.log {
+            roll_size 10mb
+            roll_keep 5
+        }
+    }
+}
+
+# ============================================================================
+# APPLICATION SERVICES
+# ============================================================================
+
+# Magic Pages API
+api.magicpages.{$DOMAIN} {
+    reverse_proxy magic-pages-api:8000
+    
+    # CORS headers if needed
+    header {
+        Access-Control-Allow-Origin *
+        Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+        Access-Control-Allow-Headers "Content-Type, Authorization"
+    }
+    
+    log {
+        output file /data/logs/magic-pages-api.log {
+            roll_size 10mb
+            roll_keep 5
+        }
+    }
+}
+
+# CapitolScope
+capitolscope.{$DOMAIN} {
+    reverse_proxy capitolscope:8000
+    
+    log {
+        output file /data/logs/capitolscope.log {
+            roll_size 10mb
+            roll_keep 5
+        }
+    }
+}
+
+# SchedShare
+schedshare.{$DOMAIN} {
+    reverse_proxy schedshare:5000
+    
+    log {
+        output file /data/logs/schedshare.log {
+            roll_size 10mb
+            roll_keep 5
+        }
+    }
+}
+
+# Portfolio Site
+portfolio.{$DOMAIN} {
+    reverse_proxy portfolio:5000
+    
+    log {
+        output file /data/logs/portfolio.log {
+            roll_size 10mb
+            roll_keep 5
+        }
+    }
+}
+
+# Magic Pages Frontend (Static)
+magicpages.{$DOMAIN} {
+    reverse_proxy magic-pages-frontend:80
+    
+    # Enable compression for static assets
+    encode gzip zstd
+    
+    # Cache static assets
+    header {
+        Cache-Control "public, max-age=31536000"
+    }
+    
+    log {
+        output file /data/logs/magic-pages-frontend.log {
+            roll_size 10mb
+            roll_keep 5
+        }
+    }
+}
+
+# ============================================================================
+# DEFAULT / CATCH-ALL
+# ============================================================================
+
+# Default site - redirect to portfolio or a status page
+{$DOMAIN} {
+    redir https://portfolio.{$DOMAIN} permanent
+}
+

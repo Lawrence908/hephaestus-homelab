@@ -1,0 +1,94 @@
+# Prometheus Configuration for Hephaestus Homelab
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    monitor: 'hephaestus'
+    environment: 'homelab'
+
+# Alertmanager configuration (optional - add when ready)
+# alerting:
+#   alertmanagers:
+#     - static_configs:
+#         - targets:
+#           - alertmanager:9093
+
+# Load rules once and periodically evaluate them
+# rule_files:
+#   - "alerts/*.yml"
+
+scrape_configs:
+  # Prometheus itself
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # cAdvisor - Container metrics
+  - job_name: 'cadvisor'
+    static_configs:
+      - targets: ['cadvisor:8080']
+    metric_relabel_configs:
+      - source_labels: [__name__]
+        regex: 'container_.*'
+        action: keep
+
+  # Node Exporter - Host metrics
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['node-exporter:9100']
+
+  # Docker daemon metrics (if enabled)
+  - job_name: 'docker'
+    static_configs:
+      - targets: ['host.docker.internal:9323']
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: 'hephaestus'
+
+  # Application endpoints
+  - job_name: 'magic-pages-api'
+    static_configs:
+      - targets: ['magic-pages-api:8000']
+    metrics_path: '/metrics'  # Add Prometheus metrics endpoint to your apps
+
+  - job_name: 'capitolscope'
+    static_configs:
+      - targets: ['capitolscope:8000']
+    metrics_path: '/metrics'
+
+  - job_name: 'schedshare'
+    static_configs:
+      - targets: ['schedshare:5000']
+    metrics_path: '/metrics'
+
+  - job_name: 'portfolio'
+    static_configs:
+      - targets: ['portfolio:5000']
+    metrics_path: '/metrics'
+
+  # Uptime Kuma (if it exposes metrics)
+  - job_name: 'uptime-kuma'
+    static_configs:
+      - targets: ['uptime-kuma:3001']
+    metrics_path: '/metrics'
+    scrape_interval: 30s
+
+  # Blackbox exporter for endpoint monitoring (add when ready)
+  # - job_name: 'blackbox'
+  #   metrics_path: /probe
+  #   params:
+  #     module: [http_2xx]
+  #   static_configs:
+  #     - targets:
+  #       - https://magicpages.yourdomain.com
+  #       - https://capitolscope.yourdomain.com
+  #   relabel_configs:
+  #     - source_labels: [__address__]
+  #       target_label: __param_target
+  #     - source_labels: [__param_target]
+  #       target_label: instance
+  #     - target_label: __address__
+  #       replacement: blackbox-exporter:9115
+
