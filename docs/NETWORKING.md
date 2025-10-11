@@ -62,7 +62,7 @@ sudo nano /etc/netplan/01-netcfg.yaml
 network:
   version: 2
   ethernets:
-    enp3s0:  # Use 'ip link show' to find your interface name
+    enp0s31f6:  # Use 'ip link show' to find your interface name
       dhcp4: no
       addresses:
         - 192.168.50.70/24
