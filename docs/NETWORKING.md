@@ -41,6 +41,7 @@ Containers (caddy, apps, monitoring)
 | Prometheus | 9090 | 9090 | Via Caddy/Tunnel |
 | Glances | 61208 | 61208 | LAN only |
 | cAdvisor | 8080 | 8080 | LAN only |
+| Obsidian (Selkies) | 3000/3001 | 8060 (HTTP), 8061 (HTTPS) | HTTPS required |
 
 **Public Access**: All public traffic routes through **Cloudflare Tunnel** → **Caddy** → **Containers**
 

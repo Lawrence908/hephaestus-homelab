@@ -35,6 +35,7 @@ services:
       - "8087:8087"  # cAdvisor proxy
       - "8088:8088"  # Glances proxy
       - "8089:8089"  # IT-Tools proxy
+      - "8090:8090"  # Obsidian Notes proxy
     volumes:
       - ./proxy/Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy_data:/data

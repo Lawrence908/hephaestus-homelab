@@ -22,6 +22,7 @@ Complete routing guide for accessing services via different methods: direct port
 | **cAdvisor** | `http://192.168.50.70:8080` | `http://192.168.50.70:8087` | `chrislawrence.ca/containers` | 🟡 Needs Config |
 | **Glances** | `http://192.168.50.70:61208` | `http://192.168.50.70:8088` | `chrislawrence.ca/system` | 🟡 Needs Config |
 | **IT-Tools** | `http://192.168.50.70:8081` | `http://192.168.50.70:8089` | `chrislawrence.ca/tools` | 🟡 Needs Config |
+| **Obsidian (Selkies)** | `https://192.168.50.70:8061` | N/A (HTTPS required) | `https://chrislawrence.ca/notes` | 🟢 Working |
 
 ### **📱 Application Services**
 | Application | Port | Public URL | Access Level | Status |
@@ -244,6 +245,11 @@ Use dedicated proxy ports for iframe embedding:
 ### **Organizr Dashboard**
 - **LAN**: `http://192.168.50.70:8082`
 - **Public**: `https://dashboard.hephaestus.chrislawrence.ca`
+
+### **Obsidian (Notes)**
+- **Direct HTTPS (LAN)**: `https://192.168.50.70:8061`  (required by Selkies)
+- **Public Subpath**: `https://chrislawrence.ca/notes`
+- Tip: In Organizr, configure the Obsidian tab to open in a new tab using one of the URLs above (iframes over HTTP will fail due to HTTPS requirement).
 
 ### **Service Management**
 - **Portainer**: `http://192.168.50.70:9000`

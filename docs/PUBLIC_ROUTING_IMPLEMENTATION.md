@@ -21,6 +21,7 @@ chrislawrence.ca/prometheus  → Prometheus (Metrics collection)
 chrislawrence.ca/containers  → cAdvisor (Container metrics)
 chrislawrence.ca/system      → Glances (System monitoring)
 chrislawrence.ca/tools       → IT-Tools (Network utilities)
+chrislawrence.ca/notes       → Obsidian (Selkies UI) [HTTPS required]
 ```
 
 ### **Application Services** (Future Deployment)
@@ -144,6 +145,21 @@ chrislawrence.ca {
 
     handle_path /tools/* {
         reverse_proxy it-tools:8081
+    }
+
+    # Obsidian (Selkies) - HTTPS required by the web UI
+    # Use direct LAN HTTPS or Cloudflare HTTPS for public
+    handle_path /notes/* {
+        basic_auth {
+            admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
+        }
+        reverse_proxy obsidian-notes:3000 {
+            header_down -X-Frame-Options
+        }
+        header {
+            -X-Frame-Options
+            Content-Security-Policy "frame-ancestors 'self'"
+        }
     }
 
     # Default redirect to dashboard

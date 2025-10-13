@@ -265,6 +265,25 @@ organizr.hephaestus.chrislawrence.ca {
     }
 }
 
+# Obsidian Notes proxy for Organizr embedding (port 8090)
+:8090 {
+    basic_auth {
+        admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
+    }
+
+    reverse_proxy obsidian-notes:3000 {
+        # Remove X-Frame-Options to allow embedding
+        header_down -X-Frame-Options
+        header_down -Content-Security-Policy
+    }
+
+    # Set permissive headers for embedding
+    header {
+        -X-Frame-Options
+        Content-Security-Policy "frame-ancestors *"
+    }
+}
+
 # ============================================================================
 # PUBLIC SUBPATH ROUTING - chrislawrence.ca
 # ============================================================================
