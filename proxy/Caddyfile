@@ -347,33 +347,62 @@ chrislawrence.ca {
     }
 
     # ========================================================================
-    # FUTURE APPLICATION ROUTES (81XX ports - staged for deployment)
+    # APPLICATION ROUTES (81XX ports - ACTIVE)
     # ========================================================================
     
     # Magic Pages API (Testing) - Port 8100
-    # handle_path /magicpages-api/* {
-    #     reverse_proxy magic-pages-api:8000
-    # }
-
-    # Magic Pages Frontend (Testing) - Port 8101  
-    # handle_path /pages/* {
-    #     reverse_proxy magic-pages-frontend:80
-    # }
+    handle_path /magicpages-api/* {
+        reverse_proxy magicpages-api:8000
+        header {
+            Access-Control-Allow-Origin "*"
+            Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+            Access-Control-Allow-Headers "Content-Type, Authorization"
+        }
+    }
 
     # Portfolio App (Public) - Port 8110
-    # handle_path /portfolio/* {
-    #     reverse_proxy portfolio:8010
-    # }
+    handle_path /portfolio/* {
+        reverse_proxy portfolio:5000
+    }
 
     # CapitolScope (Public) - Port 8120
-    # handle_path /capitolscope/* {
-    #     reverse_proxy capitolscope:8020
-    # }
+    handle_path /capitolscope/* {
+        reverse_proxy capitolscope:8000
+        header {
+            Access-Control-Allow-Origin "*"
+            Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+            Access-Control-Allow-Headers "Content-Type, Authorization"
+        }
+    }
 
     # SchedShare (Public) - Port 8130
-    # handle_path /schedshare/* {
-    #     reverse_proxy schedshare:8030
-    # }
+    handle_path /schedshare/* {
+        reverse_proxy schedshare:5000
+    }
+
+    # Mongo Events Demo (Public) - Port 8140
+    handle_path /events/* {
+        reverse_proxy mongo-events:5000
+        header {
+            Access-Control-Allow-Origin "*"
+            Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+            Access-Control-Allow-Headers "Content-Type, Authorization"
+        }
+    }
+
+    # Obsidian Notes (Protected) - Port 8060
+    handle_path /notes/* {
+        basic_auth {
+            admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
+        }
+        reverse_proxy obsidian-notes:3000 {
+            header_down -X-Frame-Options
+        }
+        header {
+            -X-Frame-Options
+            Content-Security-Policy "frame-ancestors 'self'"
+        }
+    }
 
     # Default redirect to dashboard
     redir / /dashboard/
