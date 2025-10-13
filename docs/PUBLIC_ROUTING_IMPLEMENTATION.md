@@ -31,6 +31,9 @@ chrislawrence.ca/pages       → Magic Pages Frontend (Port 8101) - For testing 
 chrislawrence.ca/portfolio   → Portfolio App (Port 8110) - Currently live at chrislawrence.ca - could stay there, or I use that as a "Home" page to connect to user facing docker containers (it could be like a cool Home page?) then /portfolio is the current portfolio website? I like that.
 chrislawrence.ca/capitolscope     → CapitolScope (Port 8120)
 chrislawrence.ca/schedshare    → SchedShare (Port 8130) - currently at schedshare.chrislawrence.ca (we'll route this to chrislawrence.ca/schedshare when we enact this switch)
+chrislawrence.ca/eventsphere  → EventSphere (mongo-events-demo) (Port 8140)
+chrislawrence.ca/n8n          → n8n Automation (Port 8141) [Private by default]
+Minecraft Server              → Non-HTTP (TCP 25565). Access via LAN or explicit port forward; not proxied by Caddy/Cloudflare HTTP.
 ```
 
 ### **🔒 Security Strategy**
@@ -219,6 +222,22 @@ capitolscope:
 schedshare:
   ports:
     - "8130:8030"  # Changed from 8030
+
+# EventSphere (mongo-events-demo)
+eventsphere:
+  ports:
+    - "8140:8040"  # Example: container listens on 8040
+
+# n8n Automation
+n8n:
+  ports:
+    - "8141:5678"  # n8n default internal port 5678
+
+# Minecraft Server (non-HTTP)
+minecraft:
+  ports:
+    - "25565:25565/tcp"
+    - "25565:25565/udp"  # If using Bedrock or UDP features
 ```
 
 #### **Step 3.2: Add Application Routing**
@@ -247,6 +266,23 @@ chrislawrence.ca {
     handle_path /schedule/* {
         reverse_proxy schedshare:8030
     }
+
+    # EventSphere (mongo-events-demo)
+    handle_path /eventsphere/* {
+        reverse_proxy eventsphere:8040
+    }
+
+    # n8n (recommend protecting via Cloudflare Access or Basic Auth)
+    handle_path /n8n/* {
+        reverse_proxy n8n:5678 {
+            header_down -X-Frame-Options
+        }
+        header {
+            X-Frame-Options "SAMEORIGIN"
+        }
+    }
+
+    # Minecraft is non-HTTP and not routed via Caddy
 }
 ```
 

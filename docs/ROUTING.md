@@ -32,6 +32,9 @@ Complete routing guide for accessing services via different methods: direct port
 | **Portfolio** | 8110 | `chrislawrence.ca/portfolio` | Public (Home Page) | 🟡 Pending |
 | **CapitolScope** | 8120 | `chrislawrence.ca/capitolscope` | Public | 🟡 Pending |
 | **SchedShare** | 8130 | `chrislawrence.ca/schedshare` | Public | 🟡 Pending |
+| **EventSphere (mongo-events-demo)** | 8140 | `chrislawrence.ca/eventsphere` | Public (Testing) | 🟡 Pending |
+| **n8n** | 8141 | `chrislawrence.ca/n8n` | Private by default (Auth required) | 🟡 Pending |
+| **Minecraft Server** | 25565 (TCP) | N/A (non-HTTP) | LAN-only (or manual port forward) | 🟡 Pending |
 
 ## 🎯 **Organizr Tab URLs (Recommended)**
 

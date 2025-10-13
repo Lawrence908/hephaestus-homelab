@@ -1,8 +1,8 @@
 # Cloudflare Tunnel Configuration Template
 # Copy to ~/.cloudflared/config.yml and replace placeholders
 
-tunnel: 7bbb8d12-6cf4-4556-8c5f-006fb7bab126
-credentials-file: /home/chris/.cloudflared/7bbb8d12-6cf4-4556-8c5f-006fb7bab126.json
+tunnel: 3a9f1023-0d6c-49ff-900d-32403e4309f8
+token: eyJhIjoiOWU2MjZkY2FmZmIxZDE0YmNmZDc0YzM3NGQ5MDRjZmUiLCJzIjoiTnpaak9UZGpPR1V0TldJMU1pMDBZamt6TFRnNE5ERXROMlZrTkROalpUaGlaakUxIiwidCI6IjNhOWYxMDIzLTBkNmMtNDlmZi05MDBkLTMyNDAzZTQzMDlmOCJ9
 
 ingress:
   # SIMPLIFIED: Main domain routing with subpaths only

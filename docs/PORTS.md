@@ -43,6 +43,22 @@ Organizr (Central dashboard) - http://192.168.50.70:8082
 | **Portfolio** | 8110 | `chrislawrence.ca/portfolio` | Flask App (Home Page) | 🟡 Pending |
 | **CapitolScope** | 8120 | `chrislawrence.ca/capitolscope` | FastAPI App | 🟡 Pending |
 | **SchedShare** | 8130 | `chrislawrence.ca/schedshare` | Flask App | 🟡 Pending |
+| **EventSphere (mongo-events-demo)** | 8140 | `chrislawrence.ca/eventsphere` | Event stream demo | 🟡 Pending |
+| **n8n** | 8141 | `chrislawrence.ca/n8n` | Automation/workflows | 🟡 Pending |
+| **Minecraft Server** | 25565 (TCP/UDP) | N/A (non-HTTP) | Game server | 🟡 Pending |
+
+## 🔌 IoT & Communication Services
+
+| Service | Port | Public URL | Purpose | Status |
+|---------|------|------------|---------|--------|
+| **MQTT Broker** | 8150 | N/A (TCP) | Message broker | 🟡 Pending |
+| **MQTT WebSocket** | 8151 | N/A (WebSocket) | MQTT over WebSocket | 🟡 Pending |
+| **MQTT Explorer** | 8152 | `chrislawrence.ca/mqtt` | Web MQTT client | 🟡 Pending |
+| **Meshtastic MQTT** | 8153 | N/A (TCP) | Meshtastic bridge | 🟡 Pending |
+| **Meshtastic Web** | 8154 | `chrislawrence.ca/meshtastic` | Mesh network interface | 🟡 Pending |
+| **Node-RED** | 8155 | `chrislawrence.ca/nodered` | IoT automation | 🟡 Pending |
+| **Grafana IoT** | 8156 | `chrislawrence.ca/grafana-iot` | IoT metrics dashboard | 🟡 Pending |
+| **InfluxDB** | 8157 | `chrislawrence.ca/influxdb` | Time series database | 🟡 Pending |
 
 ## 🔄 Organizr Proxy Ports
 
@@ -55,6 +71,10 @@ Organizr (Central dashboard) - http://192.168.50.70:8082
 | **cAdvisor** | 8080 | 8087 | `chrislawrence.ca/containers` | Container Metrics | 🟡 Pending |
 | **Glances** | 61208 | 8088 | `chrislawrence.ca/system` | System Monitoring | 🟡 Pending |
 | **IT-Tools** | 8081 | 8089 | `chrislawrence.ca/tools` | Network Utilities | 🟡 Pending |
+| **MQTT Explorer** | 8152 | 8093 | `chrislawrence.ca/mqtt` | MQTT Web Client | 🟡 Pending |
+| **Meshtastic Web** | 8154 | 8094 | `chrislawrence.ca/meshtastic` | Mesh Network Interface | 🟡 Pending |
+| **Node-RED** | 8155 | 8095 | `chrislawrence.ca/nodered` | IoT Automation | 🟡 Pending |
+| **Grafana IoT** | 8156 | 8096 | `chrislawrence.ca/grafana-iot` | IoT Metrics Dashboard | 🟡 Pending |
 
 ### 📋 Port Range Organization
 
@@ -62,7 +82,9 @@ Organizr (Central dashboard) - http://192.168.50.70:8082
 8100-8109: Magic Pages ecosystem
 8110-8119: Portfolio & personal projects  
 8120-8129: CapitolScope & political tools
-8130-8039: SchedShare & scheduling tools
+8130-8139: SchedShare & scheduling tools
+8140-8149: EventSphere, n8n and automation
+8150-8159: IoT & Communication (MQTT, Meshtastic, Node-RED)
 ```
 
 ## 🔒 Security Zones

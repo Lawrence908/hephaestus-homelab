@@ -21,7 +21,10 @@
     ├── magicpages-frontend/             # Frontend app
     ├── CourseSchedule2Calendar/         # Course scheduler
     ├── daedalOS/                        # OS project
-    └── mongo-events-demo/               # Demo project
+    ├── mongo-events-demo/               # EventSphere demo project
+    ├── n8n/                             # n8n automation platform
+    ├── minecraft/                       # Minecraft server files/config
+    └── meshtastic-mqtt/                 # IoT & Communication services
 ```
 
 ## 🎯 **Why This Structure?**
@@ -78,6 +81,12 @@ networks:
 | MagicPages Frontend | React Frontend | 80 | `/apps/magicpages-frontend/` |
 | CapitolScope | Political Data | 8020 | `/apps/CapitolScope/` |
 | Portfolio | Personal Site | 8010 | `/apps/chrislawrence-portfolio/` |
+| EventSphere (mongo-events-demo) | Event stream demo | 8040 | `/apps/mongo-events-demo/` |
+| n8n | Automation/workflows | 5678 | `/apps/n8n/` |
+| Minecraft Server | Game server (non-HTTP) | 25565 | `/apps/minecraft/` |
+| MQTT Broker | Message broker | 8150 | `/apps/meshtastic-mqtt/` |
+| Meshtastic | Mesh networking | 8154 | `/apps/meshtastic-mqtt/` |
+| Node-RED | IoT automation | 8155 | `/apps/meshtastic-mqtt/` |
 
 ## 🔧 **Management Commands**
 
@@ -122,9 +131,10 @@ docker compose up -d
 - `8010-8019`: Portfolio & personal projects
 - `8020-8029`: CapitolScope & political tools
 - `8030-8039`: SchedShare & scheduling tools
-- `8040-8049`: Future applications
+- `8040-8049`: EventSphere and future applications
 - `8050-8059`: Development/testing
 - `8060-8069`: Personal services (Obsidian, etc.)
+- `8150-8159`: IoT & Communication (MQTT, Meshtastic, Node-RED)
 
 ## 🔄 **Deployment Workflow**
 

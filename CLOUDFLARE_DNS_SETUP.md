@@ -30,11 +30,29 @@ We're using the **subpath-only approach** for cleaner URLs and easier management
 
 ### **Step 2: Configure DNS Records**
 
+#### **2a. Remove Old Records First**
+Before adding the new record, **remove these old A records** that point to specific IPs:
+
+❌ **DELETE these records:**
+- `hephaestus` (A record → 100.64.0.1)
+- `nasty` (A record → 24.69.104.19) 
+- `www.nasty` (A record → 24.69.104.19)
+- `schedshare` (A record → 34.11.192.218)
+- `www.schedshare` (A record → 34.11.192.218)
+
+✅ **KEEP these records:**
+- All MX records (email)
+- All TXT records (SPF, DKIM, DMARC, verification)
+- All NS records (nameservers)
+- `www` CNAME to `chrislawrence.ca`
+
+#### **2b. Add New Tunnel Record**
+
 In your Cloudflare DNS settings, you need **only ONE record**:
 
 | Type | Name | Content | Proxy Status | TTL |
 |------|------|---------|--------------|-----|
-| **CNAME** | `chrislawrence.ca` | `7bbb8d12-6cf4-4556-8c5f-006fb7bab126.cfargotunnel.com` | ✅ Proxied | Auto |
+| **CNAME** | `chrislawrence.ca` | `3a9f1023-0d6c-49ff-900d-32403e4309f8.cfargotunnel.com` | ✅ Proxied | Auto |
 
 **OR** (if you prefer A record):
 
@@ -48,7 +66,7 @@ In your Cloudflare DNS settings, you need **only ONE record**:
 
 1. **Go to Cloudflare Zero Trust Dashboard**
    - Navigate to: Access → Tunnels
-   - Find your tunnel: `hephaestus-homelab`
+   - Find your tunnel: `hephaestus-tunnel`
 
 2. **Update Public Hostname**
    - Edit your tunnel configuration
@@ -59,12 +77,10 @@ In your Cloudflare DNS settings, you need **only ONE record**:
 ### **Step 4: Update Local Tunnel Config**
 
 ```bash
-# Copy the simplified config
-cp ~/github/hephaestus-homelab/cloudflare-tunnel-config-template.yml ~/.cloudflared/config.yml
-
-# Restart the tunnel
-cd ~/github/hephaestus-homelab
-docker compose -f docker-compose-infrastructure.yml restart cloudflared
+# Your config is already set up correctly at ~/.cloudflared/config.yml
+# Just restart the tunnel service
+sudo systemctl restart cloudflared
+sudo systemctl status cloudflared
 ```
 
 ## 🔒 **Security Configuration**
@@ -118,8 +134,8 @@ curl -I https://chrislawrence.ca/metrics -u admin:admin123
 
 #### **"This site can't be reached"**
 - Check DNS propagation: https://dnschecker.org/
-- Verify tunnel is running: `docker compose ps cloudflared`
-- Check tunnel logs: `docker compose logs cloudflared`
+- Verify tunnel is running: `sudo systemctl status cloudflared`
+- Check tunnel logs: `sudo journalctl -u cloudflared -f`
 
 #### **"502 Bad Gateway"**
 - Caddy might be down: `docker compose ps caddy`

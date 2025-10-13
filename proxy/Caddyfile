@@ -13,33 +13,44 @@ localhost:80 {
     respond /health "OK" 200
 }
 
-# Default route - Portainer (when accessing via IP or main domain)
-:80 {
-    # Unauthenticated health endpoint for container healthcheck
-    @health path /health
-    handle @health {
-        respond "OK" 200
-    }
-
-    # Basic authentication for all services
-    basic_auth {
-        admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
-    }
-
-    # Direct port access works better for Organizr embedding
-    # Use http://192.168.50.70:PORT/path in Organizr tab URLs
-
-    # Fallback - Portainer by default
-    reverse_proxy portainer:9000
-
-    # Logging
-    log {
-        output file /data/logs/portainer.log {
-            roll_size 10mb
-            roll_keep 5
-        }
-    }
-}
+# Default route - DISABLED (using direct ports and chrislawrence.ca routing)
+# :80 {
+#     # Unauthenticated health endpoint for container healthcheck
+#     @health path /health
+#     handle @health {
+#         respond "OK" 200
+#     }
+#
+#     # Redirect homepage to portfolio (no auth required)
+#     @homepage path /
+#     handle @homepage {
+#         redir / /portfolio/ 302
+#     }
+#
+#     # Portfolio App (no auth required)
+#     handle_path /portfolio/* {
+#         reverse_proxy portfolio:5000
+#     }
+#
+#     # Basic authentication for all services
+#     basic_auth {
+#         admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
+#     }
+#
+#     # Direct port access works better for Organizr embedding
+#     # Use http://192.168.50.70:PORT/path in Organizr tab URLs
+#
+#     # Fallback - Portainer by default
+#     reverse_proxy portainer:9000
+#
+#     # Logging
+#     log {
+#         output file /data/logs/portainer.log {
+#             roll_size 10mb
+#             roll_keep 5
+#         }
+#     }
+# }
 
 # Main domain - Portainer
 hephaestus.chrislawrence.ca {
@@ -348,6 +359,85 @@ obsidian.hephaestus.chrislawrence.ca {
     }
 }
 
+# MQTT Explorer proxy for Organizr embedding (port 8093)
+:8093 {
+    basic_auth {
+        admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
+    }
+
+    reverse_proxy mqtt-explorer:4000 {
+        # Remove X-Frame-Options to allow embedding
+        header_down -X-Frame-Options
+        header_down -Content-Security-Policy
+    }
+
+    # Set permissive headers for embedding
+    header {
+        -X-Frame-Options
+        Content-Security-Policy "frame-ancestors *"
+    }
+}
+
+# Meshtastic Web proxy for Organizr embedding (port 8094)
+:8094 {
+    basic_auth {
+        admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
+    }
+
+    reverse_proxy meshtastic-web:80 {
+        # Remove X-Frame-Options to allow embedding
+        header_down -X-Frame-Options
+        header_down -Content-Security-Policy
+    }
+
+    # Set permissive headers for embedding
+    header {
+        -X-Frame-Options
+        Content-Security-Policy "frame-ancestors *"
+    }
+}
+
+# Node-RED proxy for Organizr embedding (port 8095)
+:8095 {
+    basic_auth {
+        admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
+    }
+
+    reverse_proxy node-red:1880 {
+        # Enable WebSocket support for Node-RED editor
+        header_up Connection {http.request.header.Connection}
+        header_up Upgrade {http.request.header.Upgrade}
+        # Remove X-Frame-Options to allow embedding
+        header_down -X-Frame-Options
+        header_down -Content-Security-Policy
+    }
+
+    # Set permissive headers for embedding
+    header {
+        -X-Frame-Options
+        Content-Security-Policy "frame-ancestors *"
+    }
+}
+
+# Grafana IoT proxy for Organizr embedding (port 8096)
+:8096 {
+    basic_auth {
+        admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
+    }
+
+    reverse_proxy grafana-iot:3000 {
+        # Remove X-Frame-Options to allow embedding
+        header_down -X-Frame-Options
+        header_down -Content-Security-Policy
+    }
+
+    # Set permissive headers for embedding
+    header {
+        -X-Frame-Options
+        Content-Security-Policy "frame-ancestors *"
+    }
+}
+
 # ============================================================================
 # PUBLIC SUBPATH ROUTING - chrislawrence.ca
 # ============================================================================
@@ -359,6 +449,17 @@ chrislawrence.ca {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
         X-Content-Type-Options "nosniff"
         Referrer-Policy "strict-origin-when-cross-origin"
+    }
+
+    # Redirect homepage to portfolio (no auth required)
+    @homepage path /
+    handle @homepage {
+        redir / /portfolio/ 302
+    }
+
+    # Portfolio App (Public) - Port 8110 (no auth required)
+    handle_path /portfolio/* {
+        reverse_proxy portfolio:5000
     }
 
     # Protected dashboard (Cloudflare Access + Basic Auth)
@@ -433,6 +534,20 @@ chrislawrence.ca {
     # APPLICATION ROUTES (81XX ports - ACTIVE)
     # ========================================================================
     
+    # Minecraft Dynmap (Public) - Port 8123 (embeddable)
+    handle_path /minecraft-map/* {
+        reverse_proxy minecraft:8123 {
+            # Remove frame-blocking headers from Dynmap
+            header_down -X-Frame-Options
+            header_down -Content-Security-Policy
+        }
+        # Allow embedding in Organizr
+        header {
+            -X-Frame-Options
+            Content-Security-Policy "frame-ancestors 'self' dashboard.hephaestus.chrislawrence.ca organizr.hephaestus.chrislawrence.ca"
+        }
+    }
+
     # Magic Pages API (Testing) - Port 8100
     handle_path /magicpages-api/* {
         reverse_proxy magicpages-api:8000 {
@@ -446,9 +561,14 @@ chrislawrence.ca {
         }
     }
 
-    # Portfolio App (Public) - Port 8110
-    handle_path /portfolio/* {
-        reverse_proxy portfolio:5000
+    # Magic Pages Frontend (Testing) - Port 8101
+    handle_path /magicpages/* {
+        reverse_proxy magicpages-frontend:80
+    }
+
+    # daedalOS Browser OS (Future) - Port 8120
+    handle_path /os/* {
+        reverse_proxy daedalos:3000
     }
 
     # CapitolScope (Public) - Port 8120
@@ -468,6 +588,16 @@ chrislawrence.ca {
 
     # Mongo Events Demo (Public) - Port 8140
     handle_path /events/* {
+        reverse_proxy mongo-events:5000
+        header {
+            Access-Control-Allow-Origin "*"
+            Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+            Access-Control-Allow-Headers "Content-Type, Authorization"
+        }
+    }
+
+    # EventSphere (alias for events) - Port 8140
+    handle_path /eventsphere/* {
         reverse_proxy mongo-events:5000
         header {
             Access-Control-Allow-Origin "*"
@@ -512,6 +642,77 @@ chrislawrence.ca {
         }
     }
 
-    # Default redirect to dashboard
-    redir / /dashboard/
+    # ========================================================================
+    # IOT & COMMUNICATION SERVICES (815X ports)
+    # ========================================================================
+    
+    # MQTT Explorer (Public) - Port 8152
+    handle_path /mqtt/* {
+        basic_auth {
+            admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
+        }
+        reverse_proxy mqtt-explorer:4000 {
+            header_down -X-Frame-Options
+        }
+        header {
+            -X-Frame-Options
+            Content-Security-Policy "frame-ancestors 'self'"
+        }
+    }
+
+    # Meshtastic Web Interface (Public) - Port 8154
+    handle_path /meshtastic/* {
+        basic_auth {
+            admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
+        }
+        reverse_proxy meshtastic-web:80 {
+            header_down -X-Frame-Options
+        }
+        header {
+            -X-Frame-Options
+            Content-Security-Policy "frame-ancestors 'self'"
+        }
+    }
+
+    # Node-RED IoT Automation (Protected) - Port 8155
+    handle_path /nodered/* {
+        basic_auth {
+            admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
+        }
+        reverse_proxy node-red:1880 {
+            # Enable WebSocket support for Node-RED editor
+            header_up Connection {http.request.header.Connection}
+            header_up Upgrade {http.request.header.Upgrade}
+            header_down -X-Frame-Options
+        }
+        header {
+            -X-Frame-Options
+            Content-Security-Policy "frame-ancestors 'self'"
+        }
+    }
+
+    # Grafana IoT Dashboard (Protected) - Port 8156
+    handle_path /grafana-iot/* {
+        basic_auth {
+            admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
+        }
+        reverse_proxy grafana-iot:3000 {
+            header_down -X-Frame-Options
+        }
+        header {
+            -X-Frame-Options
+            Content-Security-Policy "frame-ancestors 'self'"
+        }
+    }
+
+    # InfluxDB API (Protected) - Port 8157
+    handle_path /influxdb/* {
+        basic_auth {
+            admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
+        }
+        reverse_proxy influxdb:8086
+    }
+
+    # Default redirect to portfolio (now handled by main route above)
+    # redir / /dashboard/  # Removed - Portfolio is now the homepage
 }
