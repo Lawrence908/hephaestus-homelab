@@ -265,13 +265,75 @@ organizr.hephaestus.chrislawrence.ca {
     }
 }
 
-# Obsidian Notes proxy for Organizr embedding (port 8090)
+# Obsidian Notes proxy for Organizr embedding (port 8090 HTTP)
 :8090 {
+    reverse_proxy obsidian-notes:3000 {
+        # Pass authentication headers
+        header_up Authorization "Basic b2JzaWRpYW46b2JzaWRpYW4xMjM="
+        # Enable WebSocket support for the app
+        header_up Connection {http.request.header.Connection}
+        header_up Upgrade {http.request.header.Upgrade}
+        # Remove X-Frame-Options to allow embedding
+        header_down -X-Frame-Options
+        header_down -Content-Security-Policy
+    }
+
+    # Set permissive headers for embedding
+    header {
+        -X-Frame-Options
+        Content-Security-Policy "frame-ancestors *"
+    }
+}
+
+# Obsidian Notes HTTPS proxy for Organizr embedding
+obsidian.hephaestus.chrislawrence.ca {
+    reverse_proxy obsidian-notes:3000 {
+        # Pass authentication headers
+        header_up Authorization "Basic b2JzaWRpYW46b2JzaWRpYW4xMjM="
+        # Enable WebSocket support for the app
+        header_up Connection {http.request.header.Connection}
+        header_up Upgrade {http.request.header.Upgrade}
+        # Remove X-Frame-Options to allow embedding
+        header_down -X-Frame-Options
+        header_down -Content-Security-Policy
+    }
+
+    # Set permissive headers for embedding
+    header {
+        -X-Frame-Options
+        Content-Security-Policy "frame-ancestors *"
+    }
+}
+
+# Magic Pages API proxy for Organizr embedding (port 8091)
+:8091 {
     basic_auth {
         admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
     }
 
-    reverse_proxy obsidian-notes:3000 {
+    reverse_proxy magicpages-api:8000 {
+        # Remove X-Frame-Options to allow embedding
+        header_down -X-Frame-Options
+        header_down -Content-Security-Policy
+    }
+
+    # Set permissive headers for embedding
+    header {
+        -X-Frame-Options
+        Content-Security-Policy "frame-ancestors *"
+    }
+}
+
+# n8n proxy for Organizr embedding (port 8092)
+:8092 {
+    basic_auth {
+        admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
+    }
+
+    reverse_proxy n8n-stack-n8n-1:5678 {
+        # Enable WebSocket support for n8n editor
+        header_up Connection {http.request.header.Connection}
+        header_up Upgrade {http.request.header.Upgrade}
         # Remove X-Frame-Options to allow embedding
         header_down -X-Frame-Options
         header_down -Content-Security-Policy
@@ -409,12 +471,18 @@ chrislawrence.ca {
         }
     }
 
+
     # Obsidian Notes (Protected) - Port 8060
     handle_path /notes/* {
         basic_auth {
             admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
         }
         reverse_proxy obsidian-notes:3000 {
+            # Pass authentication headers
+            header_up Authorization "Basic b2JzaWRpYW46b2JzaWRpYW4xMjM="
+            # Enable WebSocket support
+            header_up Connection {http.request.header.Connection}
+            header_up Upgrade {http.request.header.Upgrade}
             header_down -X-Frame-Options
         }
         header {

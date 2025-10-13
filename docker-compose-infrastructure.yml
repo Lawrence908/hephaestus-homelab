@@ -36,6 +36,8 @@ services:
       - "8088:8088"  # Glances proxy
       - "8089:8089"  # IT-Tools proxy
       - "8090:8090"  # Obsidian Notes proxy
+      - "8091:8091"  # Magic Pages API proxy (HTTP)
+      - "8092:8092"  # n8n proxy
     volumes:
       - ./proxy/Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy_data:/data
