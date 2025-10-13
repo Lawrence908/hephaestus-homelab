@@ -21,14 +21,18 @@ Internet → Cloudflare Tunnel → Docker Services (Direct)
 | **Glances** | 61208 | LAN Only | System Monitor | 🟢 Running |
 | **cAdvisor** | 8080 | LAN Only | Container Metrics | 🟢 Running |
 | **Node Exporter** | 9100 | LAN Only | Host Metrics | 🟡 Pending |
+| **IT-Tools** | 8081 | LAN Only | IT Utilities | 🟢 Running |
+| **Organizr** | 8082 | Via Cloudflare Tunnel | Central Dashboard | 🟡 Pending |
 
 Local on X2Go:
-Portainer (Docker management) - http://10.0.0.252:9000
-Grafana (Metrics dashboard) - http://10.0.0.252:3000
-Uptime Kuma (Uptime monitoring) - http://10.0.0.252:3001
-Prometheus (Metrics collection) - http://10.0.0.252:9090
-cAdvisor (Container metrics) - http://10.0.0.252:8080
-Glances (System monitoring) - http://10.0.0.252:61208
+Portainer (Docker management) - http://192.168.50.70:9000
+Grafana (Metrics dashboard) - http://192.168.50.70:3000
+Uptime Kuma (Uptime monitoring) - http://192.168.50.70:3001
+Prometheus (Metrics collection) - http://192.168.50.70:9090
+cAdvisor (Container metrics) - http://192.168.50.70:8080
+Glances (System monitoring) - http://192.168.50.70:61208
+IT-Tools (IT utilities) - http://192.168.50.70:8081
+Organizr (Central dashboard) - http://192.168.50.70:8082
 
 ## 🚀 Application Ports
 
@@ -63,6 +67,7 @@ Glances (System monitoring) - http://10.0.0.252:61208
 - Glances (system monitoring)
 - cAdvisor (container metrics)
 - Node Exporter (host metrics)
+- IT-Tools (IT utilities)
 
 ### **No External Access**
 - Database ports (Postgres, Redis)
@@ -80,6 +85,7 @@ Glances (System monitoring) - http://10.0.0.252:61208
 | `portfolio.chrislawrence.ca` | Portfolio | Portfolio App | 8010 |
 | `capitolscope.chrislawrence.ca` | CapitolScope | CapitolScope App | 8020 |
 | `schedshare.chrislawrence.ca` | SchedShare | SchedShare App | 8030 |
+| `dashboard.chrislawrence.ca` | Dashboard | Organizr | 8082 |
 
 ## 🐳 Docker Network Configuration
 
@@ -242,6 +248,7 @@ nmap -p 80,443,3000,3001,9000,9090,61208 172.20.0.0/16
 - **61208**: Glances
 - **8080**: cAdvisor
 - **9100**: Node Exporter
+- **8081**: IT-Tools
 
 ---
 
@@ -269,5 +276,5 @@ sudo systemctl status cloudflared
 
 ---
 
-*Last Updated: October 11, 2024*
+*Last Updated: October 12, 2025*
 *Status: 🟢 Cloudflare Tunnel Active*
