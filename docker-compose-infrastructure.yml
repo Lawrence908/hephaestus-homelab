@@ -28,6 +28,13 @@ services:
       - web
     ports:
       - "80:80"
+      - "8083:8083"  # Uptime Kuma proxy
+      - "8084:8084"  # Portainer proxy
+      - "8085:8085"  # Grafana proxy
+      - "8086:8086"  # Prometheus proxy
+      - "8087:8087"  # cAdvisor proxy
+      - "8088:8088"  # Glances proxy
+      - "8089:8089"  # IT-Tools proxy
     volumes:
       - ./proxy/Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy_data:/data
@@ -188,6 +195,20 @@ services:
     pid: host
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
+
+  # IT-Tools - Network utilities
+  it-tools:
+    image: corentinth/it-tools:latest
+    container_name: it-tools
+    restart: unless-stopped
+    networks:
+      - web
+    ports:
+      - "8081:80"
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    security_opt:
+      - no-new-privileges:true
 
   # ============================================================================
   # DASHBOARD SERVICES

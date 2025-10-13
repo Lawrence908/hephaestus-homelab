@@ -36,23 +36,33 @@ Organizr (Central dashboard) - http://192.168.50.70:8082
 
 ## 🚀 Application Ports
 
-| Application | Internal Port | External Access | Purpose | Status |
-|-------------|--------------|-----------------|---------|--------|
-| **Magic Pages API** | 8000 | Via Cloudflare Tunnel | Django API | 🟡 Pending |
-| **Magic Pages Frontend** | 80 | Via Cloudflare Tunnel | Static Site | 🟡 Pending |
-| **Portfolio** | 8010 | Via Cloudflare Tunnel | Flask App | 🟡 Pending |
-| **CapitolScope** | 8020 | Via Cloudflare Tunnel | FastAPI App | 🟡 Pending |
-| **SchedShare** | 8030 | Via Cloudflare Tunnel | Flask App | 🟡 Pending |
+| Application | Port | Public URL | Purpose | Status |
+|-------------|------|------------|---------|--------|
+| **Magic Pages API** | 8100 | `chrislawrence.ca/magicpages-api` | Django API (Testing) | 🟡 Pending |
+| **Magic Pages Frontend** | 8101 | `chrislawrence.ca/pages` | Static Site (Testing) | 🟡 Pending |
+| **Portfolio** | 8110 | `chrislawrence.ca/portfolio` | Flask App (Home Page) | 🟡 Pending |
+| **CapitolScope** | 8120 | `chrislawrence.ca/capitolscope` | FastAPI App | 🟡 Pending |
+| **SchedShare** | 8130 | `chrislawrence.ca/schedshare` | Flask App | 🟡 Pending |
+
+## 🔄 Organizr Proxy Ports
+
+| Service | Direct Port | Proxy Port | Public URL | Purpose | Status |
+|---------|-------------|------------|------------|---------|--------|
+| **Uptime Kuma** | 3001 | 8083 | `chrislawrence.ca/uptime` | Service Monitoring | ✅ Working |
+| **Portainer** | 9000 | 8084 | `chrislawrence.ca/docker` | Container Management | ✅ Working |
+| **Grafana** | 3000 | 8085 | `chrislawrence.ca/metrics` | Metrics Dashboard | 🟡 Pending |
+| **Prometheus** | 9090 | 8086 | `chrislawrence.ca/prometheus` | Metrics Collection | 🟡 Pending |
+| **cAdvisor** | 8080 | 8087 | `chrislawrence.ca/containers` | Container Metrics | 🟡 Pending |
+| **Glances** | 61208 | 8088 | `chrislawrence.ca/system` | System Monitoring | 🟡 Pending |
+| **IT-Tools** | 8081 | 8089 | `chrislawrence.ca/tools` | Network Utilities | 🟡 Pending |
 
 ### 📋 Port Range Organization
 
 ```
-8000-8009: Magic Pages ecosystem
-8010-8019: Portfolio & personal projects  
-8020-8029: CapitolScope & political tools
-8030-8039: SchedShare & scheduling tools
-8040-8049: Future services
-8050-8059: Development/testing
+8100-8109: Magic Pages ecosystem
+8110-8119: Portfolio & personal projects  
+8120-8129: CapitolScope & political tools
+8130-8039: SchedShare & scheduling tools
 ```
 
 ## 🔒 Security Zones

@@ -26,30 +26,8 @@ localhost:80 {
         admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
     }
 
-    # Subpath proxies for same-origin embedding (Organizr tabs)
-    handle_path /kuma/* {
-        header -X-Frame-Options
-        header Content-Security-Policy "frame-ancestors *"
-        reverse_proxy uptime-kuma:3001
-    }
-
-    handle_path /grafana/* {
-        header -X-Frame-Options
-        header Content-Security-Policy "frame-ancestors *"
-        reverse_proxy grafana:3000
-    }
-
-    handle_path /prometheus/* {
-        header -X-Frame-Options
-        header Content-Security-Policy "frame-ancestors *"
-        reverse_proxy prometheus:9090
-    }
-
-    handle_path /portainer/* {
-        header -X-Frame-Options
-        header Content-Security-Policy "frame-ancestors *"
-        reverse_proxy portainer:9000
-    }
+    # Direct port access works better for Organizr embedding
+    # Use http://192.168.50.70:PORT/path in Organizr tab URLs
 
     # Fallback - Portainer by default
     reverse_proxy portainer:9000
@@ -87,13 +65,24 @@ grafana.hephaestus.chrislawrence.ca {
     reverse_proxy grafana:3000
 }
 
-# Uptime Kuma - Monitoring
-uptime.hephaestus.chrislawrence.ca {
+# Uptime Kuma - Monitoring (with iframe support)
+uptime.hephaestus.chrislawrence.ca, uptime.chrislawrence.ca {
     basic_auth {
         admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
     }
-    reverse_proxy uptime-kuma:3001
+
+    # Allow embedding in Organizr (dashboard)
+    header {
+        -X-Frame-Options
+        Content-Security-Policy "frame-ancestors 'self' dashboard.hephaestus.chrislawrence.ca organizr.hephaestus.chrislawrence.ca localhost:8082"
+        Referrer-Policy "strict-origin-when-cross-origin"
+    }
+
+    reverse_proxy uptime-kuma:3001 {
+        header_down -X-Frame-Options
+    }
 }
+
 
 # Prometheus - Metrics collection
 prometheus.hephaestus.chrislawrence.ca {
@@ -141,4 +130,251 @@ organizr.hephaestus.chrislawrence.ca {
         admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
     }
     reverse_proxy organizr:80
+}
+
+# Uptime Kuma proxy for Organizr embedding (port 8083)
+:8083 {
+    basic_auth {
+        admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
+    }
+
+    reverse_proxy uptime-kuma:3001 {
+        # Remove X-Frame-Options to allow embedding
+        header_down -X-Frame-Options
+        header_down -Content-Security-Policy
+    }
+
+    # Set permissive headers for embedding
+    header {
+        -X-Frame-Options
+        Content-Security-Policy "frame-ancestors *"
+    }
+}
+
+# Portainer proxy for Organizr embedding (port 8084)
+:8084 {
+    basic_auth {
+        admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
+    }
+
+    reverse_proxy portainer:9000 {
+        # Remove X-Frame-Options to allow embedding
+        header_down -X-Frame-Options
+        header_down -Content-Security-Policy
+    }
+
+    # Set permissive headers for embedding
+    header {
+        -X-Frame-Options
+        Content-Security-Policy "frame-ancestors *"
+    }
+}
+
+# Grafana proxy for Organizr embedding (port 8085)
+:8085 {
+    basic_auth {
+        admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
+    }
+
+    reverse_proxy grafana:3000 {
+        # Remove X-Frame-Options to allow embedding
+        header_down -X-Frame-Options
+        header_down -Content-Security-Policy
+    }
+
+    # Set permissive headers for embedding
+    header {
+        -X-Frame-Options
+        Content-Security-Policy "frame-ancestors *"
+    }
+}
+
+# Prometheus proxy for Organizr embedding (port 8086)
+:8086 {
+    basic_auth {
+        admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
+    }
+
+    reverse_proxy prometheus:9090 {
+        # Remove X-Frame-Options to allow embedding
+        header_down -X-Frame-Options
+        header_down -Content-Security-Policy
+    }
+
+    # Set permissive headers for embedding
+    header {
+        -X-Frame-Options
+        Content-Security-Policy "frame-ancestors *"
+    }
+}
+
+# cAdvisor proxy for Organizr embedding (port 8087)
+:8087 {
+    basic_auth {
+        admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
+    }
+
+    reverse_proxy cadvisor:8080 {
+        # Remove X-Frame-Options to allow embedding
+        header_down -X-Frame-Options
+        header_down -Content-Security-Policy
+    }
+
+    # Set permissive headers for embedding
+    header {
+        -X-Frame-Options
+        Content-Security-Policy "frame-ancestors *"
+    }
+}
+
+# Glances proxy for Organizr embedding (port 8088)
+:8088 {
+    basic_auth {
+        admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
+    }
+
+    reverse_proxy glances:61208 {
+        # Remove X-Frame-Options to allow embedding
+        header_down -X-Frame-Options
+        header_down -Content-Security-Policy
+    }
+
+    # Set permissive headers for embedding
+    header {
+        -X-Frame-Options
+        Content-Security-Policy "frame-ancestors *"
+    }
+}
+
+# IT-Tools proxy for Organizr embedding (port 8089)
+:8089 {
+    basic_auth {
+        admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
+    }
+
+    reverse_proxy it-tools:80 {
+        # Remove X-Frame-Options to allow embedding
+        header_down -X-Frame-Options
+        header_down -Content-Security-Policy
+    }
+
+    # Set permissive headers for embedding
+    header {
+        -X-Frame-Options
+        Content-Security-Policy "frame-ancestors *"
+    }
+}
+
+# ============================================================================
+# PUBLIC SUBPATH ROUTING - chrislawrence.ca
+# ============================================================================
+
+# Main domain with subpath routing
+chrislawrence.ca {
+    # Security headers
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        X-Content-Type-Options "nosniff"
+        Referrer-Policy "strict-origin-when-cross-origin"
+    }
+
+    # Protected dashboard (Cloudflare Access + Basic Auth)
+    handle_path /dashboard/* {
+        basic_auth {
+            admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
+        }
+        reverse_proxy organizr:80
+    }
+
+    # Infrastructure services (accessible through Organizr)
+    handle_path /uptime/* {
+        basic_auth {
+            admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
+        }
+        reverse_proxy uptime-kuma:3001 {
+            header_down -X-Frame-Options
+        }
+        header {
+            -X-Frame-Options
+            Content-Security-Policy "frame-ancestors 'self'"
+        }
+    }
+
+    handle_path /docker/* {
+        basic_auth {
+            admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
+        }
+        reverse_proxy portainer:9000 {
+            header_down -X-Frame-Options
+        }
+    }
+
+    handle_path /metrics/* {
+        basic_auth {
+            admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
+        }
+        reverse_proxy grafana:3000 {
+            header_down -X-Frame-Options
+        }
+    }
+
+    handle_path /prometheus/* {
+        basic_auth {
+            admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
+        }
+        reverse_proxy prometheus:9090
+    }
+
+    handle_path /containers/* {
+        basic_auth {
+            admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
+        }
+        reverse_proxy cadvisor:8080
+    }
+
+    handle_path /system/* {
+        basic_auth {
+            admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
+        }
+        reverse_proxy glances:61208
+    }
+
+    handle_path /tools/* {
+        basic_auth {
+            admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
+        }
+        reverse_proxy it-tools:80
+    }
+
+    # ========================================================================
+    # FUTURE APPLICATION ROUTES (81XX ports - staged for deployment)
+    # ========================================================================
+    
+    # Magic Pages API (Testing) - Port 8100
+    # handle_path /magicpages-api/* {
+    #     reverse_proxy magic-pages-api:8000
+    # }
+
+    # Magic Pages Frontend (Testing) - Port 8101  
+    # handle_path /pages/* {
+    #     reverse_proxy magic-pages-frontend:80
+    # }
+
+    # Portfolio App (Public) - Port 8110
+    # handle_path /portfolio/* {
+    #     reverse_proxy portfolio:8010
+    # }
+
+    # CapitolScope (Public) - Port 8120
+    # handle_path /capitolscope/* {
+    #     reverse_proxy capitolscope:8020
+    # }
+
+    # SchedShare (Public) - Port 8130
+    # handle_path /schedshare/* {
+    #     reverse_proxy schedshare:8030
+    # }
+
+    # Default redirect to dashboard
+    redir / /dashboard/
 }
