@@ -55,7 +55,7 @@ Organizr (Central dashboard) - http://192.168.50.70:8082
 | **MQTT WebSocket** | 8151 | N/A (WebSocket) | MQTT over WebSocket | 🟡 Pending |
 | **MQTT Explorer** | 8152 | `chrislawrence.ca/mqtt` | Web MQTT client | 🟡 Pending |
 | **Meshtastic MQTT** | 8153 | N/A (TCP) | Meshtastic bridge | 🟡 Pending |
-| **Meshtastic Web** | 8154 | `chrislawrence.ca/meshtastic` | Mesh network interface | 🟡 Pending |
+| **Home Assistant** | 8154 | `chrislawrence.ca/homeassistant` | IoT Hub | 🟢 Running |
 | **Node-RED** | 8155 | `chrislawrence.ca/nodered` | IoT automation | 🟡 Pending |
 | **Grafana IoT** | 8156 | `chrislawrence.ca/grafana-iot` | IoT metrics dashboard | 🟡 Pending |
 | **InfluxDB** | 8157 | `chrislawrence.ca/influxdb` | Time series database | 🟡 Pending |
@@ -72,7 +72,7 @@ Organizr (Central dashboard) - http://192.168.50.70:8082
 | **Glances** | 61208 | 8088 | `chrislawrence.ca/system` | System Monitoring | 🟡 Pending |
 | **IT-Tools** | 8081 | 8089 | `chrislawrence.ca/tools` | Network Utilities | 🟡 Pending |
 | **MQTT Explorer** | 8152 | 8093 | `chrislawrence.ca/mqtt` | MQTT Web Client | 🟡 Pending |
-| **Meshtastic Web** | 8154 | 8094 | `chrislawrence.ca/meshtastic` | Mesh Network Interface | 🟡 Pending |
+| **Home Assistant** | 8154 | 8094 | `chrislawrence.ca/homeassistant` | IoT Hub | 🟢 Running |
 | **Node-RED** | 8155 | 8095 | `chrislawrence.ca/nodered` | IoT Automation | 🟡 Pending |
 | **Grafana IoT** | 8156 | 8096 | `chrislawrence.ca/grafana-iot` | IoT Metrics Dashboard | 🟡 Pending |
 
