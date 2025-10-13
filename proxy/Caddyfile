@@ -312,6 +312,8 @@ obsidian.hephaestus.chrislawrence.ca {
     }
 
     reverse_proxy magicpages-api:8000 {
+        # Set correct host header for Django ALLOWED_HOSTS
+        header_up Host localhost
         # Remove X-Frame-Options to allow embedding
         header_down -X-Frame-Options
         header_down -Content-Security-Policy
@@ -433,11 +435,14 @@ chrislawrence.ca {
     
     # Magic Pages API (Testing) - Port 8100
     handle_path /magicpages-api/* {
-        reverse_proxy magicpages-api:8000
+        reverse_proxy magicpages-api:8000 {
+            # Set correct host header for Django ALLOWED_HOSTS
+            header_up Host localhost
+        }
         header {
             Access-Control-Allow-Origin "*"
             Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
-            Access-Control-Allow-Headers "Content-Type, Authorization"
+            Access-Control-Allow-Headers "Content-Type, Authorization, X-API-Key"
         }
     }
 
@@ -471,6 +476,22 @@ chrislawrence.ca {
         }
     }
 
+    # n8n Workflow Automation (Protected) - Port 8092
+    handle_path /n8n/* {
+        basic_auth {
+            admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
+        }
+        reverse_proxy n8n-stack-n8n-1:5678 {
+            # Enable WebSocket support for n8n editor
+            header_up Connection {http.request.header.Connection}
+            header_up Upgrade {http.request.header.Upgrade}
+            header_down -X-Frame-Options
+        }
+        header {
+            -X-Frame-Options
+            Content-Security-Policy "frame-ancestors 'self'"
+        }
+    }
 
     # Obsidian Notes (Protected) - Port 8060
     handle_path /notes/* {

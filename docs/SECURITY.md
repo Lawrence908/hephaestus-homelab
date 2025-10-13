@@ -649,6 +649,39 @@ ls -la /etc/cron.d/
 ---
 
 ## Additional Resources
+## Security Rules Cheat Sheet
+
+### Categories for Cloudflare Protections
+
+### 1. Public-Facing Services (Use CAPTCHA)
+- **Description:** For anything that’s publicly accessible and you want to add a layer of bot protection or professionalism.
+- **Examples:**
+  - Contact forms
+  - Public login pages
+  - Any public-facing demo sites or tools
+- **How to Apply:**
+  - Enable Cloudflare Turnstile CAPTCHA on these pages.
+
+### 2. Internal or Sensitive Services (Use Cloudflare Access)
+- **Description:** For admin dashboards, internal tools, or anything you want to restrict to certain users.
+- **Examples:**
+  - Admin panels
+  - Internal note-taking apps or wikis
+  - Any service handling sensitive data or configuration
+- **How to Apply:**
+  - Use Cloudflare Access to require a one-time code, email-based login, or SSO for these routes.
+
+### 3. Account or Payment-Related Pages
+- **Description:** For areas where users might manage accounts or where payment processing occurs.
+- **Examples:**
+  - Account settings pages
+  - Any page right before a Stripe payment form
+- **How to Apply:**
+  - Typically combine CAPTCHA on public account login and Cloudflare Access for more sensitive account management areas.
+
+---
+
+Feel free to tweak these categories and examples as you see fit, and keep this markdown handy whenever you want to apply those rules!
 
 - [Docker Security Best Practices](https://docs.docker.com/engine/security/)
 - [Cloudflare Security](https://www.cloudflare.com/security/)
