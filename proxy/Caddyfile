@@ -13,74 +13,57 @@ localhost:80 {
     respond /health "OK" 200
 }
 
-# Default route - DISABLED (using direct ports and chrislawrence.ca routing)
-# :80 {
-#     # Unauthenticated health endpoint for container healthcheck
-#     @health path /health
-#     handle @health {
-#         respond "OK" 200
-#     }
-#
-#     # Redirect homepage to portfolio (no auth required)
-#     @homepage path /
-#     handle @homepage {
-#         redir / /portfolio/ 302
-#     }
-#
-#     # Portfolio App (no auth required)
-#     handle_path /portfolio/* {
-#         reverse_proxy portfolio:5000
-#     }
-#
-#     # Basic authentication for all services
-#     basic_auth {
-#         admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
-#     }
-#
-#     # Direct port access works better for Organizr embedding
-#     # Use http://192.168.50.70:PORT/path in Organizr tab URLs
-#
-#     # Fallback - Portainer by default
-#     reverse_proxy portainer:9000
-#
-#     # Logging
-#     log {
-#         output file /data/logs/portainer.log {
-#             roll_size 10mb
-#             roll_keep 5
-#         }
-#     }
-# }
+# Default route - Cloudflare Tunnel entry point
+:80 {
+    # Unauthenticated health endpoint for container healthcheck
+    @health path /health
+    handle @health {
+        respond "OK" 200
+    }
+
+    # Redirect homepage to portfolio (no auth required)
+    @homepage path /
+    handle @homepage {
+        redir / /portfolio/ 302
+    }
+
+    # Portfolio App (no auth required - public)
+    handle_path /portfolio/* {
+        reverse_proxy portfolio:5000
+    }
+
+    # Direct port access works better for Organizr embedding
+    # Use http://192.168.50.70:PORT/path in Organizr tab URLs
+
+    # Fallback - Portainer by default (will be protected by Cloudflare Access)
+    reverse_proxy portainer:9000
+
+    # Logging
+    log {
+        output file /data/logs/portainer.log {
+            roll_size 10mb
+            roll_keep 5
+        }
+    }
+}
 
 # Main domain - Portainer
 hephaestus.chrislawrence.ca {
-    basic_auth {
-        admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
-    }
     reverse_proxy portainer:9000
 }
 
 # Portainer subdomain
 portainer.hephaestus.chrislawrence.ca {
-    basic_auth {
-        admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
-    }
     reverse_proxy portainer:9000
 }
 
 # Grafana - Metrics dashboard
 grafana.hephaestus.chrislawrence.ca {
-    basic_auth {
-        admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
-    }
     reverse_proxy grafana:3000
 }
 
 # Uptime Kuma - Monitoring (with iframe support)
 uptime.hephaestus.chrislawrence.ca, uptime.chrislawrence.ca {
-    basic_auth {
-        admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
-    }
 
     # Allow embedding in Organizr (dashboard)
     header {
@@ -97,33 +80,21 @@ uptime.hephaestus.chrislawrence.ca, uptime.chrislawrence.ca {
 
 # Prometheus - Metrics collection
 prometheus.hephaestus.chrislawrence.ca {
-    basic_auth {
-        admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
-    }
     reverse_proxy prometheus:9090
 }
 
 # cAdvisor - Container metrics
 cadvisor.hephaestus.chrislawrence.ca {
-    basic_auth {
-        admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
-    }
     reverse_proxy cadvisor:8080
 }
 
 # Glances - System monitoring
 glances.hephaestus.chrislawrence.ca {
-    basic_auth {
-        admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
-    }
     reverse_proxy glances:61208
 }
 
 # Organizr - Central dashboard (main entry point)
 dashboard.hephaestus.chrislawrence.ca {
-    basic_auth {
-        admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
-    }
     reverse_proxy organizr:80
 
     # Logging
@@ -137,17 +108,11 @@ dashboard.hephaestus.chrislawrence.ca {
 
 # Alternative Organizr route
 organizr.hephaestus.chrislawrence.ca {
-    basic_auth {
-        admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
-    }
     reverse_proxy organizr:80
 }
 
 # Uptime Kuma proxy for Organizr embedding (port 8083)
 :8083 {
-    basic_auth {
-        admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
-    }
 
     reverse_proxy uptime-kuma:3001 {
         # Remove X-Frame-Options to allow embedding
@@ -164,9 +129,6 @@ organizr.hephaestus.chrislawrence.ca {
 
 # Portainer proxy for Organizr embedding (port 8084)
 :8084 {
-    basic_auth {
-        admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
-    }
 
     reverse_proxy portainer:9000 {
         # Remove X-Frame-Options to allow embedding
@@ -183,9 +145,6 @@ organizr.hephaestus.chrislawrence.ca {
 
 # Grafana proxy for Organizr embedding (port 8085)
 :8085 {
-    basic_auth {
-        admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
-    }
 
     reverse_proxy grafana:3000 {
         # Remove X-Frame-Options to allow embedding
@@ -202,9 +161,6 @@ organizr.hephaestus.chrislawrence.ca {
 
 # Prometheus proxy for Organizr embedding (port 8086)
 :8086 {
-    basic_auth {
-        admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
-    }
 
     reverse_proxy prometheus:9090 {
         # Remove X-Frame-Options to allow embedding
@@ -221,9 +177,6 @@ organizr.hephaestus.chrislawrence.ca {
 
 # cAdvisor proxy for Organizr embedding (port 8087)
 :8087 {
-    basic_auth {
-        admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
-    }
 
     reverse_proxy cadvisor:8080 {
         # Remove X-Frame-Options to allow embedding
@@ -240,9 +193,6 @@ organizr.hephaestus.chrislawrence.ca {
 
 # Glances proxy for Organizr embedding (port 8088)
 :8088 {
-    basic_auth {
-        admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
-    }
 
     reverse_proxy glances:61208 {
         # Remove X-Frame-Options to allow embedding
@@ -259,9 +209,6 @@ organizr.hephaestus.chrislawrence.ca {
 
 # IT-Tools proxy for Organizr embedding (port 8089)
 :8089 {
-    basic_auth {
-        admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
-    }
 
     reverse_proxy it-tools:80 {
         # Remove X-Frame-Options to allow embedding
@@ -318,9 +265,6 @@ obsidian.hephaestus.chrislawrence.ca {
 
 # Magic Pages API proxy for Organizr embedding (port 8091)
 :8091 {
-    basic_auth {
-        admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
-    }
 
     reverse_proxy magicpages-api:8000 {
         # Set correct host header for Django ALLOWED_HOSTS
@@ -339,9 +283,6 @@ obsidian.hephaestus.chrislawrence.ca {
 
 # n8n proxy for Organizr embedding (port 8092)
 :8092 {
-    basic_auth {
-        admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
-    }
 
     reverse_proxy n8n-stack-n8n-1:5678 {
         # Enable WebSocket support for n8n editor
@@ -361,9 +302,6 @@ obsidian.hephaestus.chrislawrence.ca {
 
 # MQTT Explorer proxy for Organizr embedding (port 8093)
 :8093 {
-    basic_auth {
-        admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
-    }
 
     reverse_proxy mqtt-explorer:4000 {
         # Remove X-Frame-Options to allow embedding
@@ -380,9 +318,6 @@ obsidian.hephaestus.chrislawrence.ca {
 
 # Meshtastic Web proxy for Organizr embedding (port 8094)
 :8094 {
-    basic_auth {
-        admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
-    }
 
     reverse_proxy meshtastic-web:80 {
         # Remove X-Frame-Options to allow embedding
@@ -399,9 +334,6 @@ obsidian.hephaestus.chrislawrence.ca {
 
 # Node-RED proxy for Organizr embedding (port 8095)
 :8095 {
-    basic_auth {
-        admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
-    }
 
     reverse_proxy node-red:1880 {
         # Enable WebSocket support for Node-RED editor
@@ -421,9 +353,6 @@ obsidian.hephaestus.chrislawrence.ca {
 
 # Grafana IoT proxy for Organizr embedding (port 8096)
 :8096 {
-    basic_auth {
-        admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
-    }
 
     reverse_proxy grafana-iot:3000 {
         # Remove X-Frame-Options to allow embedding
@@ -462,19 +391,13 @@ chrislawrence.ca {
         reverse_proxy portfolio:5000
     }
 
-    # Protected dashboard (Cloudflare Access + Basic Auth)
+    # Protected dashboard (Cloudflare Access required)
     handle_path /dashboard/* {
-        basic_auth {
-            admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
-        }
         reverse_proxy organizr:80
     }
 
-    # Infrastructure services (accessible through Organizr)
+    # Infrastructure services (Cloudflare Access required)
     handle_path /uptime/* {
-        basic_auth {
-            admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
-        }
         reverse_proxy uptime-kuma:3001 {
             header_down -X-Frame-Options
         }
@@ -485,48 +408,30 @@ chrislawrence.ca {
     }
 
     handle_path /docker/* {
-        basic_auth {
-            admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
-        }
         reverse_proxy portainer:9000 {
             header_down -X-Frame-Options
         }
     }
 
     handle_path /metrics/* {
-        basic_auth {
-            admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
-        }
         reverse_proxy grafana:3000 {
             header_down -X-Frame-Options
         }
     }
 
     handle_path /prometheus/* {
-        basic_auth {
-            admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
-        }
         reverse_proxy prometheus:9090
     }
 
     handle_path /containers/* {
-        basic_auth {
-            admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
-        }
         reverse_proxy cadvisor:8080
     }
 
     handle_path /system/* {
-        basic_auth {
-            admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
-        }
         reverse_proxy glances:61208
     }
 
     handle_path /tools/* {
-        basic_auth {
-            admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
-        }
         reverse_proxy it-tools:80
     }
 
@@ -534,10 +439,10 @@ chrislawrence.ca {
     # APPLICATION ROUTES (81XX ports - ACTIVE)
     # ========================================================================
     
-    # Minecraft Dynmap (Public) - Port 8123 (embeddable)
+    # Minecraft BlueMap (Public) - Port 8150 (embeddable)
     handle_path /minecraft-map/* {
-        reverse_proxy minecraft:8123 {
-            # Remove frame-blocking headers from Dynmap
+        reverse_proxy minecraft:8100 {
+            # Remove frame-blocking headers from BlueMap
             header_down -X-Frame-Options
             header_down -Content-Security-Policy
         }
@@ -608,9 +513,6 @@ chrislawrence.ca {
 
     # n8n Workflow Automation (Protected) - Port 8092
     handle_path /n8n/* {
-        basic_auth {
-            admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
-        }
         reverse_proxy n8n-stack-n8n-1:5678 {
             # Enable WebSocket support for n8n editor
             header_up Connection {http.request.header.Connection}
@@ -625,9 +527,6 @@ chrislawrence.ca {
 
     # Obsidian Notes (Protected) - Port 8060
     handle_path /notes/* {
-        basic_auth {
-            admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
-        }
         reverse_proxy obsidian-notes:3000 {
             # Pass authentication headers
             header_up Authorization "Basic b2JzaWRpYW46b2JzaWRpYW4xMjM="
@@ -648,9 +547,6 @@ chrislawrence.ca {
     
     # MQTT Explorer (Public) - Port 8152
     handle_path /mqtt/* {
-        basic_auth {
-            admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
-        }
         reverse_proxy mqtt-explorer:4000 {
             header_down -X-Frame-Options
         }
@@ -662,9 +558,6 @@ chrislawrence.ca {
 
     # Meshtastic Web Interface (Public) - Port 8154
     handle_path /meshtastic/* {
-        basic_auth {
-            admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
-        }
         reverse_proxy meshtastic-web:80 {
             header_down -X-Frame-Options
         }
@@ -676,9 +569,6 @@ chrislawrence.ca {
 
     # Node-RED IoT Automation (Protected) - Port 8155
     handle_path /nodered/* {
-        basic_auth {
-            admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
-        }
         reverse_proxy node-red:1880 {
             # Enable WebSocket support for Node-RED editor
             header_up Connection {http.request.header.Connection}
@@ -693,9 +583,6 @@ chrislawrence.ca {
 
     # Grafana IoT Dashboard (Protected) - Port 8156
     handle_path /grafana-iot/* {
-        basic_auth {
-            admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
-        }
         reverse_proxy grafana-iot:3000 {
             header_down -X-Frame-Options
         }
@@ -707,12 +594,11 @@ chrislawrence.ca {
 
     # InfluxDB API (Protected) - Port 8157
     handle_path /influxdb/* {
-        basic_auth {
-            admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
-        }
         reverse_proxy influxdb:8086
     }
 
-    # Default redirect to portfolio (now handled by main route above)
-    # redir / /dashboard/  # Removed - Portfolio is now the homepage
+    # Fallback for any unmatched paths - redirect to portfolio
+    handle {
+        redir / /portfolio/ 302
+    }
 }

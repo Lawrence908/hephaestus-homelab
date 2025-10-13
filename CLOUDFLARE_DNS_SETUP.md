@@ -2,6 +2,37 @@
 
 ## 🎯 **Simplified Setup: Subpaths Only**
 
+
+- [https://chrislawrence.ca/](https://chrislawrence.ca/) → redirects to /portfolio/
+- [https://chrislawrence.ca/portfolio/](https://chrislawrence.ca/portfolio/) → Portfolio app (Flask)
+- [https://chrislawrence.ca/magicpages/](https://chrislawrence.ca/magicpages/) → Magic Pages frontend
+- [https://chrislawrence.ca/capitolscope/](https://chrislawrence.ca/capitolscope/) → CapitolScope app
+- [https://chrislawrence.ca/schedshare/](https://chrislawrence.ca/schedshare/) → SchedShare app
+- [https://chrislawrence.ca/events/](https://chrislawrence.ca/events/) → Mongo Events demo
+- [https://chrislawrence.ca/eventsphere/](https://chrislawrence.ca/eventsphere/) → EventSphere (alias)
+- [https://chrislawrence.ca/minecraft-map/](https://chrislawrence.ca/minecraft-map/) → Minecraft Dynmap
+
+**Protected Routes (Auth Required):**
+- [https://chrislawrence.ca/dashboard/](https://chrislawrence.ca/dashboard/) → Organizr dashboard
+- [https://chrislawrence.ca/uptime/](https://chrislawrence.ca/uptime/) → Uptime Kuma
+- [https://chrislawrence.ca/docker/](https://chrislawrence.ca/docker/) → Portainer
+- [https://chrislawrence.ca/metrics/](https://chrislawrence.ca/metrics/) → Grafana
+- [https://chrislawrence.ca/prometheus/](https://chrislawrence.ca/prometheus/) → Prometheus
+- [https://chrislawrence.ca/containers/](https://chrislawrence.ca/containers/) → cAdvisor
+- [https://chrislawrence.ca/system/](https://chrislawrence.ca/system/) → Glances
+- [https://chrislawrence.ca/tools/](https://chrislawrence.ca/tools/) → IT-Tools
+- [https://chrislawrence.ca/n8n/](https://chrislawrence.ca/n8n/) → n8n automation
+- [https://chrislawrence.ca/notes/](https://chrislawrence.ca/notes/) → Obsidian Notes
+- [https://chrislawrence.ca/mqtt/](https://chrislawrence.ca/mqtt/) → MQTT Explorer
+- [https://chrislawrence.ca/meshtastic/](https://chrislawrence.ca/meshtastic/) → Meshtastic Web
+- [https://chrislawrence.ca/nodered/](https://chrislawrence.ca/nodered/) → Node-RED
+- [https://chrislawrence.ca/grafana-iot/](https://chrislawrence.ca/grafana-iot/) → Grafana IoT
+- [https://chrislawrence.ca/influxdb/](https://chrislawrence.ca/influxdb/) → InfluxDB
+
+**API Routes:**
+- [https://chrislawrence.ca/magicpages-api/](https://chrislawrence.ca/magicpages-api/) → Magic Pages API
+
+
 We're using the **subpath-only approach** for cleaner URLs and easier management.
 
 ### **What You'll Have:**
@@ -180,3 +211,5 @@ After this setup:
 - **Direct Service Access**: `http://192.168.50.70:[port]` (local only)
 
 **Ready to implement!** 🚀
+
+
