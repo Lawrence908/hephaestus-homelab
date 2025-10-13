@@ -8,16 +8,52 @@
     http_port 80
 }
 
+# Localhost health endpoint (no auth)
+localhost:80 {
+    respond /health "OK" 200
+}
+
 # Default route - Portainer (when accessing via IP or main domain)
 :80 {
+    # Unauthenticated health endpoint for container healthcheck
+    @health path /health
+    handle @health {
+        respond "OK" 200
+    }
+
     # Basic authentication for all services
     basic_auth {
         admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
     }
-    
-    # Route to Portainer by default
+
+    # Subpath proxies for same-origin embedding (Organizr tabs)
+    handle_path /kuma/* {
+        header -X-Frame-Options
+        header Content-Security-Policy "frame-ancestors *"
+        reverse_proxy uptime-kuma:3001
+    }
+
+    handle_path /grafana/* {
+        header -X-Frame-Options
+        header Content-Security-Policy "frame-ancestors *"
+        reverse_proxy grafana:3000
+    }
+
+    handle_path /prometheus/* {
+        header -X-Frame-Options
+        header Content-Security-Policy "frame-ancestors *"
+        reverse_proxy prometheus:9090
+    }
+
+    handle_path /portainer/* {
+        header -X-Frame-Options
+        header Content-Security-Policy "frame-ancestors *"
+        reverse_proxy portainer:9000
+    }
+
+    # Fallback - Portainer by default
     reverse_proxy portainer:9000
-    
+
     # Logging
     log {
         output file /data/logs/portainer.log {
@@ -81,4 +117,28 @@ glances.hephaestus.chrislawrence.ca {
         admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
     }
     reverse_proxy glances:61208
+}
+
+# Organizr - Central dashboard (main entry point)
+dashboard.hephaestus.chrislawrence.ca {
+    basic_auth {
+        admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
+    }
+    reverse_proxy organizr:80
+
+    # Logging
+    log {
+        output file /data/logs/organizr.log {
+            roll_size 10mb
+            roll_keep 5
+        }
+    }
+}
+
+# Alternative Organizr route
+organizr.hephaestus.chrislawrence.ca {
+    basic_auth {
+        admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
+    }
+    reverse_proxy organizr:80
 }
