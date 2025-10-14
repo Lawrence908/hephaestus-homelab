@@ -489,9 +489,19 @@ chrislawrence.ca {
         reverse_proxy daedalos:3000
     }
 
-    # CapitolScope (Public) - Port 8120
-    handle_path /capitolscope/* {
+    # CapitolScope Backend API (Public) - Port 8120
+    handle_path /capitolscope/api/* {
         reverse_proxy capitolscope:8000
+        header {
+            Access-Control-Allow-Origin "*"
+            Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+            Access-Control-Allow-Headers "Content-Type, Authorization"
+        }
+    }
+
+    # CapitolScope Frontend (Public) - Port 8121
+    handle_path /capitolscope/ {
+        reverse_proxy capitolscope-frontend:5173
         header {
             Access-Control-Allow-Origin "*"
             Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
