@@ -31,7 +31,9 @@ localhost:80 {
     @portfolio path /portfolio/*
     handle @portfolio {
         uri strip_prefix /portfolio
-        reverse_proxy portfolio:5000
+        reverse_proxy portfolio:5000 {
+            header_up X-Forwarded-Prefix /portfolio
+        }
     }
 
     # SchedShare (Public) - Port 8130
@@ -95,17 +97,9 @@ localhost:80 {
     }
 }
 
-# n8n - Dedicated subdomain for OAuth callbacks
-n8n.chrislawrence.ca {
-    # Explicitly handle all paths to avoid fallback redirect
-    handle {
-        reverse_proxy n8n-stack-n8n-1:5678 {
-            header_up Host {host}
-            header_up X-Forwarded-Proto https
-            header_up X-Forwarded-For {remote}
-        }
-    }
-}
+# n8n subdomain removed in favor of path routing under chrislawrence.ca
+
+
 
 # Dashboard subdomain (single subdomain)
 dashboard.chrislawrence.ca {
@@ -384,6 +378,7 @@ chrislawrence.ca {
     handle @portfolio_public {
         uri strip_prefix /portfolio
         reverse_proxy portfolio:5000 {
+            header_up X-Forwarded-Prefix /portfolio
             header_up Host {host}
             header_up X-Forwarded-Proto {scheme}
             header_up X-Forwarded-For {remote}
