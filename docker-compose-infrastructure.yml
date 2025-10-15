@@ -35,7 +35,7 @@ services:
       - "8087:8087"  # cAdvisor proxy
       - "8088:8088"  # Glances proxy
       - "8089:8089"  # IT-Tools proxy
-      - "8090:8090"  # Obsidian Notes proxy
+      - "8090:8090"  # Obsidian Notes HTTPS proxy
       - "8091:8091"  # Magic Pages API proxy (HTTP)
       - "8092:8092"  # n8n proxy
       - "8093:8093"  # MQTT Explorer proxy

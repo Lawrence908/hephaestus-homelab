@@ -32,6 +32,34 @@ localhost:80 {
         reverse_proxy portfolio:5000
     }
 
+    # SchedShare (Public) - Port 8130
+    @schedshare {
+        path /schedshare/*
+    }
+    handle @schedshare {
+        uri strip_prefix /schedshare
+        reverse_proxy schedshare:5000 {
+            header_up Host {host}
+            header_up X-Forwarded-Proto {scheme}
+            header_up X-Forwarded-For {remote}
+            header_up X-Real-IP {remote}
+        }
+    }
+
+    # MagicPages API (Public) - Port 8100
+    @magicpages {
+        path /magicpages-api/*
+    }
+    handle @magicpages {
+        uri strip_prefix /magicpages-api
+        reverse_proxy magicpages-api:8000 {
+            header_up Host {host}
+            header_up X-Forwarded-Proto {scheme}
+            header_up X-Forwarded-For {remote}
+            header_up X-Real-IP {remote}
+        }
+    }
+
     # Direct port access works better for Organizr embedding
     # Use http://192.168.50.70:PORT/path in Organizr tab URLs
 
@@ -64,10 +92,13 @@ grafana.hephaestus.chrislawrence.ca {
 
 # n8n - Dedicated subdomain for OAuth callbacks
 n8n.chrislawrence.ca {
-    reverse_proxy n8n:5678 {
-        header_up Host {host}
-        header_up X-Forwarded-Proto https
-        header_up X-Forwarded-For {remote}
+    # Explicitly handle all paths to avoid fallback redirect
+    handle {
+        reverse_proxy n8n-stack-n8n-1:5678 {
+            header_up Host {host}
+            header_up X-Forwarded-Proto https
+            header_up X-Forwarded-For {remote}
+        }
     }
 }
 
@@ -232,9 +263,9 @@ organizr.hephaestus.chrislawrence.ca {
     }
 }
 
-# Obsidian Notes proxy for Organizr embedding (port 8090 HTTP)
+# Obsidian Notes proxy for Organizr embedding (port 8090)
 :8090 {
-    reverse_proxy obsidian-notes:3000 {
+    reverse_proxy obsidian-notes:3001 {
         # Pass authentication headers
         header_up Authorization "Basic b2JzaWRpYW46b2JzaWRpYW4xMjM="
         # Enable WebSocket support for the app
@@ -292,7 +323,6 @@ obsidian.hephaestus.chrislawrence.ca {
 
 # n8n proxy for Organizr embedding (port 8092)
 :8092 {
-
     reverse_proxy n8n-stack-n8n-1:5678 {
         # Enable WebSocket support for n8n editor
         header_up Connection {http.request.header.Connection}
@@ -400,7 +430,12 @@ chrislawrence.ca {
 
     # Portfolio App (Public) - Port 8110 (no auth required)
     handle_path /portfolio/* {
-        reverse_proxy portfolio:5000
+        reverse_proxy portfolio:5000 {
+            header_up Host {host}
+            header_up X-Forwarded-Proto {scheme}
+            header_up X-Forwarded-For {remote}
+            header_up X-Real-IP {remote}
+        }
     }
 
     # Protected dashboard (Cloudflare Access required)
@@ -516,11 +551,6 @@ chrislawrence.ca {
             Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
             Access-Control-Allow-Headers "Content-Type, Authorization"
         }
-    }
-
-    # SchedShare (Public) - Port 8130
-    handle_path /schedshare/* {
-        reverse_proxy schedshare:5000
     }
 
     # Mongo Events Demo (Public) - Port 8140
