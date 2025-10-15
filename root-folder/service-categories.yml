@@ -1,0 +1,17 @@
+# key: category
+# Keys are substrings matched against compose file paths
+proxy: infra
+redis: db
+postgres: db
+mongo: db
+prometheus: monitoring
+grafana: monitoring
+uptime: monitoring
+exporter: monitoring
+portainer: infra
+n8n: app
+magicpages: app
+obsidian: app
+portfolio: app
+capitolscope: app
+minecraft: app
