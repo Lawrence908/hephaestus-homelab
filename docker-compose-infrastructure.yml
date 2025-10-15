@@ -48,7 +48,7 @@ services:
       - caddy_config:/config
     environment:
       - DOMAIN=${DOMAIN}
-      - CLOUDFLARE_API_TOKEN=${CLOUDFLARE_API_TOKEN}
+      # - CLOUDFLARE_API_TOKEN=${CLOUDFLARE_API_TOKEN}
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
     healthcheck:
