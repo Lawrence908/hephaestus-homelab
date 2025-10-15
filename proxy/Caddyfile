@@ -3,7 +3,7 @@
 
 # Global configuration
 {
-    admin off
+    admin 127.0.0.1:2019
     auto_https off
     http_port 80
 }
@@ -28,7 +28,9 @@ localhost:80 {
     }
 
     # Portfolio App (no auth required - public)
-    handle_path /portfolio/* {
+    @portfolio path /portfolio/*
+    handle @portfolio {
+        uri strip_prefix /portfolio
         reverse_proxy portfolio:5000
     }
 
@@ -378,7 +380,9 @@ chrislawrence.ca {
     }
 
     # Portfolio App (Public) - Port 8110 (no auth required)
-    handle_path /portfolio/* {
+    @portfolio_public path /portfolio/*
+    handle @portfolio_public {
+        uri strip_prefix /portfolio
         reverse_proxy portfolio:5000 {
             header_up Host {host}
             header_up X-Forwarded-Proto {scheme}
