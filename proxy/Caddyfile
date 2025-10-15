@@ -33,11 +33,7 @@ localhost:80 {
     }
 
     # SchedShare (Public) - Port 8130
-    @schedshare {
-        path /schedshare/*
-    }
-    handle @schedshare {
-        uri strip_prefix /schedshare
+    handle_path /schedshare/* {
         reverse_proxy schedshare:5000 {
             header_up Host {host}
             header_up X-Forwarded-Proto {scheme}
@@ -60,6 +56,28 @@ localhost:80 {
         }
     }
 
+    # MagicPages Static Files (CSS, JS, Images)
+    @magicpages_static {
+        path /magicpages-api/static/*
+    }
+    handle @magicpages_static {
+        uri strip_prefix /magicpages-api/static
+        file_server {
+            root /var/www/magicpages/static
+        }
+    }
+
+    # MagicPages Media Files (User uploads)
+    @magicpages_media {
+        path /magicpages-api/media/*
+    }
+    handle @magicpages_media {
+        uri strip_prefix /magicpages-api/media
+        file_server {
+            root /var/www/magicpages/media
+        }
+    }
+
     # Direct port access works better for Organizr embedding
     # Use http://192.168.50.70:PORT/path in Organizr tab URLs
 
@@ -75,21 +93,6 @@ localhost:80 {
     }
 }
 
-# Main domain - Portainer
-hephaestus.chrislawrence.ca {
-    reverse_proxy portainer:9000
-}
-
-# Portainer subdomain
-portainer.hephaestus.chrislawrence.ca {
-    reverse_proxy portainer:9000
-}
-
-# Grafana - Metrics dashboard
-grafana.hephaestus.chrislawrence.ca {
-    reverse_proxy grafana:3000
-}
-
 # n8n - Dedicated subdomain for OAuth callbacks
 n8n.chrislawrence.ca {
     # Explicitly handle all paths to avoid fallback redirect
@@ -102,39 +105,8 @@ n8n.chrislawrence.ca {
     }
 }
 
-# Uptime Kuma - Monitoring (with iframe support)
-uptime.hephaestus.chrislawrence.ca, uptime.chrislawrence.ca {
-
-    # Allow embedding in Organizr (dashboard)
-    header {
-        -X-Frame-Options
-        Content-Security-Policy "frame-ancestors 'self' dashboard.hephaestus.chrislawrence.ca organizr.hephaestus.chrislawrence.ca localhost:8082"
-        Referrer-Policy "strict-origin-when-cross-origin"
-    }
-
-    reverse_proxy uptime-kuma:3001 {
-        header_down -X-Frame-Options
-    }
-}
-
-
-# Prometheus - Metrics collection
-prometheus.hephaestus.chrislawrence.ca {
-    reverse_proxy prometheus:9090
-}
-
-# cAdvisor - Container metrics
-cadvisor.hephaestus.chrislawrence.ca {
-    reverse_proxy cadvisor:8080
-}
-
-# Glances - System monitoring
-glances.hephaestus.chrislawrence.ca {
-    reverse_proxy glances:61208
-}
-
-# Organizr - Central dashboard (main entry point)
-dashboard.hephaestus.chrislawrence.ca {
+# Dashboard subdomain (single subdomain)
+dashboard.chrislawrence.ca {
     reverse_proxy organizr:80
 
     # Logging
@@ -144,11 +116,6 @@ dashboard.hephaestus.chrislawrence.ca {
             roll_keep 5
         }
     }
-}
-
-# Alternative Organizr route
-organizr.hephaestus.chrislawrence.ca {
-    reverse_proxy organizr:80
 }
 
 # Uptime Kuma proxy for Organizr embedding (port 8083)
@@ -283,25 +250,7 @@ organizr.hephaestus.chrislawrence.ca {
     }
 }
 
-# Obsidian Notes HTTPS proxy for Organizr embedding
-obsidian.hephaestus.chrislawrence.ca {
-    reverse_proxy obsidian-notes:3000 {
-        # Pass authentication headers
-        header_up Authorization "Basic b2JzaWRpYW46b2JzaWRpYW4xMjM="
-        # Enable WebSocket support for the app
-        header_up Connection {http.request.header.Connection}
-        header_up Upgrade {http.request.header.Upgrade}
-        # Remove X-Frame-Options to allow embedding
-        header_down -X-Frame-Options
-        header_down -Content-Security-Policy
-    }
-
-    # Set permissive headers for embedding
-    header {
-        -X-Frame-Options
-        Content-Security-Policy "frame-ancestors *"
-    }
-}
+# (Removed per-service subdomains in favor of chrislawrence.ca subpaths)
 
 # Magic Pages API proxy for Organizr embedding (port 8091)
 :8091 {
@@ -506,7 +455,7 @@ chrislawrence.ca {
         # Allow embedding in Organizr
         header {
             -X-Frame-Options
-            Content-Security-Policy "frame-ancestors 'self' dashboard.hephaestus.chrislawrence.ca organizr.hephaestus.chrislawrence.ca"
+            Content-Security-Policy "frame-ancestors 'self' dashboard.chrislawrence.ca"
         }
     }
 

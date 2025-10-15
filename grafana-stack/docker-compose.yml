@@ -1,11 +1,10 @@
 # Grafana + Prometheus Monitoring Stack
 # This can be run independently or as part of the main stack
 
-version: '3.8'
-
 networks:
   web:
     external: true
+    name: homelab-web
 
 volumes:
   grafana_data:
