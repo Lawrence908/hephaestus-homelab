@@ -21,8 +21,23 @@ Complete tracking document for all homelab services with local, proxy, and publi
 - CapitolScope Backend (Proxy working)
 - CapitolScope Frontend (Proxy working)
 
-### **❌ Not Working**
-- Obsidian (Docker compose syntax error)
+### **✅ Working Services**
+- Portfolio (Public)
+- SchedShare (Local only)
+- EventSphere (Local only)
+- Organizr (Public)
+- Portainer (Proxy working)
+- Uptime Kuma (Proxy working)
+- Grafana (Proxy working)
+- Prometheus (Proxy working)
+- cAdvisor (Proxy working)
+- Glances (Proxy working)
+- IT-Tools (Proxy working)
+- MagicPages (Proxy working)
+- n8n (Proxy working)
+- CapitolScope Backend (Proxy working)
+- CapitolScope Frontend (Proxy working)
+- Obsidian (Direct HTTPS access working)
 
 ---
 
@@ -53,7 +68,7 @@ Complete tracking document for all homelab services with local, proxy, and publi
 | **CapitolScope Backend** | `http://192.168.50.70:8001` | `http://192.168.50.70:8120` | `https://chrislawrence.ca/capitolscope` | ✅ Working | Proxy configured and working |
 | **EventSphere** | `http://192.168.50.70:8140` | `https://chrislawrence.ca/eventsphere` | ✅ Working | Local only, public pending |
 | **n8n** | `http://192.168.50.70:5678` | `http://192.168.50.70:8092` | `https://chrislawrence.ca/n8n` | ✅ Working | Proxy configured and working |
-| **Obsidian** | `https://192.168.50.70:8061` | `https://chrislawrence.ca/notes` | ❌ Not Working | HTTPS required, needs config |
+| **Obsidian** | `https://192.168.50.70:8061` | `https://192.168.50.70:8061` | `https://chrislawrence.ca/notes` | ✅ Working | Use direct HTTPS - middle-click for full screen |
 
 ### **🔧 IoT & Communication Services**
 
@@ -73,6 +88,7 @@ Complete tracking document for all homelab services with local, proxy, and publi
 Portfolio: https://chrislawrence.ca/portfolio
 SchedShare: http://192.168.50.70:8130
 EventSphere: http://192.168.50.70:8140
+Obsidian: https://192.168.50.70:8061 (middle-click for full screen - HTTPS required)
 ```
 
 ### **🔄 Needs Proxy Ports (For iframe embedding)**

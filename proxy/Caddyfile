@@ -228,15 +228,16 @@ dashboard.chrislawrence.ca {
 
 # Obsidian Notes proxy for Organizr embedding (port 8090)
 :8090 {
-    reverse_proxy obsidian-notes:3001 {
-        # Pass authentication headers
-        header_up Authorization "Basic b2JzaWRpYW46b2JzaWRpYW4xMjM="
+    reverse_proxy obsidian-notes:3000 {
         # Enable WebSocket support for the app
         header_up Connection {http.request.header.Connection}
         header_up Upgrade {http.request.header.Upgrade}
         # Remove X-Frame-Options to allow embedding
         header_down -X-Frame-Options
         header_down -Content-Security-Policy
+        # Force HTTP for embedding compatibility
+        header_up X-Forwarded-Proto http
+        header_up X-Forwarded-Ssl off
     }
 
     # Set permissive headers for embedding
