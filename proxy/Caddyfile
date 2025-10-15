@@ -354,6 +354,38 @@ dashboard.chrislawrence.ca {
     }
 }
 
+# CapitolScope Backend proxy for Organizr embedding (port 8120)
+:8120 {
+
+    reverse_proxy capitolscope-dev:8000 {
+        # Remove X-Frame-Options to allow embedding
+        header_down -X-Frame-Options
+        header_down -Content-Security-Policy
+    }
+
+    # Set permissive headers for embedding
+    header {
+        -X-Frame-Options
+        Content-Security-Policy "frame-ancestors *"
+    }
+}
+
+# CapitolScope Frontend proxy for Organizr embedding (port 8121)
+:8121 {
+
+    reverse_proxy capitolscope-frontend-dev:5173 {
+        # Remove X-Frame-Options to allow embedding
+        header_down -X-Frame-Options
+        header_down -Content-Security-Policy
+    }
+
+    # Set permissive headers for embedding
+    header {
+        -X-Frame-Options
+        Content-Security-Policy "frame-ancestors *"
+    }
+}
+
 # ============================================================================
 # PUBLIC SUBPATH ROUTING - chrislawrence.ca
 # ============================================================================

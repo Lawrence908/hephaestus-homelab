@@ -42,6 +42,8 @@ services:
       - "8094:8094"  # Meshtastic Web proxy
       - "8095:8095"  # Node-RED proxy
       - "8096:8096"  # Grafana IoT proxy
+      - "8120:8120"  # CapitolScope Backend proxy
+      - "8121:8121"  # CapitolScope Frontend proxy
     volumes:
       - ./proxy/Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy_data:/data

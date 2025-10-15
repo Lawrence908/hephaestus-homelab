@@ -49,16 +49,17 @@
 ```yaml
 # ~/github/hephaestus-homelab/docker-compose-infrastructure.yml
 networks:
-  web:
+  homelab-web:
     driver: bridge
 ```
 
 ### **Application Services**
 ```yaml
-# ~/apps/*/docker-compose.yml
+# ~/apps/*/docker-compose-homelab.yml
 networks:
   web:
-    external: true  # References infrastructure network
+    external: true
+    name: homelab-web  # References infrastructure network
 ```
 
 ## 📊 **Service Categories**
