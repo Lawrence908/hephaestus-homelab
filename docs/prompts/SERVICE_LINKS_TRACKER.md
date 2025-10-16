@@ -39,6 +39,13 @@ Complete tracking document for all homelab services with local, proxy, and publi
 - CapitolScope Frontend (Proxy working)
 - Obsidian (Direct HTTPS access working)
 
+### **🤖 AI Services (New)**
+- Ollama (Local LLM inference)
+- Open WebUI (AI chat interface)
+- ComfyUI (Image generation)
+- OpenRouter Proxy (Cloud AI access)
+- Model Manager (Model management)
+
 ---
 
 ## 📊 **Complete Service Links Table**
@@ -69,6 +76,16 @@ Complete tracking document for all homelab services with local, proxy, and publi
 | **EventSphere** | `http://192.168.50.70:8140` | `https://chrislawrence.ca/eventsphere` | ✅ Working | Local only, public pending |
 | **n8n** | `http://192.168.50.70:5678` | `http://192.168.50.70:8092` | `https://chrislawrence.ca/n8n` | ✅ Working | Proxy configured and working |
 | **Obsidian** | `https://192.168.50.70:8061` | `https://192.168.50.70:8061` | `https://chrislawrence.ca/notes` | ✅ Working | Use direct HTTPS - middle-click for full screen |
+
+### **🤖 AI Inference Services**
+
+| Service | Direct Port (LAN) | Proxy Port (LAN) | Public URL | Status | Notes |
+|---------|------------------|------------------|------------|--------|-------|
+| **Ollama API** | `http://192.168.50.70:11434` | N/A | `https://chrislawrence.ca/ai/api` | 🟡 Pending | Local LLM inference engine |
+| **Open WebUI** | `http://192.168.50.70:8189` | `http://192.168.50.70:8161` | `https://chrislawrence.ca/ai` | 🟡 Pending | AI chat interface |
+| **ComfyUI** | `http://192.168.50.70:8188` | `http://192.168.50.70:8162` | `https://chrislawrence.ca/comfyui` | 🟡 Pending | Image generation workflows |
+| **OpenRouter Proxy** | `http://192.168.50.70:8190` | `http://192.168.50.70:8163` | `https://chrislawrence.ca/openrouter` | 🟡 Pending | Cloud AI model access |
+| **Model Manager** | `http://192.168.50.70:8191` | `http://192.168.50.70:8164` | `https://chrislawrence.ca/models` | 🟡 Pending | Model download and management |
 
 ### **🔧 IoT & Communication Services**
 
@@ -139,15 +156,20 @@ Obsidian: https://192.168.50.70:8061 (not working)
 - **Portfolio**: `https://chrislawrence.ca/portfolio`
 - **SchedShare**: `http://192.168.50.70:8130`
 - **EventSphere**: `http://192.168.50.70:8140`
+- **CapitolScope Frontend**: `http://192.168.50.70:8121`
+- **CapitolScope Backend**: `http://192.168.50.70:8120`
 
 ### **🔄 Needs Testing**
+- **Obsidian**: `https://192.168.50.70:8061` (cannot use through Organizr)
 - **MagicPages API**: `http://192.168.50.70:8100` (error)
 - **MagicPages Frontend**: `http://192.168.50.70:8101` (error)
 
 ### **❌ Not Deployed**
-- **CapitolScope**: `http://192.168.50.70:8120`
-- **Obsidian**: `https://192.168.50.70:8061`
-- **All Infrastructure Services**: Need proxy port configuration
+
+- **Meshtastic MQTT Explorer**: `http://192.168.50.70:8152`
+- **Home Assistant**: `http://192.168.50.70:8154`
+- **Node-RED**: `http://192.168.50.70:8155`
+- **Grafana IoT**: `http://192.168.50.70:8156`
 
 ---
 

@@ -47,6 +47,16 @@ Organizr (Central dashboard) - http://192.168.50.70:8082
 | **n8n** | 8141 | `chrislawrence.ca/n8n` | Automation/workflows | 🟡 Pending |
 | **Minecraft Server** | 25565 (TCP/UDP) | N/A (non-HTTP) | Game server | 🟡 Pending |
 
+## 🤖 AI Inference Services
+
+| Service | Port | Public URL | Purpose | Status |
+|---------|------|------------|---------|--------|
+| **Ollama API** | 11434 | `chrislawrence.ca/ai/api` | Local LLM inference | 🟡 Pending |
+| **Open WebUI** | 8189 | `chrislawrence.ca/ai` | Web interface for AI | 🟡 Pending |
+| **ComfyUI** | 8188 | `chrislawrence.ca/comfyui` | Image generation workflows | 🟡 Pending |
+| **OpenRouter Proxy** | 8190 | `chrislawrence.ca/openrouter` | Cloud model access | 🟡 Pending |
+| **Model Manager** | 8191 | `chrislawrence.ca/models` | Model management | 🟡 Pending |
+
 ## 🔌 IoT & Communication Services
 
 | Service | Port | Public URL | Purpose | Status |
@@ -75,6 +85,10 @@ Organizr (Central dashboard) - http://192.168.50.70:8082
 | **Home Assistant** | 8154 | 8094 | `chrislawrence.ca/homeassistant` | IoT Hub | 🟢 Running |
 | **Node-RED** | 8155 | 8095 | `chrislawrence.ca/nodered` | IoT Automation | 🟡 Pending |
 | **Grafana IoT** | 8156 | 8096 | `chrislawrence.ca/grafana-iot` | IoT Metrics Dashboard | 🟡 Pending |
+| **Open WebUI** | 8189 | 8161 | `chrislawrence.ca/ai` | AI Web Interface | 🟡 Pending |
+| **ComfyUI** | 8188 | 8162 | `chrislawrence.ca/comfyui` | Image Generation | 🟡 Pending |
+| **OpenRouter Proxy** | 8190 | 8163 | `chrislawrence.ca/openrouter` | Cloud AI Access | 🟡 Pending |
+| **Model Manager** | 8191 | 8164 | `chrislawrence.ca/models` | Model Management | 🟡 Pending |
 
 ### 📋 Port Range Organization
 
@@ -85,6 +99,7 @@ Organizr (Central dashboard) - http://192.168.50.70:8082
 8130-8139: SchedShare & scheduling tools
 8140-8149: EventSphere, n8n and automation
 8150-8159: IoT & Communication (MQTT, Meshtastic, Node-RED)
+8160-8169: AI Services (Ollama, Open WebUI, ComfyUI, OpenRouter, Model Manager)
 ```
 
 ## 🔒 Security Zones

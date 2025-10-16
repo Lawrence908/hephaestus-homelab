@@ -85,8 +85,104 @@ localhost:80 {
     # Direct port access works better for Organizr embedding
     # Use http://192.168.50.70:PORT/path in Organizr tab URLs
 
-    # Fallback - Portainer by default (will be protected by Cloudflare Access)
-    reverse_proxy portainer:9000
+    # Dashboard/Organizr (Protected) - for remote access
+    @dashboard {
+        path /dashboard/*
+    }
+    handle @dashboard {
+        reverse_proxy organizr:80 {
+            header_up Host {host}
+        }
+    }
+
+    # Infrastructure services (for remote access)
+    handle_path /uptime {
+        reverse_proxy uptime-kuma:3001 {
+            header_down -X-Frame-Options
+        }
+    }
+    
+    handle_path /uptime/* {
+        reverse_proxy uptime-kuma:3001 {
+            header_down -X-Frame-Options
+        }
+    }
+
+    handle_path /docker/* {
+        reverse_proxy portainer:9000 {
+            header_down -X-Frame-Options
+        }
+    }
+
+    handle_path /metrics/* {
+        reverse_proxy grafana:3000 {
+            header_down -X-Frame-Options
+        }
+    }
+
+    handle_path /prometheus/* {
+        reverse_proxy prometheus:9090
+    }
+
+    handle_path /containers/* {
+        reverse_proxy cadvisor:8080
+    }
+
+    handle_path /system/* {
+        reverse_proxy glances:61208
+    }
+
+    handle_path /tools/* {
+        reverse_proxy it-tools:80
+    }
+
+    # IoT Services (for remote access)
+    handle_path /mqtt/* {
+        reverse_proxy mqtt-explorer:4000 {
+            header_down -X-Frame-Options
+        }
+    }
+
+    handle_path /homeassistant/* {
+        reverse_proxy homeassistant:8123 {
+            header_down -X-Frame-Options
+        }
+    }
+
+    handle_path /nodered/* {
+        reverse_proxy node-red:1880 {
+            header_up Connection {http.request.header.Connection}
+            header_up Upgrade {http.request.header.Upgrade}
+            header_down -X-Frame-Options
+        }
+    }
+
+    handle_path /grafana-iot/* {
+        reverse_proxy grafana-iot:3000 {
+            header_down -X-Frame-Options
+        }
+    }
+
+    # Application Services (for remote access)
+    handle_path /n8n/* {
+        reverse_proxy n8n-stack-n8n-1:5678 {
+            header_up Connection {http.request.header.Connection}
+            header_up Upgrade {http.request.header.Upgrade}
+            header_down -X-Frame-Options
+        }
+    }
+
+    handle_path /notes/* {
+        reverse_proxy obsidian-notes:3000 {
+            header_up Authorization "Basic b2JzaWRpYW46b2JzaWRpYW4xMjM="
+            header_up Connection {http.request.header.Connection}
+            header_up Upgrade {http.request.header.Upgrade}
+            header_down -X-Frame-Options
+        }
+    }
+
+    # Fallback - Portfolio by default
+    reverse_proxy portfolio:5000
 
     # Logging
     log {
@@ -388,6 +484,70 @@ dashboard.chrislawrence.ca {
 }
 
 # ============================================================================
+# AI SERVICES PROXY PORTS (816X ports - for Organizr embedding)
+# ============================================================================
+
+# Open WebUI proxy for Organizr embedding (port 8161)
+:8161 {
+    reverse_proxy ai-openwebui:8080 {
+        # Remove X-Frame-Options to allow embedding
+        header_down -X-Frame-Options
+        header_down -Content-Security-Policy
+    }
+
+    # Set permissive headers for embedding
+    header {
+        -X-Frame-Options
+        Content-Security-Policy "frame-ancestors *"
+    }
+}
+
+# ComfyUI proxy for Organizr embedding (port 8162)
+:8162 {
+    reverse_proxy ai-comfyui:8188 {
+        # Remove X-Frame-Options to allow embedding
+        header_down -X-Frame-Options
+        header_down -Content-Security-Policy
+    }
+
+    # Set permissive headers for embedding
+    header {
+        -X-Frame-Options
+        Content-Security-Policy "frame-ancestors *"
+    }
+}
+
+# OpenRouter Proxy for Organizr embedding (port 8163)
+:8163 {
+    reverse_proxy ai-openrouter-proxy:8190 {
+        # Remove X-Frame-Options to allow embedding
+        header_down -X-Frame-Options
+        header_down -Content-Security-Policy
+    }
+
+    # Set permissive headers for embedding
+    header {
+        -X-Frame-Options
+        Content-Security-Policy "frame-ancestors *"
+    }
+}
+
+# Model Manager proxy for Organizr embedding (port 8164)
+:8164 {
+    reverse_proxy ai-model-manager:8191 {
+        # Remove X-Frame-Options to allow embedding
+        header_down -X-Frame-Options
+        header_down -Content-Security-Policy
+    }
+
+    # Set permissive headers for embedding
+    header {
+        -X-Frame-Options
+        Content-Security-Policy "frame-ancestors *"
+    }
+}
+
+# ============================================================================
 # PUBLIC SUBPATH ROUTING - chrislawrence.ca
 # ============================================================================
 
@@ -576,6 +736,48 @@ chrislawrence.ca {
             # Enable WebSocket support
             header_up Connection {http.request.header.Connection}
             header_up Upgrade {http.request.header.Upgrade}
+            header_down -X-Frame-Options
+        }
+        header {
+            -X-Frame-Options
+            Content-Security-Policy "frame-ancestors 'self'"
+        }
+    }
+
+    # ========================================================================
+    # AI INFERENCE SERVICES (816X ports)
+    # ========================================================================
+    
+    # Open WebUI (Protected) - Port 8161
+    handle_path /ai/* {
+        reverse_proxy ai-openwebui:8080 {
+            header_down -X-Frame-Options
+        }
+        header {
+            -X-Frame-Options
+            Content-Security-Policy "frame-ancestors 'self'"
+        }
+    }
+    
+    # ComfyUI (Protected) - Port 8162
+    handle_path /comfyui/* {
+        reverse_proxy ai-comfyui:8188 {
+            header_down -X-Frame-Options
+        }
+        header {
+            -X-Frame-Options
+            Content-Security-Policy "frame-ancestors 'self'"
+        }
+    }
+    
+    # OpenRouter Proxy (Protected) - Port 8163
+    handle_path /openrouter/* {
+        reverse_proxy ai-openrouter-proxy:8190
+    }
+    
+    # Model Manager (Protected) - Port 8164
+    handle_path /models/* {
+        reverse_proxy ai-model-manager:8191 {
             header_down -X-Frame-Options
         }
         header {
