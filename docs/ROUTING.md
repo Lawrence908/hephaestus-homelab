@@ -36,12 +36,22 @@ Complete routing guide for accessing services via different methods: direct port
 | **n8n** | 8141 | `chrislawrence.ca/n8n` | Private by default (Auth required) | 🟡 Pending |
 | **Minecraft Server** | 25565 (TCP) | N/A (non-HTTP) | LAN-only (or manual port forward) | 🟡 Pending |
 
+### **🤖 AI Services**
+| Service | Port | Organizr Proxy Port | Public URL | Status |
+|---------|------|---------------------|------------|--------|
+| **Open WebUI** | `http://192.168.50.70:8189` | `http://192.168.50.70:8161` | `https://chrislawrence.ca/ai` | 🟢 Working |
+| **OpenRouter Proxy** | `http://192.168.50.70:8190` | `http://192.168.50.70:8163` | `https://chrislawrence.ca/openrouter` | 🟢 Working |
+| **ComfyUI** | `http://192.168.50.70:8188` | `http://192.168.50.70:8162` | `https://chrislawrence.ca/comfyui` | 🟡 Needs Config |
+| **Model Manager** | `http://192.168.50.70:8191` | `http://192.168.50.70:8164` | `https://chrislawrence.ca/models` | 🟡 Needs Config |
+
 ## 🎯 **Organizr Tab URLs (Recommended)**
 
 Use these proxy ports for embedding in Organizr (removes X-Frame-Options):
 
 ### **✅ Working URLs**
 - **Uptime Kuma**: `http://192.168.50.70:8083/dashboard` (Proxy with iframe support)
+ - **Open WebUI**: `http://192.168.50.70:8161` (Proxy for embedding in Organizr)
+ - **OpenRouter Proxy**: `http://192.168.50.70:8163` (Proxy for embedding in Organizr)
 
 ### **🔄 Next to Configure**
 - **Portainer**: `http://192.168.50.70:8084` (Will proxy to port 9000)

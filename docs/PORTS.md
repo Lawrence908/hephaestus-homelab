@@ -52,9 +52,9 @@ Organizr (Central dashboard) - http://192.168.50.70:8082
 | Service | Port | Public URL | Purpose | Status |
 |---------|------|------------|---------|--------|
 | **Ollama API** | 11434 | `chrislawrence.ca/ai/api` | Local LLM inference | 🟡 Pending |
-| **Open WebUI** | 8189 | `chrislawrence.ca/ai` | Web interface for AI | 🟡 Pending |
+| **Open WebUI** | 8189 | `chrislawrence.ca/ai` | Web interface for AI | 🟢 Running |
 | **ComfyUI** | 8188 | `chrislawrence.ca/comfyui` | Image generation workflows | 🟡 Pending |
-| **OpenRouter Proxy** | 8190 | `chrislawrence.ca/openrouter` | Cloud model access | 🟡 Pending |
+| **OpenRouter Proxy** | 8190 | `chrislawrence.ca/openrouter` | Cloud model access | 🟢 Running |
 | **Model Manager** | 8191 | `chrislawrence.ca/models` | Model management | 🟡 Pending |
 
 ## 🔌 IoT & Communication Services
@@ -85,9 +85,9 @@ Organizr (Central dashboard) - http://192.168.50.70:8082
 | **Home Assistant** | 8154 | 8094 | `chrislawrence.ca/homeassistant` | IoT Hub | 🟢 Running |
 | **Node-RED** | 8155 | 8095 | `chrislawrence.ca/nodered` | IoT Automation | 🟡 Pending |
 | **Grafana IoT** | 8156 | 8096 | `chrislawrence.ca/grafana-iot` | IoT Metrics Dashboard | 🟡 Pending |
-| **Open WebUI** | 8189 | 8161 | `chrislawrence.ca/ai` | AI Web Interface | 🟡 Pending |
+| **Open WebUI** | 8189 | 8161 | `chrislawrence.ca/ai` | AI Web Interface | ✅ Working |
 | **ComfyUI** | 8188 | 8162 | `chrislawrence.ca/comfyui` | Image Generation | 🟡 Pending |
-| **OpenRouter Proxy** | 8190 | 8163 | `chrislawrence.ca/openrouter` | Cloud AI Access | 🟡 Pending |
+| **OpenRouter Proxy** | 8190 | 8163 | `chrislawrence.ca/openrouter` | Cloud AI Access | ✅ Working |
 | **Model Manager** | 8191 | 8164 | `chrislawrence.ca/models` | Model Management | 🟡 Pending |
 
 ### 📋 Port Range Organization

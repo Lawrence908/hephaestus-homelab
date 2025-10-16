@@ -82,9 +82,9 @@ Complete tracking document for all homelab services with local, proxy, and publi
 | Service | Direct Port (LAN) | Proxy Port (LAN) | Public URL | Status | Notes |
 |---------|------------------|------------------|------------|--------|-------|
 | **Ollama API** | `http://192.168.50.70:11434` | N/A | `https://chrislawrence.ca/ai/api` | 🟡 Pending | Local LLM inference engine |
-| **Open WebUI** | `http://192.168.50.70:8189` | `http://192.168.50.70:8161` | `https://chrislawrence.ca/ai` | 🟡 Pending | AI chat interface |
+| **Open WebUI** | `http://192.168.50.70:8189` | `http://192.168.50.70:8161` | `https://chrislawrence.ca/ai` | ✅ Working | Proxy configured and working |
 | **ComfyUI** | `http://192.168.50.70:8188` | `http://192.168.50.70:8162` | `https://chrislawrence.ca/comfyui` | 🟡 Pending | Image generation workflows |
-| **OpenRouter Proxy** | `http://192.168.50.70:8190` | `http://192.168.50.70:8163` | `https://chrislawrence.ca/openrouter` | 🟡 Pending | Cloud AI model access |
+| **OpenRouter Proxy** | `http://192.168.50.70:8190` | `http://192.168.50.70:8163` | `https://chrislawrence.ca/openrouter` | ✅ Working | Backend proxy configured and working |
 | **Model Manager** | `http://192.168.50.70:8191` | `http://192.168.50.70:8164` | `https://chrislawrence.ca/models` | 🟡 Pending | Model download and management |
 
 ### **🔧 IoT & Communication Services**
