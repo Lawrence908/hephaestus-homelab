@@ -1,0 +1,115 @@
+# Caddy Logging Persistence Configuration
+# This file ensures logging configuration is always present
+
+version: '3.8'
+
+# Override the main docker-compose.yml with logging persistence
+services:
+  caddy:
+    # Ensure log directory is always mounted
+    volumes:
+      - ./logs:/data/logs
+      - ./logs/analysis:/data/logs/analysis
+      - ./logs/filtered:/data/logs/filtered
+      - ./logs/backups:/data/logs/backups
+    
+    # Environment variables for logging
+    environment:
+      - CADDY_LOG_LEVEL=INFO
+      - CADDY_LOG_FORMAT=json
+      - CADDY_LOG_OUTPUT=file
+      - CADDY_LOG_FILE=/data/logs/caddy.json
+    
+    # Health check for logging
+    healthcheck:
+      test: ["CMD", "test", "-d", "/data/logs"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    
+    # Logging configuration for Docker
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "5"
+        labels: "service=caddy,environment=homelab"
+
+  # Log maintenance service
+  log-maintenance:
+    image: alpine:latest
+    container_name: caddy-log-maintenance
+    restart: unless-stopped
+    volumes:
+      - ./logs:/data/logs
+      - ./log-analyzer.sh:/usr/local/bin/log-analyzer.sh:ro
+      - ./log-filter.sh:/usr/local/bin/log-filter.sh:ro
+      - ./backup-logs.sh:/usr/local/bin/backup-logs.sh:ro
+    command: |
+      sh -c "
+        apk add --no-cache jq bash &&
+        chmod +x /usr/local/bin/*.sh &&
+        echo 'Log maintenance service started' &&
+        while true; do
+          # Check if logs are being written
+          if [[ -f /data/logs/caddy.json ]]; then
+            if [[ \$(find /data/logs/caddy.json -mmin -5) ]]; then
+              echo \"\$(date): Logging is working\"
+            else
+              echo \"\$(date): WARNING - Logs not updated in 5 minutes\"
+            fi
+          else
+            echo \"\$(date): WARNING - Log files not found\"
+          fi
+          sleep 300
+        done
+      "
+    depends_on:
+      - caddy
+    profiles:
+      - maintenance
+
+  # Log analysis service
+  log-analyzer:
+    image: alpine:latest
+    container_name: caddy-log-analyzer
+    restart: unless-stopped
+    volumes:
+      - ./logs:/data/logs:ro
+      - ./log-analyzer.sh:/usr/local/bin/log-analyzer.sh:ro
+      - ./log-filter.sh:/usr/local/bin/log-filter.sh:ro
+    command: |
+      sh -c "
+        apk add --no-cache jq bash &&
+        chmod +x /usr/local/bin/*.sh &&
+        echo 'Log analyzer service started' &&
+        echo 'Available commands:'
+        echo '  docker exec caddy-log-analyzer /usr/local/bin/log-analyzer.sh'
+        echo '  docker exec caddy-log-analyzer /usr/local/bin/log-filter.sh'
+        tail -f /dev/null
+      "
+    profiles:
+      - analysis
+
+# Volumes for log persistence
+volumes:
+  caddy_logs:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./logs
+  caddy_logs_analysis:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./logs/analysis
+  caddy_logs_filtered:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./logs/filtered
+

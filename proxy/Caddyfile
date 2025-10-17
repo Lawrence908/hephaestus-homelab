@@ -6,6 +6,17 @@
     admin 127.0.0.1:2019
     auto_https off
     http_port 80
+    
+    # Global logging configuration
+    log {
+        level INFO
+        format json
+        output file /data/logs/caddy.json {
+            roll_size 50mb
+            roll_keep 10
+            roll_keep_for 720h
+        }
+    }
 }
 
 # Localhost health endpoint (no auth)
@@ -184,11 +195,25 @@ localhost:80 {
     # Fallback - Portfolio by default
     reverse_proxy portfolio:5000
 
-    # Logging
+    # Enhanced logging for main domain
     log {
-        output file /data/logs/portainer.log {
-            roll_size 10mb
-            roll_keep 5
+        level INFO
+        format json
+        output file /data/logs/main-domain.json {
+            roll_size 25mb
+            roll_keep 10
+            roll_keep_for 168h
+        }
+    }
+    
+    # Error logging for main domain
+    log {
+        level ERROR
+        format json
+        output file /data/logs/main-domain-errors.json {
+            roll_size 5mb
+            roll_keep 15
+            roll_keep_for 72h
         }
     }
 }
@@ -201,11 +226,25 @@ localhost:80 {
 dashboard.chrislawrence.ca {
     reverse_proxy organizr:80
 
-    # Logging
+    # Enhanced logging for dashboard
     log {
-        output file /data/logs/organizr.log {
-            roll_size 10mb
-            roll_keep 5
+        level INFO
+        format json
+        output file /data/logs/dashboard.json {
+            roll_size 15mb
+            roll_keep 8
+            roll_keep_for 168h
+        }
+    }
+    
+    # Error logging for dashboard
+    log {
+        level ERROR
+        format json
+        output file /data/logs/dashboard-errors.json {
+            roll_size 3mb
+            roll_keep 10
+            roll_keep_for 72h
         }
     }
 }
@@ -845,5 +884,38 @@ chrislawrence.ca {
     # Fallback for any unmatched paths - redirect to portfolio
     handle {
         redir / /portfolio/ 302
+    }
+    
+    # Comprehensive logging for main domain
+    log {
+        level INFO
+        format json
+        output file /data/logs/chrislawrence-ca.json {
+            roll_size 50mb
+            roll_keep 15
+            roll_keep_for 720h
+        }
+    }
+    
+    # Error logging for main domain
+    log {
+        level ERROR
+        format json
+        output file /data/logs/chrislawrence-ca-errors.json {
+            roll_size 10mb
+            roll_keep 25
+            roll_keep_for 168h
+        }
+    }
+    
+    # Access logging (simplified format for analysis)
+    log {
+        level INFO
+        format json
+        output file /data/logs/chrislawrence-ca-access.log {
+            roll_size 100mb
+            roll_keep 5
+            roll_keep_for 168h
+        }
     }
 }

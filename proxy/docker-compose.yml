@@ -38,12 +38,28 @@ services:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy_data:/data
       - caddy_config:/config
+      - ./logs:/data/logs
+      - ./logs/analysis:/data/logs/analysis
+      - ./logs/filtered:/data/logs/filtered
       - /home/chris/apps/MagicPages/staticfiles:/var/www/magicpages/static:ro
       - /home/chris/apps/MagicPages/media:/var/www/magicpages/media:ro
     environment:
       - DOMAIN=${DOMAIN}
       - CLOUDFLARE_API_TOKEN=${CLOUDFLARE_API_TOKEN}
       - CLOUDFLARE_EMAIL=${CLOUDFLARE_EMAIL}
+      - CADDY_LOG_LEVEL=INFO
+      - CADDY_LOG_FORMAT=json
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "5"
+    healthcheck:
+      test: ["CMD", "test", "-d", "/data/logs"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
 
@@ -53,11 +69,9 @@ services:
     restart: unless-stopped
     networks:
       - web
-    command: tunnel --no-autoupdate run
-    volumes:
-      - /home/chris/.cloudflared:/etc/cloudflared:ro
+    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN}
     environment:
-      - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
+      - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN:-}
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
     depends_on:
