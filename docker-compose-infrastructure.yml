@@ -17,59 +17,8 @@ services:
   # INFRASTRUCTURE SERVICES
   # ============================================================================
   
-  # Caddy - Reverse proxy with automatic HTTPS
-  caddy:
-    image: caddy:2-alpine
-    container_name: caddy
-    restart: unless-stopped
-    networks:
-      - homelab-web
-    ports:
-      - "80:80"
-      - "8083:8083"  # Uptime Kuma proxy
-      - "8084:8084"  # Portainer proxy
-      - "8085:8085"  # Grafana proxy
-      - "8086:8086"  # Prometheus proxy
-      - "8087:8087"  # cAdvisor proxy
-      - "8088:8088"  # Glances proxy
-      - "8089:8089"  # IT-Tools proxy
-      - "8090:8090"  # Obsidian Notes HTTPS proxy
-      - "8091:8091"  # Magic Pages API proxy (HTTP)
-      - "8092:8092"  # n8n proxy
-      - "8093:8093"  # MQTT Explorer proxy
-      - "8094:8094"  # Meshtastic Web proxy
-      - "8095:8095"  # Node-RED proxy
-      - "8096:8096"  # Grafana IoT proxy
-      - "8120:8120"  # CapitolScope Backend proxy
-      - "8121:8121"  # CapitolScope Frontend proxy
-    volumes:
-      - ./proxy/Caddyfile:/etc/caddy/Caddyfile:ro
-      - caddy_data:/data
-      - caddy_config:/config
-    environment:
-      - DOMAIN=${DOMAIN}
-      # - CLOUDFLARE_API_TOKEN=${CLOUDFLARE_API_TOKEN}
-    labels:
-      - "com.centurylinklabs.watchtower.enable=true"
-    healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:80/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-
-  # Cloudflared - Cloudflare Tunnel
-  cloudflared:
-    image: cloudflare/cloudflared:latest
-    container_name: cloudflared
-    restart: unless-stopped
-    network_mode: host
-    command: tunnel run
-    environment:
-      - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
-    labels:
-      - "com.centurylinklabs.watchtower.enable=true"
-    depends_on:
-      - caddy
+  # Note: Caddy and Cloudflared are managed by the proxy stack
+  # See: ./proxy/docker-compose.yml
 
   # Portainer - Docker management UI
   portainer:

@@ -1,0 +1,45 @@
+# Hephaestus Homelab - Environment Variables Template
+# Copy this file to .env and customize the values for your setup
+
+# ============================================================================
+# CRITICAL VARIABLES (Required for proper operation)
+# ============================================================================
+
+# Domain Configuration
+DOMAIN=chrislawrence.ca
+
+# Grafana Security
+GRAFANA_ADMIN_PASSWORD=your-secure-password-here
+
+# Cloudflare Configuration (for automatic SSL)
+CLOUDFLARE_API_TOKEN=your-cloudflare-api-token-here
+CLOUDFLARE_EMAIL=your-email@example.com
+CLOUDFLARE_TUNNEL_TOKEN=your-tunnel-token-here
+
+# ============================================================================
+# OPTIONAL VARIABLES (Can be left blank if not needed)
+# ============================================================================
+
+# Slack Logging (Optional - for PHP JSON Logger)
+PHP_JSON_LOGGER_SLACK_TOKEN=
+PHP_JSON_LOGGER_SLACK_CHANNEL=
+
+# Timezone
+TZ=America/New_York
+
+# ============================================================================
+# SERVICE-SPECIFIC VARIABLES (Add as needed)
+# ============================================================================
+
+# n8n Configuration
+N8N_ENCRYPTION_KEY=your-n8n-encryption-key-here
+N8N_SECURE_COOKIE=true
+N8N_BASIC_AUTH_ACTIVE=false
+
+# Database Passwords (if using external databases)
+POSTGRES_PASSWORD=your-postgres-password
+REDIS_PASSWORD=your-redis-password
+
+# AI Services (if using AI inference)
+OPENROUTER_API_KEY=your-openrouter-key-here
+WEBUI_SECRET_KEY=your-webui-secret-key-here
