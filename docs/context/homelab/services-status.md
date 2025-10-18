@@ -1,27 +1,12 @@
-# Hephaestus Homelab - Service Links Tracker
+# Hephaestus Homelab - Service Status Tracker
 
-Complete tracking document for all homelab services with local, proxy, and public access URLs.
+## Overview
 
-## 🎯 **Current Status Overview**
+Complete tracking document for all homelab services with local, proxy, and public access URLs. This document provides real-time status of all services and their accessibility.
 
-### **✅ Working Services**
-- Portfolio (Public)
-- SchedShare (Local only)
-- EventSphere (Local only)
-- Organizr (Public)
-- Portainer (Proxy working)
-- Uptime Kuma (Proxy working)
-- Grafana (Proxy working)
-- Prometheus (Proxy working)
-- cAdvisor (Proxy working)
-- Glances (Proxy working)
-- IT-Tools (Proxy working)
-- MagicPages (Proxy working)
-- n8n (Proxy working)
-- CapitolScope Backend (Proxy working)
-- CapitolScope Frontend (Proxy working)
+## 🎯 Current Status Overview
 
-### **✅ Working Services**
+### ✅ Working Services
 - Portfolio (Public)
 - SchedShare (Local only)
 - EventSphere (Local only)
@@ -39,18 +24,16 @@ Complete tracking document for all homelab services with local, proxy, and publi
 - CapitolScope Frontend (Proxy working)
 - Obsidian (Direct HTTPS access working)
 
-### **🤖 AI Services (New)**
+### 🤖 AI Services (New)
 - Ollama (Local LLM inference)
 - Open WebUI (AI chat interface)
 - ComfyUI (Image generation)
 - OpenRouter Proxy (Cloud AI access)
 - Model Manager (Model management)
 
----
+## 📊 Complete Service Links Table
 
-## 📊 **Complete Service Links Table**
-
-### **🏠 Infrastructure Services**
+### 🏠 Infrastructure Services
 
 | Service | Direct Port (LAN) | Proxy Port (LAN) | Public URL | Status | Notes |
 |---------|------------------|------------------|------------|--------|-------|
@@ -63,7 +46,7 @@ Complete tracking document for all homelab services with local, proxy, and publi
 | **Glances** | `http://192.168.50.70:61208` | `http://192.168.50.70:8088` | `https://chrislawrence.ca/system` | ✅ Working | Proxy configured and working |
 | **IT-Tools** | `http://192.168.50.70:8081` | `http://192.168.50.70:8089` | `https://chrislawrence.ca/tools` | ✅ Working | Proxy configured and working |
 
-### **📱 Application Services**
+### 📱 Application Services
 
 | Application | Direct Port (LAN) | Public URL | Status | Notes |
 |-------------|------------------|------------|--------|-------|
@@ -77,7 +60,7 @@ Complete tracking document for all homelab services with local, proxy, and publi
 | **n8n** | `http://192.168.50.70:5678` | `http://192.168.50.70:8092` | `https://chrislawrence.ca/n8n` | ✅ Working | Proxy configured and working |
 | **Obsidian** | `https://192.168.50.70:8061` | `https://192.168.50.70:8061` | `https://chrislawrence.ca/notes` | ✅ Working | Use direct HTTPS - middle-click for full screen |
 
-### **🤖 AI Inference Services**
+### 🤖 AI Inference Services
 
 | Service | Direct Port (LAN) | Proxy Port (LAN) | Public URL | Status | Notes |
 |---------|------------------|------------------|------------|--------|-------|
@@ -87,7 +70,7 @@ Complete tracking document for all homelab services with local, proxy, and publi
 | **OpenRouter Proxy** | `http://192.168.50.70:8190` | `http://192.168.50.70:8163` | `https://chrislawrence.ca/openrouter` | ✅ Working | Backend proxy configured and working |
 | **Model Manager** | `http://192.168.50.70:8191` | `http://192.168.50.70:8164` | `https://chrislawrence.ca/models` | 🟡 Pending | Model download and management |
 
-### **🔧 IoT & Communication Services**
+### 🔧 IoT & Communication Services
 
 | Service | Direct Port (LAN) | Public URL | Status | Notes |
 |---------|------------------|------------|--------|-------|
@@ -96,11 +79,9 @@ Complete tracking document for all homelab services with local, proxy, and publi
 | **Node-RED** | `http://192.168.50.70:8155` | `https://chrislawrence.ca/nodered` | ❌ Not Working | Needs deployment |
 | **Grafana IoT** | `http://192.168.50.70:8156` | `https://chrislawrence.ca/grafana-iot` | ❌ Not Working | Needs deployment |
 
----
+## 🎯 Organizr Tab Configuration
 
-## 🎯 **Organizr Tab Configuration**
-
-### **✅ Working Tabs (Ready for Organizr)**
+### ✅ Working Tabs (Ready for Organizr)
 ```
 Portfolio: https://chrislawrence.ca/portfolio
 SchedShare: http://192.168.50.70:8130
@@ -108,7 +89,7 @@ EventSphere: http://192.168.50.70:8140
 Obsidian: https://192.168.50.70:8061 (middle-click for full screen - HTTPS required)
 ```
 
-### **🔄 Needs Proxy Ports (For iframe embedding)**
+### 🔄 Needs Proxy Ports (For iframe embedding)
 ```
 Portainer: http://192.168.50.70:8084 (proxy to 9000)
 Uptime Kuma: http://192.168.50.70:8083 (proxy to 3001)
@@ -119,7 +100,7 @@ Glances: http://192.168.50.70:8088 (proxy to 61208)
 IT-Tools: http://192.168.50.70:8089 (proxy to 8081)
 ```
 
-### **❌ Needs Deployment/Fixing**
+### ❌ Needs Deployment/Fixing
 ```
 MagicPages API: http://192.168.50.70:8100 (error)
 MagicPages Frontend: http://192.168.50.70:8101 (error)
@@ -127,31 +108,27 @@ CapitolScope: http://192.168.50.70:8120 (not working)
 Obsidian: https://192.168.50.70:8061 (not working)
 ```
 
----
+## 🔧 Immediate Action Items
 
-## 🔧 **Immediate Action Items**
-
-### **Priority 1: Fix Infrastructure Services**
+### Priority 1: Fix Infrastructure Services
 1. **Configure Caddy proxy ports** for infrastructure services (8083-8089)
 2. **Test each proxy port** individually
 3. **Add to Organizr** as working tabs
 
-### **Priority 2: Fix Application Services**
+### Priority 2: Fix Application Services
 1. **Debug MagicPages** error
 2. **Deploy CapitolScope** 
 3. **Configure Obsidian** HTTPS
 4. **Deploy n8n** automation
 
-### **Priority 3: Public Access**
+### Priority 3: Public Access
 1. **Configure Cloudflare Tunnel** for remaining services
 2. **Test public URLs** 
 3. **Update Organizr** with public URLs where appropriate
 
----
+## 📋 Quick Reference URLs
 
-## 📋 **Quick Reference URLs**
-
-### **✅ Currently Working**
+### ✅ Currently Working
 - **Organizr Dashboard**: `https://dashboard.chrislawrence.ca`
 - **Portfolio**: `https://chrislawrence.ca/portfolio`
 - **SchedShare**: `http://192.168.50.70:8130`
@@ -159,41 +136,36 @@ Obsidian: https://192.168.50.70:8061 (not working)
 - **CapitolScope Frontend**: `http://192.168.50.70:8121`
 - **CapitolScope Backend**: `http://192.168.50.70:8120`
 
-### **🔄 Needs Testing**
+### 🔄 Needs Testing
 - **Obsidian**: `https://192.168.50.70:8061` (cannot use through Organizr)
 - **MagicPages API**: `http://192.168.50.70:8100` (error)
 - **MagicPages Frontend**: `http://192.168.50.70:8101` (error)
 
-### **❌ Not Deployed**
-
+### ❌ Not Deployed
 - **Meshtastic MQTT Explorer**: `http://192.168.50.70:8152`
 - **Home Assistant**: `http://192.168.50.70:8154`
 - **Node-RED**: `http://192.168.50.70:8155`
 - **Grafana IoT**: `http://192.168.50.70:8156`
 
----
+## 🚨 Known Issues
 
-## 🚨 **Known Issues**
-
-### **MagicPages Error**
+### MagicPages Error
 - API and Frontend both showing errors
 - Need to check container logs
 - Verify database connections
 - Check environment variables
 
-### **Infrastructure Services Not Working**
+### Infrastructure Services Not Working
 - All proxy ports (8083-8089) need Caddy configuration
 - Services may be running but not accessible via proxy
 - Need to verify Caddy routing rules
 
-### **HTTPS Services**
+### HTTPS Services
 - Obsidian requires HTTPS (Selkies limitation)
 - Need proper SSL certificate configuration
 - May need separate Caddy configuration
 
----
-
-## 📊 **Status Legend**
+## 📊 Status Legend
 
 - ✅ **Working**: Service is running and accessible
 - 🔄 **Error**: Service has issues but partially working
@@ -202,9 +174,7 @@ Obsidian: https://192.168.50.70:8061 (not working)
 - 🔒 **Private**: LAN-only access
 - 🌍 **Public**: Accessible via public domain
 
----
-
-## 🔄 **Next Steps**
+## 🔄 Next Steps
 
 1. **Fix Caddy proxy configuration** for infrastructure services
 2. **Debug MagicPages** application errors
@@ -213,8 +183,56 @@ Obsidian: https://192.168.50.70:8061 (not working)
 5. **Update Organizr** with all working service URLs
 6. **Test all links** and update this tracker
 
+## Service Health Checks
+
+### Infrastructure Services
+```bash
+# Check service status
+docker compose -f docker-compose-infrastructure.yml ps
+
+# Test proxy ports
+curl -I http://192.168.50.70:8083 -u admin:admin123  # Uptime Kuma
+curl -I http://192.168.50.70:8084 -u admin:admin123  # Portainer
+curl -I http://192.168.50.70:8085 -u admin:admin123  # Grafana
+curl -I http://192.168.50.70:8086 -u admin:admin123  # Prometheus
+curl -I http://192.168.50.70:8087 -u admin:admin123  # cAdvisor
+curl -I http://192.168.50.70:8088 -u admin:admin123  # Glances
+curl -I http://192.168.50.70:8089 -u admin:admin123  # IT-Tools
+```
+
+### Application Services
+```bash
+# Test application services
+curl -I http://192.168.50.70:8110  # Portfolio
+curl -I http://192.168.50.70:8130  # SchedShare
+curl -I http://192.168.50.70:8140  # EventSphere
+curl -I http://192.168.50.70:8100  # MagicPages API
+curl -I http://192.168.50.70:8101  # MagicPages Frontend
+curl -I http://192.168.50.70:8120  # CapitolScope Backend
+curl -I http://192.168.50.70:8121  # CapitolScope Frontend
+```
+
+### Public Access Tests
+```bash
+# Test public URLs
+curl -I https://chrislawrence.ca/portfolio
+curl -I https://chrislawrence.ca/schedshare
+curl -I https://chrislawrence.ca/magicpages-api
+curl -I https://chrislawrence.ca/capitolscope
+curl -I https://chrislawrence.ca/docker -u admin:admin123
+curl -I https://chrislawrence.ca/uptime -u admin:admin123
+curl -I https://chrislawrence.ca/metrics -u admin:admin123
+```
+
+## Related Documentation
+
+- [Application Services](./applications.md) - Application services and management
+- [Infrastructure Services](./infra/services.md) - Service architecture and definitions
+- [Network Architecture](./infra/networks.md) - Docker network setup
+- [Deployment Guide](./infra/deployment.md) - Service deployment procedures
+
 ---
 
-**Last Updated**: October 13, 2025  
+**Last Updated**: $(date)
 **Status**: 🔄 Multiple services need configuration  
 **Next Priority**: Fix infrastructure proxy ports and debug MagicPages

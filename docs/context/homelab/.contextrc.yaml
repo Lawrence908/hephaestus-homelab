@@ -1,0 +1,204 @@
+---
+# Context Pack Configuration for Hephaestus Homelab
+# This file configures the context pack system for the homelab documentation
+
+# Basic configuration
+namespace: "homelab"
+sensitivity: "public"
+title: "Hephaestus Homelab Documentation"
+description: "Comprehensive documentation for the Hephaestus Homelab infrastructure, services, and applications"
+
+# Chunking configuration
+chunk_size: 900
+chunk_overlap: 120
+max_chunks_per_document: 50
+
+# Indexing configuration
+index_private: false
+index_public: true
+index_internal: true
+
+# File patterns to include
+include_patterns:
+  - "**/*.md"
+  - "**/*.yml"
+  - "**/*.yaml"
+  - "**/*.json"
+
+# File patterns to exclude
+exclude_patterns:
+  - "**/node_modules/**"
+  - "**/.git/**"
+  - "**/__pycache__/**"
+  - "**/*.pyc"
+  - "**/*.log"
+  - "**/tmp/**"
+  - "**/temp/**"
+
+# Metadata extraction
+extract_metadata: true
+extract_frontmatter: true
+extract_code_blocks: true
+extract_links: true
+
+# Search configuration
+search_config:
+  enable_fts: true
+  enable_semantic: true
+  enable_keyword: true
+  enable_fuzzy: true
+
+# Output configuration
+output_formats:
+  - "jsonl"
+  - "sqlite"
+  - "markdown"
+
+# Quality settings
+quality_threshold: 0.7
+duplicate_threshold: 0.9
+
+# Update settings
+auto_update: false
+update_interval: "24h"
+force_update: false
+
+# Security settings
+encrypt_private: true
+hash_sensitive: true
+audit_log: true
+
+# Performance settings
+parallel_processing: true
+max_workers: 4
+chunk_timeout: 30
+memory_limit: "2GB"
+
+# Integration settings
+context_pack_version: "1.0"
+compatible_versions:
+  - "1.0"
+  - "1.1"
+  - "1.2"
+
+# Homelab specific settings
+homelab:
+  server_ip: "192.168.50.70"
+  domain: "chrislawrence.ca"
+  tunnel_id: "3a9f1023-0d6c-49ff-900d-32403e4309f8"
+  network: "homelab-web"
+  
+  # Service categories
+  infrastructure:
+    - "networks"
+    - "dns-cloudflare"
+    - "security"
+    - "deployment"
+    - "services"
+  
+  applications:
+    - "applications"
+  
+  # Port ranges
+  ports:
+    infrastructure: "3000-3099"
+    proxy: "8000-8099"
+    applications: "8100-8199"
+    development: "8200-8299"
+  
+  # Security levels
+  security:
+    public: ["portfolio", "capitolscope", "schedshare", "magicpages"]
+    protected: ["dashboard", "docker", "uptime", "metrics", "prometheus", "containers", "system", "tools"]
+    admin: ["n8n", "notes", "mqtt", "meshtastic", "nodered", "grafana-iot", "influxdb"]
+
+# Tags for categorization
+tags:
+  - "homelab"
+  - "infrastructure"
+  - "docker"
+  - "cloudflare"
+  - "monitoring"
+  - "security"
+  - "applications"
+  - "automation"
+  - "iot"
+  - "development"
+
+# Custom fields
+custom_fields:
+  service_type: "string"
+  port_number: "integer"
+  public_url: "string"
+  security_level: "string"
+  status: "string"
+  last_updated: "datetime"
+  dependencies: "array"
+  health_check: "string"
+  backup_required: "boolean"
+  monitoring_enabled: "boolean"
+
+# Validation rules
+validation:
+  required_fields:
+    - "title"
+    - "namespace"
+    - "sensitivity"
+    - "updated"
+  
+  optional_fields:
+    - "tags"
+    - "summary"
+    - "dependencies"
+    - "health_check"
+  
+  field_types:
+    title: "string"
+    namespace: "string"
+    sensitivity: "enum:public,internal,private"
+    updated: "date"
+    tags: "array"
+    summary: "string"
+    dependencies: "array"
+    health_check: "string"
+
+# Export settings
+export:
+  formats: ["json", "yaml", "csv"]
+  include_metadata: true
+  include_chunks: true
+  include_embeddings: false
+  compress: true
+  
+# Backup settings
+backup:
+  enabled: true
+  interval: "daily"
+  retention: "30d"
+  location: "./backups"
+  encryption: true
+  compression: true
+
+# Monitoring settings
+monitoring:
+  enabled: true
+  metrics: true
+  alerts: true
+  dashboard: true
+  log_level: "INFO"
+  
+# API settings
+api:
+  enabled: false
+  port: 8080
+  authentication: true
+  rate_limiting: true
+  cors: true
+  
+# Webhook settings
+webhooks:
+  enabled: false
+  endpoints: []
+  authentication: true
+  retry_attempts: 3
+  timeout: 30

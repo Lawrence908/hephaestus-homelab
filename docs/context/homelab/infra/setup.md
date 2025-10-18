@@ -1,30 +1,18 @@
-# Hephaestus Setup Guide
+# Hephaestus Homelab - Setup & Installation
+
+## Overview
 
 Complete installation guide for setting up the Dell OptiPlex 7040 as a Docker-based homelab server.
 
-## Table of Contents
-
-1. [Hardware Specifications](#hardware-specifications)
-2. [BIOS Configuration](#bios-configuration)
-3. [Ubuntu Server Installation](#ubuntu-server-installation)
-4. [Initial System Configuration](#initial-system-configuration)
-5. [Docker Installation](#docker-installation)
-6. [Repository Setup](#repository-setup)
-7. [Application Deployment](#application-deployment)
-8. [Post-Installation](#post-installation)
-
----
-
 ## Hardware Specifications
 
-**Dell OptiPlex 7040**
+### Dell OptiPlex 7040
 - **CPU**: Intel Core i5/i7 (6th Gen)
 - **RAM**: 16GB+ DDR4 recommended
 - **Storage**: SSD for OS + applications
 - **Network**: Gigabit Ethernet
 - **Hostname**: Hephaestus
-
----
+- **OS**: Ubuntu Server 24.04 LTS
 
 ## BIOS Configuration
 
@@ -39,8 +27,6 @@ Complete installation guide for setting up the Dell OptiPlex 7040 as a Docker-ba
    - Set **AC Recovery**: Power On (auto-restart after power loss)
    - Disable **Deep Sleep** if running 24/7
 4. **Save & Exit**
-
----
 
 ## Ubuntu Server Installation
 
@@ -60,7 +46,7 @@ dd if=ubuntu-24.04-live-server-amd64.iso of=/dev/sdX bs=4M status=progress
 2. Select **Install Ubuntu Server**
 3. **Network Configuration**:
    - Configure static IP (see NETWORKING.md)
-   - Example: `192.168.1.100/24`
+   - Example: `192.168.50.70/24`
 4. **Storage Configuration**:
    - Use entire disk with LVM (recommended)
    - Or custom partitioning:
@@ -79,8 +65,6 @@ dd if=ubuntu-24.04-live-server-amd64.iso of=/dev/sdX bs=4M status=progress
 7. **Additional Packages**:
    - Skip for now (we'll install Docker manually)
 8. **Complete Installation** and reboot
-
----
 
 ## Initial System Configuration
 
@@ -117,8 +101,6 @@ sudo systemctl restart ssh
 ```bash
 sudo timedatectl set-timezone America/New_York
 ```
-
----
 
 ## Docker Installation
 
@@ -187,8 +169,6 @@ sudo vim /etc/docker/daemon.json
 sudo systemctl restart docker
 ```
 
----
-
 ## Repository Setup
 
 ### 1. Clone Hephaestus Repository
@@ -241,10 +221,8 @@ openssl rand -base64 32
 ### 4. Create Docker Network
 
 ```bash
-docker network create web
+docker network create homelab-web
 ```
-
----
 
 ## Application Deployment
 
@@ -254,12 +232,12 @@ docker network create web
 cd ~/github/hephaestus-homelab
 
 # Start proxy and monitoring stack
-docker compose up -d caddy cloudflared portainer watchtower
-docker compose up -d prometheus grafana cadvisor glances uptime-kuma
+docker compose -f docker-compose-infrastructure.yml up -d caddy cloudflared portainer watchtower
+docker compose -f docker-compose-infrastructure.yml up -d prometheus grafana cadvisor glances uptime-kuma
 
 # Check status
-docker compose ps
-docker compose logs -f
+docker compose -f docker-compose-infrastructure.yml ps
+docker compose -f docker-compose-infrastructure.yml logs -f
 ```
 
 ### 2. Build and Start Applications
@@ -297,8 +275,6 @@ docker compose exec capitolscope alembic upgrade head
 docker compose exec schedshare flask db upgrade
 ```
 
----
-
 ## Post-Installation
 
 ### 1. Verify All Services
@@ -318,14 +294,14 @@ All services should show "Up" status.
 
 ### 3. Setup Monitoring
 
-See [MONITORING.md](./MONITORING.md) for:
+See [MONITORING.md](./monitoring.md) for:
 - Configuring Uptime Kuma monitors
 - Creating Grafana dashboards
 - Setting up alerts
 
 ### 4. Configure Security
 
-See [SECURITY.md](./SECURITY.md) for:
+See [SECURITY.md](./security.md) for:
 - UFW firewall rules
 - Fail2Ban setup
 - Tailscale VPN (optional)
@@ -341,8 +317,6 @@ cd ~/github/hephaestus-homelab
 crontab -e
 # Add: 0 2 * * * /home/chris/github/hephaestus-homelab/scripts/backup.sh
 ```
-
----
 
 ## Troubleshooting
 
@@ -370,8 +344,8 @@ free -h
 
 ```bash
 # Recreate network
-docker network rm web
-docker network create web
+docker network rm homelab-web
+docker network create homelab-web
 docker compose up -d
 ```
 
@@ -385,16 +359,91 @@ sudo lsof -i :443
 # Kill process or change port in docker-compose.yml
 ```
 
----
+## Setup Checklist
+
+### Phase 1: System Setup
+- [ ] Update system packages (`sudo apt update && sudo apt upgrade -y`)
+- [ ] Install essential packages (curl, wget, git, vim, htop, net-tools)
+- [ ] Set hostname to `hephaestus`
+- [ ] Configure timezone
+- [ ] Set up SSH keys (if not already done)
+
+### Phase 2: Docker Installation
+- [ ] Remove old Docker versions
+- [ ] Add Docker GPG key
+- [ ] Add Docker repository
+- [ ] Install Docker Engine 27.x
+- [ ] Install docker-compose plugin
+- [ ] Add user to docker group
+- [ ] Test Docker installation (`docker run hello-world`)
+
+### Phase 3: Repository Setup
+- [ ] Create `~/github` directory
+- [ ] Create `~/apps` directory
+- [ ] Clone `hephaestus-homelab` repository
+- [ ] Clone application repositories
+- [ ] Copy `.env.example` to `.env`
+- [ ] Configure domain (`chrislawrence.ca`)
+- [ ] Generate secret keys
+- [ ] Set application paths
+- [ ] Configure database passwords
+
+### Phase 4: Docker Network Setup
+- [ ] Create Docker network (`docker network create homelab-web`)
+- [ ] Verify network creation
+- [ ] Test network connectivity
+
+### Phase 5: Infrastructure Services
+- [ ] Start Caddy (reverse proxy)
+- [ ] Start Portainer (Docker management)
+- [ ] Start Watchtower (auto-updates)
+- [ ] Verify infrastructure services are running
+
+### Phase 6: Monitoring Stack
+- [ ] Start Prometheus (metrics collection)
+- [ ] Start Grafana (metrics visualization)
+- [ ] Start Uptime Kuma (uptime monitoring)
+- [ ] Start cAdvisor (container metrics)
+- [ ] Start Node Exporter (host metrics)
+- [ ] Start Glances (system monitoring)
+
+### Phase 7: Application Deployment
+- [ ] Start Magic Pages API
+- [ ] Start CapitolScope
+- [ ] Start SchedShare
+- [ ] Start Portfolio
+- [ ] Start Magic Pages Frontend
+
+### Phase 8: Cloudflare Tunnel
+- [ ] Create tunnel in Cloudflare Dashboard
+- [ ] Get tunnel token
+- [ ] Add tunnel token to `.env`
+- [ ] Start cloudflared container
+- [ ] Verify tunnel connection
+
+### Phase 9: Security Configuration
+- [ ] Enable UFW firewall
+- [ ] Configure default policies
+- [ ] Allow SSH access
+- [ ] Configure Docker network rules
+- [ ] Test firewall configuration
+
+### Phase 10: Testing & Verification
+- [ ] Test all services locally
+- [ ] Verify port accessibility
+- [ ] Check Docker network connectivity
+- [ ] Test application functionality
+- [ ] Test Cloudflare Tunnel connectivity
+- [ ] Verify SSL certificates
+- [ ] Test public domain access
+- [ ] Check monitoring dashboards
 
 ## Next Steps
 
-1. ✅ Complete [NETWORKING.md](./NETWORKING.md) - Configure networking and Cloudflare
-2. ✅ Complete [SECURITY.md](./SECURITY.md) - Harden server security
-3. ✅ Complete [MONITORING.md](./MONITORING.md) - Setup comprehensive monitoring
+1. ✅ Complete [NETWORKING.md](./networks.md) - Configure networking and Cloudflare
+2. ✅ Complete [SECURITY.md](./security.md) - Harden server security
+3. ✅ Complete [MONITORING.md](./monitoring.md) - Setup comprehensive monitoring
 4. 📚 Document your applications' specific setup in their respective repositories
-
----
 
 ## Useful Commands
 
@@ -425,3 +474,16 @@ docker compose up -d
 docker system prune -a
 ```
 
+## Related Documentation
+
+- [Server Specifications](./server-specs.md) - Hardware and network details
+- [Network Architecture](./networks.md) - Docker network setup
+- [Security Configuration](./security.md) - Authentication and access control
+- [Monitoring Setup](./monitoring.md) - Comprehensive monitoring
+- [Deployment Guide](./deployment.md) - Service deployment procedures
+
+---
+
+**Last Updated**: $(date)
+**Setup Version**: 1.0
+**Compatible With**: Ubuntu Server 24.04 LTS, Docker Engine 27.x

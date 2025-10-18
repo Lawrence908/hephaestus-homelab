@@ -1,10 +1,8 @@
-# Hephaestus Server Context Document
+# Hephaestus Homelab - Server Specifications
 
-Complete technical reference for the Dell OptiPlex 7040 homelab server, including hardware specs, networking, port mappings, and container configurations.
+## Hardware Specifications
 
-## 🖥️ Hardware Specifications
-
-**Dell OptiPlex 7040**
+### Dell OptiPlex 7040
 - **CPU**: Intel Core i5/i7 (6th Gen)
 - **RAM**: 16GB+ DDR4 recommended
 - **Storage**: SSD for OS + applications
@@ -12,7 +10,7 @@ Complete technical reference for the Dell OptiPlex 7040 homelab server, includin
 - **Hostname**: Hephaestus
 - **OS**: Ubuntu Server 24.04 LTS
 
-## 🌐 Network Configuration
+## Network Configuration
 
 ### Static IP Configuration
 - **Local IP**: `192.168.50.70/24`
@@ -29,27 +27,25 @@ Router (192.168.50.1)
     ↓
 Hephaestus (192.168.50.70) ←→ LAN devices
     ↓
-Docker Network: web (bridge: 172.20.0.0/16)
+Docker Network: homelab-web (bridge: 172.20.0.0/16)
     ↓
 Containers (caddy, apps, monitoring)
 ```
 
-
-## 🐳 Docker Network Configuration
+## Docker Network Configuration
 
 ```yaml
 networks:
-  web:
+  homelab-web:
     driver: bridge
     ipam:
       config:
         - subnet: 172.20.0.0/16
 ```
 
-## 📊 Complete Port Mapping
+## Complete Port Mapping
 
 ### Infrastructure Services
-
 | Service | Internal Port | External Access | Purpose | Status |
 |---------|--------------|-----------------|---------|--------|
 | **Portainer** | 9000 | Via Cloudflare Tunnel | Docker Management | 🟢 Running |
@@ -63,14 +59,13 @@ networks:
 | **Organizr** | 8082 | Via Cloudflare Tunnel | Central Dashboard | 🟢 Running |
 
 ### Application Services
-
 | Application | Internal Port | External Access | Purpose | Status |
 |-------------|--------------|-----------------|---------|--------|
-| **Magic Pages API** | 8000 | Via Cloudflare Tunnel | Django API | 🟡 Pending |
-| **Magic Pages Frontend** | 80 | Via Cloudflare Tunnel | Static Site | 🟡 Pending |
-| **Portfolio** | 8010 | Via Cloudflare Tunnel | Flask App | 🟡 Pending |
-| **CapitolScope** | 8020 | Via Cloudflare Tunnel | FastAPI App | 🟡 Pending |
-| **SchedShare** | 8030 | Via Cloudflare Tunnel | Flask App | 🟡 Pending |
+| **Magic Pages API** | 8100 | Via Cloudflare Tunnel | Django API | 🟡 Pending |
+| **Magic Pages Frontend** | 8101 | Via Cloudflare Tunnel | Static Site | 🟡 Pending |
+| **Portfolio** | 8110 | Via Cloudflare Tunnel | Flask App | 🟡 Pending |
+| **CapitolScope** | 8120 | Via Cloudflare Tunnel | FastAPI App | 🟡 Pending |
+| **SchedShare** | 8130 | Via Cloudflare Tunnel | Flask App | 🟡 Pending |
 
 ### Port Range Organization
 ```
@@ -82,51 +77,50 @@ networks:
 8050-8059: Development/testing
 ```
 
-## 🌍 Domain Mapping
+## Domain Mapping
 
 | Domain | Service | Internal Target | Port |
 |--------|---------|----------------|------|
 | `hephaestus.chrislawrence.ca` | Admin Panel | Portainer | 9000 |
 | `uptime.chrislawrence.ca` | Monitoring | Uptime Kuma | 3001 |
 | `grafana.chrislawrence.ca` | Metrics | Grafana | 3000 |
-| `api.magicpages.chrislawrence.ca` | API | Magic Pages API | 8000 |
-| `magicpages.chrislawrence.ca` | Frontend | Magic Pages Frontend | 80 |
-| `portfolio.chrislawrence.ca` | Portfolio | Portfolio App | 8010 |
-| `capitolscope.chrislawrence.ca` | CapitolScope | CapitolScope App | 8020 |
-| `schedshare.chrislawrence.ca` | SchedShare | SchedShare App | 8030 |
+| `api.magicpages.chrislawrence.ca` | API | Magic Pages API | 8100 |
+| `magicpages.chrislawrence.ca` | Frontend | Magic Pages Frontend | 8101 |
+| `portfolio.chrislawrence.ca` | Portfolio | Portfolio App | 8110 |
+| `capitolscope.chrislawrence.ca` | CapitolScope | CapitolScope App | 8120 |
+| `schedshare.chrislawrence.ca` | SchedShare | SchedShare App | 8130 |
 | `dashboard.hephaestus.chrislawrence.ca` | Dashboard | Organizr | 8082 |
-| `organizr.hephaestus.chrislawrence.ca` | Dashboard Alt | Organizr | 8082 |
 
-## 🔒 Security Zones
+## Security Zones
 
-### **Public Access (via Cloudflare Tunnel)**
+### Public Access (via Cloudflare Tunnel)
 - All web applications
 - Monitoring dashboards (Grafana, Uptime Kuma, Prometheus)
 - API endpoints
 - Portainer (Docker management)
 
-### **LAN Only Access**
+### LAN Only Access
 - Glances (system monitoring)
 - cAdvisor (container metrics)
 - Node Exporter (host metrics)
 - IT-Tools (IT utilities)
 
-### **No External Access**
+### No External Access
 - Database ports (Postgres, Redis)
 - Internal service communication
 
-## 🚀 Cloudflare Tunnel Configuration
+## Cloudflare Tunnel Configuration
 
-### **Tunnel Details**
-- **Tunnel ID**: `7bbb8d12-6cf4-4556-8c5f-006fb7bab126`
-- **Tunnel Name**: `hephaestus-homelab`
+### Tunnel Details
+- **Tunnel ID**: `3a9f1023-0d6c-49ff-900d-32403e4309f8`
+- **Tunnel Name**: `hephaestus-tunnel`
 - **Config File**: `~/.cloudflared/config.yml`
-- **Credentials**: `~/.cloudflared/7bbb8d12-6cf4-4556-8c5f-006fb7bab126.json`
+- **Credentials**: `~/.cloudflared/3a9f1023-0d6c-49ff-900d-32403e4309f8.json`
 
-### **Tunnel Management Commands**
+### Tunnel Management Commands
 ```bash
 # Start tunnel manually (for testing)
-cloudflared tunnel run hephaestus-homelab
+cloudflared tunnel run hephaestus-tunnel
 
 # Install as system service
 sudo cloudflared service install
@@ -137,9 +131,9 @@ sudo systemctl start cloudflared
 sudo systemctl status cloudflared
 ```
 
-## 🔧 Local Access URLs
+## Local Access URLs
 
-### **Direct LAN Access**
+### Direct LAN Access
 ```
 Portainer (Docker management) - http://192.168.50.70:9000
 Grafana (Metrics dashboard) - http://192.168.50.70:3000
@@ -151,7 +145,7 @@ IT-Tools (IT utilities) - http://192.168.50.70:8081
 Organizr (Central dashboard) - http://192.168.50.70:8082
 ```
 
-### **Public Access (via Cloudflare Tunnel)**
+### Public Access (via Cloudflare Tunnel)
 ```
 Admin Panel: https://hephaestus.chrislawrence.ca
 Monitoring: https://uptime.chrislawrence.ca
@@ -162,12 +156,11 @@ Portfolio: https://portfolio.chrislawrence.ca
 CapitolScope: https://capitolscope.chrislawrence.ca
 SchedShare: https://schedshare.chrislawrence.ca
 Dashboard: https://dashboard.hephaestus.chrislawrence.ca
-Dashboard Alt: https://organizr.hephaestus.chrislawrence.ca
 ```
 
-## 🐳 Docker Management Commands
+## Docker Management Commands
 
-### **Essential Commands**
+### Essential Commands
 ```bash
 # Navigate to project
 cd ~/github/hephaestus-homelab
@@ -192,7 +185,7 @@ docker compose pull
 docker compose up -d
 ```
 
-### **Health Checks**
+### Health Checks
 ```bash
 # Test internal connectivity
 curl -I http://localhost:9000  # Portainer
@@ -200,11 +193,11 @@ curl -I http://localhost:3001  # Uptime Kuma
 curl -I http://localhost:3000  # Grafana
 
 # Test Docker network
-docker network inspect web
+docker network inspect homelab-web
 docker exec caddy ping uptime-kuma
 ```
 
-### **Troubleshooting**
+### Troubleshooting
 ```bash
 # Find what's using a port
 sudo lsof -i :80
@@ -217,34 +210,11 @@ df -h
 free -h
 
 # Recreate network
-docker network rm web
-docker network create web
+docker network rm homelab-web
+docker network create homelab-web
 ```
 
-## 📋 Quick Reference
-
-### **Essential Ports**
-- **9000**: Portainer
-- **3001**: Uptime Kuma
-- **3000**: Grafana
-- **9090**: Prometheus
-
-### **Application Ports**
-- **8000**: Magic Pages API
-- **80**: Magic Pages Frontend
-- **8010**: Portfolio
-- **8020**: CapitolScope
-- **8030**: SchedShare
-
-### **Monitoring Ports**
-- **9090**: Prometheus
-- **61208**: Glances
-- **8080**: cAdvisor
-- **9100**: Node Exporter
-- **8081**: IT-Tools
-- **8082**: Organizr
-
-## 🔧 Environment Variables
+## Environment Variables
 
 Key environment variables from `.env`:
 ```bash
@@ -258,11 +228,11 @@ SCHEDSHARE_SECRET_KEY=...
 ORGANIZR_API_KEY=m6anohg2zwu3emo13e4r
 ```
 
-## 📁 Directory Structure
+## Directory Structure
 
 ```
 ~/github/hephaestus-homelab/
-├── docker-compose.yml
+├── docker-compose-infrastructure.yml
 ├── .env
 ├── proxy/
 │   └── Caddyfile
@@ -283,9 +253,9 @@ ORGANIZR_API_KEY=m6anohg2zwu3emo13e4r
 └── portfolio/
 ```
 
-## 🚨 Common Issues & Solutions
+## Common Issues & Solutions
 
-### **Port Conflicts**
+### Port Conflicts
 ```bash
 # Find conflicting process
 sudo lsof -i :PORT
@@ -293,14 +263,14 @@ sudo lsof -i :PORT
 sudo kill -9 PID
 ```
 
-### **Network Issues**
+### Network Issues
 ```bash
 # Restart networking
 sudo systemctl restart systemd-networkd
 sudo netplan apply
 ```
 
-### **Docker Issues**
+### Docker Issues
 ```bash
 # Restart Docker
 sudo systemctl restart docker
@@ -308,8 +278,39 @@ sudo systemctl restart docker
 docker system prune -a
 ```
 
+## Quick Reference
+
+### Essential Ports
+- **9000**: Portainer
+- **3001**: Uptime Kuma
+- **3000**: Grafana
+- **9090**: Prometheus
+
+### Application Ports
+- **8100**: Magic Pages API
+- **8101**: Magic Pages Frontend
+- **8110**: Portfolio
+- **8120**: CapitolScope
+- **8130**: SchedShare
+
+### Monitoring Ports
+- **9090**: Prometheus
+- **61208**: Glances
+- **8080**: cAdvisor
+- **9100**: Node Exporter
+- **8081**: IT-Tools
+- **8082**: Organizr
+
+## Related Documentation
+
+- [Network Architecture](./networks.md) - Docker network setup
+- [DNS & Cloudflare Configuration](./dns-cloudflare.md) - Tunnel and DNS setup
+- [Security Configuration](./security.md) - Authentication and access control
+- [Deployment Guide](./deployment.md) - Service deployment procedures
+- [Service Architecture](./services.md) - Service definitions and management
+
 ---
 
-**Last Updated**: October 11, 2024  
-**Status**: 🟢 Cloudflare Tunnel Active  
-**Server**: Dell OptiPlex 7040 @ 192.168.50.70 (Public: 24.69.104.19)
+**Last Updated**: $(date)
+**Server Version**: 1.0
+**Compatible With**: Ubuntu Server 24.04 LTS, Docker Engine 27.x
