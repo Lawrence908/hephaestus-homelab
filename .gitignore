@@ -70,3 +70,4 @@ docker-compose.local.yml
 # Caddy data directories (handled by volumes)
 proxy/data/
 proxy/config/
+proxy/logs/
