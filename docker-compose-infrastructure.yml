@@ -3,7 +3,7 @@
 # Docker Engine 27.x
 
 networks:
-  web:
+  homelab-web:
     driver: bridge
 
 volumes:
@@ -25,7 +25,7 @@ services:
     container_name: caddy
     restart: unless-stopped
     networks:
-      - web
+      - homelab-web
     ports:
       - "80:80"
       - "8083:8083"  # Uptime Kuma proxy
@@ -79,7 +79,7 @@ services:
     container_name: portainer
     restart: unless-stopped
     networks:
-      - web
+      - homelab-web
     ports:
       - "9000:9000"
     volumes:
@@ -96,7 +96,7 @@ services:
     container_name: uptime-kuma
     restart: unless-stopped
     networks:
-      - web
+      - homelab-web
     ports:
       - "3001:3001"
     volumes:
@@ -132,7 +132,7 @@ services:
     container_name: grafana
     restart: unless-stopped
     networks:
-      - web
+      - homelab-web
     ports:
       - "3000:3000"
     volumes:
@@ -151,7 +151,7 @@ services:
     container_name: prometheus
     restart: unless-stopped
     networks:
-      - web
+      - homelab-web
     ports:
       - "9090:9090"
     volumes:
@@ -173,7 +173,7 @@ services:
     container_name: cadvisor
     restart: unless-stopped
     networks:
-      - web
+      - homelab-web
     ports:
       - "8080:8080"
     volumes:
@@ -194,7 +194,7 @@ services:
     container_name: glances
     restart: unless-stopped
     networks:
-      - web
+      - homelab-web
     ports:
       - "61208:61208"
     volumes:
@@ -211,7 +211,7 @@ services:
     container_name: it-tools
     restart: unless-stopped
     networks:
-      - web
+      - homelab-web
     ports:
       - "8081:80"
     labels:
@@ -229,7 +229,7 @@ services:
     container_name: organizr
     restart: unless-stopped
     networks:
-      - web
+      - homelab-web
     ports:
       - "8082:80"
     volumes:

@@ -1,7 +1,7 @@
 # Proxy Stack - Caddy & Cloudflare Tunnel
 # This can be run independently or as part of the main stack
 networks:
-  web:
+  homelab-web:
     external: true
     name: homelab-web
 
@@ -15,7 +15,7 @@ services:
     container_name: caddy
     restart: unless-stopped
     networks:
-      - web
+      - homelab-web
     ports:
       - "80:80"
       - "443:443"
@@ -68,8 +68,8 @@ services:
     container_name: cloudflared
     restart: unless-stopped
     networks:
-      - web
-    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN}
+      - homelab-web
+    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN:-}
     environment:
       - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN:-}
     labels:

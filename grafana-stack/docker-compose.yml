@@ -2,7 +2,7 @@
 # This can be run independently or as part of the main stack
 
 networks:
-  web:
+  homelab-web:
     external: true
     name: homelab-web
 
@@ -16,7 +16,7 @@ services:
     container_name: grafana
     restart: unless-stopped
     networks:
-      - web
+      - homelab-web
     ports:
       - "3000:3000"
     volumes:
@@ -40,7 +40,7 @@ services:
     container_name: prometheus
     restart: unless-stopped
     networks:
-      - web
+      - homelab-web
     ports:
       - "9090:9090"
     volumes:
@@ -62,7 +62,7 @@ services:
     container_name: cadvisor
     restart: unless-stopped
     networks:
-      - web
+      - homelab-web
     ports:
       - "8080:8080"
     volumes:
@@ -82,7 +82,7 @@ services:
     container_name: node-exporter
     restart: unless-stopped
     networks:
-      - web
+      - homelab-web
     ports:
       - "9100:9100"
     command:
