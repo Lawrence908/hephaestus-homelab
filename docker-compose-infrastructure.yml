@@ -9,8 +9,6 @@ networks:
 volumes:
   portainer_data:
   uptime-kuma_data:
-  grafana_data:
-  prometheus_data:
   caddy_data:
   caddy_config:
 
@@ -123,70 +121,8 @@ services:
       - "com.centurylinklabs.watchtower.enable=true"
 
   # ============================================================================
-  # MONITORING SERVICES
+  # UTILITY SERVICES
   # ============================================================================
-
-  # Grafana - Metrics visualization
-  grafana:
-    image: grafana/grafana:latest
-    container_name: grafana
-    restart: unless-stopped
-    networks:
-      - homelab-web
-    ports:
-      - "3000:3000"
-    volumes:
-      - grafana_data:/var/lib/grafana
-    environment:
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=admin
-    labels:
-      - "com.centurylinklabs.watchtower.enable=true"
-    depends_on:
-      - prometheus
-
-  # Prometheus - Metrics collection
-  prometheus:
-    image: prom/prometheus:latest
-    container_name: prometheus
-    restart: unless-stopped
-    networks:
-      - homelab-web
-    ports:
-      - "9090:9090"
-    volumes:
-      - prometheus_data:/prometheus
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus'
-      - '--storage.tsdb.retention.time=30d'
-      - '--web.console.libraries=/etc/prometheus/console_libraries'
-      - '--web.console.templates=/etc/prometheus/consoles'
-      - '--web.enable-lifecycle'
-    labels:
-      - "com.centurylinklabs.watchtower.enable=true"
-    user: "nobody"
-
-  # cAdvisor - Container metrics
-  cadvisor:
-    image: gcr.io/cadvisor/cadvisor:latest
-    container_name: cadvisor
-    restart: unless-stopped
-    networks:
-      - homelab-web
-    ports:
-      - "8080:8080"
-    volumes:
-      - /:/rootfs:ro
-      - /var/run:/var/run:ro
-      - /sys:/sys:ro
-      - /var/lib/docker/:/var/lib/docker:ro
-      - /dev/disk/:/dev/disk:ro
-    privileged: true
-    devices:
-      - /dev/kmsg
-    labels:
-      - "com.centurylinklabs.watchtower.enable=true"
 
   # Glances - System monitoring
   glances:
