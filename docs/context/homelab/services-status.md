@@ -8,9 +8,9 @@ Complete tracking document for all homelab services with local, proxy, and publi
 
 ### ✅ Working Services
 - Portfolio (Public)
-- SchedShare (Local only)
-- EventSphere (Local only)
-- Organizr (Public)
+- SchedShare (Proxy working)
+- EventSphere (Proxy working)
+- Organizr (Proxy working)
 - Portainer (Proxy working)
 - Uptime Kuma (Proxy working)
 - Grafana (Proxy working)
@@ -51,12 +51,12 @@ Complete tracking document for all homelab services with local, proxy, and publi
 | Application | Direct Port (LAN) | Public URL | Status | Notes |
 |-------------|------------------|------------|--------|-------|
 | **Portfolio** | `http://192.168.50.70:8110` | `https://chrislawrence.ca/portfolio` | ✅ Working | Public access confirmed |
-| **SchedShare** | `http://192.168.50.70:8130` | `https://chrislawrence.ca/schedshare` | ✅ Working | Local only, public pending |
+| **SchedShare** | `http://192.168.50.70:8130` | `https://chrislawrence.ca/schedshare` | ✅ Working | Public access configured |
 | **MagicPages API** | `http://192.168.50.70:8100` | `http://192.168.50.70:8091` | `https://chrislawrence.ca/magicpages-api` | ✅ Working | Proxy configured and working |
 | **MagicPages Frontend** | `http://192.168.50.70:8101` | N/A | `https://chrislawrence.ca/magicpages` | ✅ Working | Direct access working |
-| **CapitolScope Frontend** | `http://192.168.50.70:5173` | `http://192.168.50.70:8121` | `https://chrislawrence.ca/capitolscope-frontend` | ✅ Working | Proxy configured and working |
-| **CapitolScope Backend** | `http://192.168.50.70:8001` | `http://192.168.50.70:8120` | `https://chrislawrence.ca/capitolscope` | ✅ Working | Proxy configured and working |
-| **EventSphere** | `http://192.168.50.70:8140` | `https://chrislawrence.ca/eventsphere` | ✅ Working | Local only, public pending |
+| **CapitolScope Frontend** | `http://192.168.50.70:5173` | `http://192.168.50.70:8121` | `https://chrislawrence.ca/capitolscope` | ✅ Working | Public access configured |
+| **CapitolScope Backend** | `http://192.168.50.70:8001` | `http://192.168.50.70:8120` | `https://chrislawrence.ca/capitolscope/api` | ✅ Working | Public access configured |
+| **EventSphere** | `http://192.168.50.70:8140` | `https://chrislawrence.ca/eventsphere` | ✅ Working | Public access configured |
 | **n8n** | `http://192.168.50.70:5678` | `http://192.168.50.70:8092` | `https://chrislawrence.ca/n8n` | ✅ Working | Proxy configured and working |
 | **Obsidian** | `https://192.168.50.70:8061` | `https://192.168.50.70:8061` | `https://chrislawrence.ca/notes` | ✅ Working | Use direct HTTPS - middle-click for full screen |
 
@@ -131,10 +131,10 @@ Obsidian: https://192.168.50.70:8061 (not working)
 ### ✅ Currently Working
 - **Organizr Dashboard**: `https://dashboard.chrislawrence.ca`
 - **Portfolio**: `https://chrislawrence.ca/portfolio`
-- **SchedShare**: `http://192.168.50.70:8130`
-- **EventSphere**: `http://192.168.50.70:8140`
-- **CapitolScope Frontend**: `http://192.168.50.70:8121`
-- **CapitolScope Backend**: `http://192.168.50.70:8120`
+- **SchedShare**: `https://chrislawrence.ca/schedshare`
+- **EventSphere**: `https://chrislawrence.ca/eventsphere`
+- **CapitolScope Frontend**: `https://chrislawrence.ca/capitolscope`
+- **CapitolScope Backend**: `https://chrislawrence.ca/capitolscope/api`
 
 ### 🔄 Needs Testing
 - **Obsidian**: `https://192.168.50.70:8061` (cannot use through Organizr)
@@ -217,8 +217,10 @@ curl -I http://192.168.50.70:8121  # CapitolScope Frontend
 # Test public URLs
 curl -I https://chrislawrence.ca/portfolio
 curl -I https://chrislawrence.ca/schedshare
-curl -I https://chrislawrence.ca/magicpages-api
+curl -I https://chrislawrence.ca/eventsphere
 curl -I https://chrislawrence.ca/capitolscope
+curl -I https://chrislawrence.ca/capitolscope/api
+curl -I https://chrislawrence.ca/magicpages-api
 curl -I https://chrislawrence.ca/docker -u admin:admin123
 curl -I https://chrislawrence.ca/uptime -u admin:admin123
 curl -I https://chrislawrence.ca/metrics -u admin:admin123

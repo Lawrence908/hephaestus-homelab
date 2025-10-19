@@ -12,12 +12,59 @@ This document outlines the DNS and Cloudflare tunnel configuration for the Hepha
 - **Main Domain**: `chrislawrence.ca`
 - **Strategy**: Subpath routing through main domain
 
+### Current DNS Records (as of 2025-01-17)
+Based on Cloudflare DNS management interface:
+
+#### CNAME Records (11 records)
+- `api.capitol...` → `ghs.googlehos...` (Proxied, Auto TTL) ⚠️ Warning
+- `autodiscover` → `autodiscover.o...` (Proxied, Auto TTL)
+- `capitolscope` → `ghs.googlehos...` (Proxied, Auto TTL)
+- `chrislawre...` → `3a9f1023-0d6...` (Proxied, Auto TTL) ✅ Main domain
+- `_domainco...` → `_domainconne...` (Proxied, Auto TTL)
+- `email` → `email.secures...` (Proxied, Auto TTL)
+- `list` → `3a9f1023-0d6...` (Proxied, Auto TTL)
+- `lyncdiscover` → `webdir.online.l...` (Proxied, Auto TTL)
+- `msoid` → `clientconfig.mi...` (Proxied, Auto TTL)
+- `sip` → `sipdir.online.ly...` (Proxied, Auto TTL)
+- `www` → `chrislawrence....` (Proxied, Auto TTL) ⚠️ **NEEDS FIXING**
+
+#### MX Records (3 records) - Email routing
+- `route3.mx....` (Priority 38, DNS only)
+- `route2.mx....` (Priority 36, DNS only)  
+- `route1.mx.c...` (Priority 45, DNS only)
+
+#### NS Records (2 records) - Nameservers
+- `ns78.domainc...` (DNS only)
+- `ns77.domainc...` (DNS only)
+
+#### SRV Records (2 records)
+- `_sipfederat...` (DNS only)
+- `_sip._tls` (DNS only) ⚠️ Warning
+
+#### TXT Records (7 records) - Email authentication & verification
+- `cf2024-1._...` (DKIM record, DNS only)
+- `chrislawre...` (SPF record, DNS only)
+- `chrislawre...` (Google site verification, DNS only)
+- `chrislawre...` (Domain verification, DNS only)
+- `chrislawre...` (Google site verification, DNS only)
+- `_dmarc` (DMARC policy, DNS only)
+- `schedshare` (Google site verification, 1 hr TTL)
+
 ### DNS Records
 
 #### Core Infrastructure (Required)
 ```
 Type: CNAME
 Name: chrislawrence.ca
+Content: 3a9f1023-0d6c-49ff-900d-32403e4309f8.cfargotunnel.com
+Proxy: ✅ Proxied (Orange Cloud)
+TTL: Auto
+```
+
+#### WWW Subdomain (Required)
+```
+Type: CNAME
+Name: www
 Content: 3a9f1023-0d6c-49ff-900d-32403e4309f8.cfargotunnel.com
 Proxy: ✅ Proxied (Orange Cloud)
 TTL: Auto

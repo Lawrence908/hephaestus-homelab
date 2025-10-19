@@ -32,6 +32,12 @@ localhost:80 {
         respond "OK" 200
     }
 
+    # www subdomain redirect to main domain
+    @www host www.chrislawrence.ca
+    handle @www {
+        redir https://chrislawrence.ca{uri} 301
+    }
+
     # Redirect homepage to portfolio (no auth required)
     @homepage path /
     handle @homepage {
@@ -47,15 +53,7 @@ localhost:80 {
         }
     }
 
-    # SchedShare (Public) - Port 8130
-    handle_path /schedshare/* {
-        reverse_proxy schedshare:5000 {
-            header_up Host {host}
-            header_up X-Forwarded-Proto {scheme}
-            header_up X-Forwarded-For {remote}
-            header_up X-Real-IP {remote}
-        }
-    }
+    # SchedShare route moved to main domain section below
 
     # MagicPages API (Public) - Port 8100
     @magicpages {
@@ -192,8 +190,7 @@ localhost:80 {
         }
     }
 
-    # Fallback - Portfolio by default
-    reverse_proxy portfolio:5000
+    # Fallback removed - handled by main domain routing
 
     # Enhanced logging for main domain
     log {
@@ -743,6 +740,16 @@ chrislawrence.ca {
         }
     }
 
+    # SchedShare (Public) - Port 8130
+    handle_path /schedshare/* {
+        reverse_proxy schedshare:5000 {
+            header_up Host {host}
+            header_up X-Forwarded-Proto {scheme}
+            header_up X-Forwarded-For {remote}
+            header_up X-Real-IP {remote}
+        }
+    }
+
     # EventSphere (alias for events) - Port 8140
     handle_path /eventsphere/* {
         reverse_proxy mongo-events:5000
@@ -881,9 +888,9 @@ chrislawrence.ca {
         reverse_proxy influxdb:8086
     }
 
-    # Fallback for any unmatched paths - redirect to portfolio
+    # Fallback for any unmatched paths - return 404
     handle {
-        redir / /portfolio/ 302
+        respond "Not Found" 404
     }
     
     # Comprehensive logging for main domain
