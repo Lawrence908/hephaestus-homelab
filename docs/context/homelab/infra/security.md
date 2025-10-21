@@ -243,3 +243,5 @@ curl -I https://chrislawrence.ca/uptime/
 **Last Updated**: $(date)
 **Security Version**: 1.0
 **Compatible With**: Cloudflare Zero Trust, Caddy v2.x
+
+

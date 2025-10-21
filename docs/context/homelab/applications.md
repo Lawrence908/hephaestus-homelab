@@ -371,3 +371,5 @@ docker compose -f docker-compose-homelab.yml exec db psql -U user -d app -c "SEL
 **Last Updated**: $(date)
 **Application Version**: 1.0
 **Compatible With**: Docker Compose v2.0+, Docker Engine 27.x
+
+
