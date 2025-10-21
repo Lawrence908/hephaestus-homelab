@@ -117,12 +117,24 @@ localhost:80 {
         }
     }
 
+    handle_path /docker {
+        reverse_proxy portainer:9000 {
+            header_down -X-Frame-Options
+        }
+    }
+    
     handle_path /docker/* {
         reverse_proxy portainer:9000 {
             header_down -X-Frame-Options
         }
     }
 
+    handle_path /metrics {
+        reverse_proxy grafana:3000 {
+            header_down -X-Frame-Options
+        }
+    }
+    
     handle_path /metrics/* {
         reverse_proxy grafana:3000 {
             header_down -X-Frame-Options
@@ -616,6 +628,10 @@ chrislawrence.ca {
     }
 
     # Protected dashboard (Cloudflare Access required)
+    handle_path /dashboard {
+        reverse_proxy organizr:80
+    }
+    
     handle_path /dashboard/* {
         reverse_proxy organizr:80
     }
@@ -641,12 +657,24 @@ chrislawrence.ca {
         }
     }
 
+    handle_path /docker {
+        reverse_proxy portainer:9000 {
+            header_down -X-Frame-Options
+        }
+    }
+    
     handle_path /docker/* {
         reverse_proxy portainer:9000 {
             header_down -X-Frame-Options
         }
     }
 
+    handle_path /metrics {
+        reverse_proxy grafana:3000 {
+            header_down -X-Frame-Options
+        }
+    }
+    
     handle_path /metrics/* {
         reverse_proxy grafana:3000 {
             header_down -X-Frame-Options
@@ -741,6 +769,15 @@ chrislawrence.ca {
     }
 
     # SchedShare (Public) - Port 8130
+    handle_path /schedshare {
+        reverse_proxy schedshare:5000 {
+            header_up Host {host}
+            header_up X-Forwarded-Proto {scheme}
+            header_up X-Forwarded-For {remote}
+            header_up X-Real-IP {remote}
+        }
+    }
+    
     handle_path /schedshare/* {
         reverse_proxy schedshare:5000 {
             header_up Host {host}
