@@ -595,6 +595,21 @@ dashboard.chrislawrence.ca {
     }
 }
 
+# daedalOS proxy for Organizr embedding (port 8158)
+:8158 {
+    reverse_proxy daedalos:3000 {
+        # Remove X-Frame-Options to allow embedding
+        header_down -X-Frame-Options
+        header_down -Content-Security-Policy
+    }
+
+    # Set permissive headers for embedding
+    header {
+        -X-Frame-Options
+        Content-Security-Policy "frame-ancestors *"
+    }
+}
+
 # ============================================================================
 # PUBLIC SUBPATH ROUTING - chrislawrence.ca
 # ============================================================================
@@ -701,7 +716,7 @@ chrislawrence.ca {
     # APPLICATION ROUTES (81XX ports - ACTIVE)
     # ========================================================================
     
-    # Minecraft BlueMap (Public) - Port 8150 (embeddable)
+    # Minecraft BlueMap (Public) - Port 8159 (embeddable)
     handle_path /minecraft-map/* {
         reverse_proxy minecraft:8100 {
             # Remove frame-blocking headers from BlueMap
@@ -733,9 +748,16 @@ chrislawrence.ca {
         reverse_proxy magicpages-frontend:80
     }
 
-    # daedalOS Browser OS (Future) - Port 8120
+    # daedalOS Browser OS (Public) - Port 8158
     handle_path /os/* {
-        reverse_proxy daedalos:3000
+        reverse_proxy daedalos:3000 {
+            header_down -X-Frame-Options
+            header_down -Content-Security-Policy
+        }
+        header {
+            -X-Frame-Options
+            Content-Security-Policy "frame-ancestors 'self'"
+        }
     }
 
     # CapitolScope Backend API (Public) - Port 8120
@@ -770,7 +792,9 @@ chrislawrence.ca {
 
     # SchedShare (Public) - Port 8130
     handle_path /schedshare {
+        uri strip_prefix /schedshare
         reverse_proxy schedshare:5000 {
+            header_up X-Forwarded-Prefix /schedshare
             header_up Host {host}
             header_up X-Forwarded-Proto {scheme}
             header_up X-Forwarded-For {remote}
@@ -779,7 +803,9 @@ chrislawrence.ca {
     }
     
     handle_path /schedshare/* {
+        uri strip_prefix /schedshare
         reverse_proxy schedshare:5000 {
+            header_up X-Forwarded-Prefix /schedshare
             header_up Host {host}
             header_up X-Forwarded-Proto {scheme}
             header_up X-Forwarded-For {remote}

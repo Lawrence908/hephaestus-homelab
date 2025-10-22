@@ -32,6 +32,7 @@ This document outlines the deployment procedures, service management, and operat
 | Prometheus | 9090 | Internal + Proxy | `https://chrislawrence.ca/prometheus` |
 | Portainer | 9000 | Internal + Proxy | `https://chrislawrence.ca/docker` |
 | Uptime Kuma | 3001 | Internal + Proxy | `https://chrislawrence.ca/uptime` |
+| daedalOS | 8158 | Internal + Proxy | `https://chrislawrence.ca/os` |
 | CapitolScope API | 8120 | Internal + Proxy | `https://chrislawrence.ca/capitolscope` |
 | CapitolScope Frontend | 8121 | Internal + Proxy | `https://chrislawrence.ca/capitolscope` |
 | MagicPages API | 8100 | Internal + Proxy | `https://chrislawrence.ca/magicpages-api` |
@@ -50,6 +51,7 @@ This document outlines the deployment procedures, service management, and operat
 | **cAdvisor** | `http://192.168.50.70:8087` | Container metrics |
 | **Glances** | `http://192.168.50.70:8088` | System monitoring |
 | **IT-Tools** | `http://192.168.50.70:8089` | Network utilities |
+| **daedalOS** | `http://192.168.50.70:8158` | Browser desktop environment |
 
 ## Deployment Procedures
 
@@ -111,6 +113,7 @@ docker compose -f docker-compose-homelab.yml up -d
 #### Application Files (Network Users)
 - **Pattern**: `/home/chris/apps/*/docker-compose-homelab.yml`
 - **Examples**:
+  - `/home/chris/apps/daedalOS/docker-compose-homelab.yml`
   - `/home/chris/apps/CapitolScope/docker-compose.yml`
   - `/home/chris/apps/n8n/docker-compose.yml`
   - `/home/chris/apps/MagicPages/docker-compose.yml`
@@ -150,11 +153,13 @@ curl -I http://192.168.50.70:9000  # Portainer
 curl -I http://192.168.50.70:8085 -u admin:admin123  # Grafana proxy
 curl -I http://192.168.50.70:8086 -u admin:admin123  # Prometheus proxy
 curl -I http://192.168.50.70:8087 -u admin:admin123  # cAdvisor proxy
+curl -I http://192.168.50.70:8158  # daedalOS proxy
 
 # Test public access
 curl -I https://chrislawrence.ca/dashboard -u admin:admin123
 curl -I https://chrislawrence.ca/uptime -u admin:admin123
 curl -I https://chrislawrence.ca/docker -u admin:admin123
+curl -I https://chrislawrence.ca/os  # daedalOS
 ```
 
 ### Organizr Integration Tests

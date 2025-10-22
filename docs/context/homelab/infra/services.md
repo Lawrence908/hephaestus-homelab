@@ -34,6 +34,7 @@ Custom applications and services:
 
 #### Web Applications
 - **Portfolio**: Personal portfolio website
+- **daedalOS**: Browser-based desktop environment
 - **CapitolScope**: Political data analysis platform
 - **SchedShare**: Schedule sharing application
 - **MagicPages**: Content management system
@@ -162,6 +163,31 @@ services:
       - app_data:/data
     environment:
       - ENV_VAR=value
+```
+
+#### daedalOS Service Definition
+```yaml
+services:
+  daedalos:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: daedalos
+    restart: unless-stopped
+    networks:
+      - web
+    ports:
+      - "8158:3000"
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - daedalos_data:/app/data
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 ```
 
 ## Service Communication

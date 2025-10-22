@@ -38,6 +38,7 @@ This document outlines the comprehensive monitoring setup for the Hephaestus Hom
 | Name | Monitor Type | URL | Interval |
 |------|-------------|-----|----------|
 | Portfolio | HTTP(s) | `https://chrislawrence.ca/portfolio` | 60s |
+| daedalOS | HTTP(s) | `https://chrislawrence.ca/os` | 60s |
 | CapitolScope | HTTP(s) | `https://chrislawrence.ca/capitolscope` | 60s |
 | SchedShare | HTTP(s) | `https://chrislawrence.ca/schedshare` | 60s |
 | MagicPages API | HTTP(s) | `https://chrislawrence.ca/magicpages-api` | 60s |
@@ -49,6 +50,7 @@ This document outlines the comprehensive monitoring setup for the Hephaestus Hom
 | Container | Monitor Type | Configuration |
 |-----------|-------------|---------------|
 | Caddy | Docker Container | `unix:///var/run/docker.sock` |
+| daedalOS | Docker Container | `unix:///var/run/docker.sock` |
 | Portainer | Docker Container | `unix:///var/run/docker.sock` |
 | Grafana | Docker Container | `unix:///var/run/docker.sock` |
 

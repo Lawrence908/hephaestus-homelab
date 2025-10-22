@@ -58,6 +58,7 @@ networks:
 
 #### App Files Using This Pattern:
 - `/home/chris/apps/*/docker-compose-homelab.yml` (all homelab-integrated apps)
+- `/home/chris/apps/daedalOS/docker-compose-homelab.yml`
 - `/home/chris/apps/CapitolScope/docker-compose.yml`
 - `/home/chris/apps/n8n/docker-compose.yml`
 - And 15+ other application compose files
@@ -82,6 +83,7 @@ networks:
 | Prometheus | 9090 | Internal + Proxy |
 | Portainer | 9000 | Internal + Proxy |
 | Uptime Kuma | 3001 | Internal + Proxy |
+| daedalOS | 8158 | Internal + Proxy |
 | CapitolScope API | 8120 | Internal + Proxy |
 | CapitolScope Frontend | 8121 | Internal + Proxy |
 | MagicPages API | 8100 | Internal + Proxy |
