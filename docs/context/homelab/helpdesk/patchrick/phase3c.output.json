@@ -1,0 +1,23 @@
+{
+    "phase3": {
+        "repair_successful": true,
+        "final_status": "up/down/partial",
+        "http_code": 200,
+        "response_time": 0.234,
+        "message": "Service repaired successfully",
+        "verification_results": {
+            "public_access": "up/down",
+            "local_access": "up/down",
+            "content_verified": true,
+            "container_healthy": true
+        },
+        "next_phase": "end",
+        "escalation_required": false,
+        "repair_time": "30s/2m/5m",
+        "applied_fix": true,
+        "needs_approval": false,
+        "commands_requested": null,
+        "tunnel_status": "active/inactive/error",
+        "tunnel_message": "Tunnel status after repair"
+    }
+}

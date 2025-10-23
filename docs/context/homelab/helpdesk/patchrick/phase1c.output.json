@@ -1,0 +1,18 @@
+{
+    "phase1": {
+        "status": "up/down/slow/partial",
+        "http_code": 200,
+        "response_time": 0.234,
+        "message": "Service is operational",
+        "next_phase": "diagnostics/end",
+        "critical": true,
+        "service_url": "https://dev.chrislawrence.ca/portfolio/",
+        "container_status": "running/stopped/unhealthy",
+        "content_verified": true,
+        "applied_fix": false,
+        "needs_approval": false,
+        "commands_requested": null,
+        "tunnel_status": "active/inactive/error",
+        "tunnel_message": "Tunnel is operational"
+    }
+}

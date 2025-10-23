@@ -1,0 +1,25 @@
+{
+    "phase2": {
+        "root_cause": "Container stopped/Network issue/Port conflict/Service error/Infrastructure down",
+        "severity": "critical/high/medium/low",
+        "diagnostics": {
+            "container_status": "running/stopped/unhealthy",
+            "container_logs": "Recent error messages",
+            "network_connectivity": "connected/disconnected",
+            "infrastructure_status": "up/down/partial",
+            "port_accessibility": "accessible/blocked/conflict"
+        },
+        "recommended_commands": [
+            "docker restart {{ $json.CONTAINER_NAME }}",
+            "docker restart caddy",
+            "sudo systemctl restart cloudflared"
+        ],
+        "next_phase": "repair/skip",
+        "estimated_repair_time": "30s/2m/5m",
+        "applied_fix": false,
+        "needs_approval": true,
+        "commands_requested": "docker restart {{ $json.CONTAINER_NAME }} && docker restart caddy",
+        "tunnel_status": "active/inactive/error",
+        "tunnel_message": "Tunnel status from diagnostics"
+    }
+}
