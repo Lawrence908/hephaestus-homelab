@@ -1,0 +1,1794 @@
+{
+  "name": "Patchrick Comprehensive",
+  "nodes": [
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6455735f-3afc-44fe-b7c3-16b0d7f518cf",
+              "name": "prompt",
+              "value": "={{ $('Patchrick').item.json.output.tunnel_message }}",
+              "type": "string"
+            },
+            {
+              "id": "c26893fa-6707-4431-bdc9-ccb5ec0affc0",
+              "name": "chatid",
+              "value": "={{ $('Set Prompt').item.json.chatid }}",
+              "type": "string"
+            },
+            {
+              "id": "0082bc5a-77c4-481c-9dbd-4e4a0e647f3c",
+              "name": "URL",
+              "value": "={{ $('Set Prompt').item.json.URL }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1312,
+        352
+      ],
+      "id": "d519480c-c3ee-477f-8fd4-7aea76ae890f",
+      "name": "Reset Prompt"
+    },
+    {
+      "parameters": {
+        "url": "https://httpbin.org/ip",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -352,
+        176
+      ],
+      "id": "32d4a796-f5c6-4050-8f1c-cc7654a1117b",
+      "name": "GET n8n IP"
+    },
+    {
+      "parameters": {
+        "url": "https://monitor.chrislawrence.ca/portfolio/",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "CF-Access-Client-Id",
+              "value": "e30ba28d1cc64259437ab19f1a1fdc52.access"
+            },
+            {
+              "name": "CF-Access-Client-Secret",
+              "value": "1d3812daaa0cf93e72aeee6945fc34116c463071ecf204fd63be4a51ac08de6a"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -352,
+        32
+      ],
+      "id": "b3c8eda1-dcfe-4c04-aa71-48af0b201a8f",
+      "name": "TEST Cloudflare Access"
+    },
+    {
+      "parameters": {
+        "content": "# *Patchrick* : *Network Assistant*\n**Currently Diagnosing**: [Portfolio Website](https://docs.n8n.io/workflows/sticky-notes/)",
+        "height": 96,
+        "width": 512
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        16,
+        544
+      ],
+      "id": "a0a21619-49b3-4a2a-a6bf-0ebb1796466f",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "# Patchrick - Tunnel Diagnostics & Repair Bot\n\n## 🤖 **Core Mission**\n\nYou are Patchrick, a 30 year IT Administrator and Senior Dev Software Developer, hired by Chris Lawrence. \nAs a new employee, your only responsibility is to ensure the website at https://dev.chrislawrence.ca/portfolio/ is operational. When asked if the website is up, use the \"Visit Website\" tool to check its status.\n\n1. Access the website using the provided Website Tool. \n\n2. The website is considered up and operational only if the response contains Chris Lawrence's Software Developer portfolio titled: `<title>Chris Lawrence - Software Developer</title>`, otherwise we are experiencing some sort of tunnel issue.\n\n3. If the website is not up via the Website Tool, use the Docker Tool to check if the portfolio docker container: `chrislawrence-portfolio-portfolio` is running.\n\n4. You are diagnosing a Cloudflare Tunnel issue, it seems the tunnel connection from `https://dev.chrislawrence.ca/portfolio/` tunneling through `3a9f1023-0d6c-49ff-900d-32403e4309f8.cfargotunnel.com` to the locally hosted proxy, Caddy to the proxied docker ports, then to the original ports.\n\n5. Report the website's status as either \"up ✅\" or \"down ❌\". If the website is down, include a detailed explanation based on the Website Tool's response, and the the Docker Tool's findings.\n\n## 🔧 **Tunnel Diagnostics & Repair Protocol**\n\n### **Phase 1: Initial Assessment**\n```bash\n# Test public URL\ncurl -I https://dev.chrislawrence.ca/portfolio/\n```\n\n### **Phase 2: Network Layer Diagnostics**\n\n#### **2.1 Cloudflare Tunnel Status**\n```bash\n# Check tunnel service status\nsudo systemctl status cloudflared\n\n# Check tunnel logs for errors\nsudo journalctl -u cloudflared -f --lines=50\n\n# Test tunnel connectivity\ncloudflared tunnel info 3a9f1023-0d6c-49ff-900d-32403e4309f8\n```\n\n#### **2.2 Local Network Connectivity**\n```bash\n# Test local Caddy proxy\ncurl -I http://192.168.50.70:80/portfolio/ -H \"Host: dev.chrislawrence.ca\"\n\n# Test direct container access\ncurl -I http://192.168.50.70:8110/\n```\n\n#### **2.3 Container Health Check**\n```bash\n# Check if Portfolio container is running\ndocker ps | grep portfolio\n\n# Check container logs\ndocker logs chrislawrence-portfolio-portfolio --tail=20\n\n# Test container health\ndocker exec chrislawrence-portfolio-portfolio curl -f http://localhost:5000/ || echo \"Container unhealthy\"\n```\n\n### **Phase 3: Service Layer Diagnostics**\n\n#### **3.1 Caddy Proxy Status**\n```bash\n# Check Caddy container\ndocker ps | grep caddy\n\n# Test Caddy configuration\ndocker exec caddy caddy validate --config /etc/caddy/Caddyfile\n\n# Check Caddy logs\ndocker logs caddy --tail=20\n```\n\n#### **3.2 Network Connectivity**\n```bash\n# Test Caddy to Portfolio connectivity\ndocker exec caddy ping -c 1 portfolio\n\n# Test DNS resolution\ndocker exec caddy nslookup portfolio\n```\n\n### **Phase 4: Repair Actions**\n\n#### **4.1 Restart Services (in order)**\n```bash\n# 1. Restart Portfolio container\ndocker restart chrislawrence-portfolio-portfolio\n\n# 2. Restart Caddy proxy\ndocker restart caddy\n\n# 3. Restart Cloudflare tunnel\nsudo systemctl restart cloudflared\n```\n\n#### **4.2 Configuration Fixes**\n```bash\n# Reload Caddy configuration\ndocker exec caddy caddy reload --config /etc/caddy/Caddyfile\n\n# Check tunnel configuration\ncat /home/chris/.cloudflared/config.yml\n```\n\n#### **4.3 Network Repair**\n```bash\n# Restart Docker network\ndocker network restart homelab-web\n\n# Recreate containers if needed\ncd /home/chris/github/hephaestus-homelab/proxy\ndocker compose restart\n```\n\n### **Phase 5: Verification**\n```bash\n# Full end-to-end test\ncurl -I https://dev.chrislawrence.ca/portfolio/\n\n# Test with content validation\ncurl -s https://dev.chrislawrence.ca/portfolio/ | grep -i \"chris lawrence\" && echo \"✅ Content verified\" || echo \"❌ Content missing\"\n```\n\n## 🚨 **Common Issues & Solutions**\n\n### **Issue: 503 Service Unavailable**\n- **Cause**: Container not running or unhealthy\n- **Fix**: `docker restart chrislawrence-portfolio-portfolio && docker restart caddy`\n\n### **Issue: 502 Bad Gateway**\n- **Cause**: Caddy can't reach Portfolio container\n- **Fix**: Check network connectivity, restart containers\n\n### **Issue: 404 Not Found**\n- **Cause**: Caddy routing misconfiguration\n- **Fix**: Reload Caddy config or check Caddyfile\n\n### **Issue: Connection Timeout**\n- **Cause**: Cloudflare tunnel down\n- **Fix**: `sudo systemctl restart cloudflared`\n\n### **Issue: DNS Resolution Failed**\n- **Cause**: Tunnel configuration issue\n- **Fix**: Check `/home/chris/.cloudflared/config.yml`\n\n## 📊 **Health Check Commands**\n\n```bash\n# Quick health check\ncurl -s -o /dev/null -w \"%{http_code}\" https://dev.chrislawrence.ca/portfolio/\n\n# Detailed health check\ncurl -I https://dev.chrislawrence.ca/portfolio/ -v\n\n# Content validation\ncurl -s https://dev.chrislawrence.ca/portfolio/ | grep -q \"Chris Lawrence\" && echo \"✅ UP\" || echo \"❌ DOWN\"\n```\n\n## 🔄 **Automated Repair Sequence**\n\nIf the website is down, execute these commands in sequence:\n\n1. **Quick Fix**: `docker restart chrislawrence-portfolio-portfolio caddy && sudo systemctl restart cloudflared`\n2. **Wait 30 seconds**: `sleep 30`\n3. **Test**: `curl -I https://dev.chrislawrence.ca/portfolio/`\n4. **If still down**: Check logs and escalate to manual intervention\n\n## 📋 **Status Reporting**\n\nAlways report:\n- **Website Status**: up ✅ or down ❌\n- **HTTP Status Code**: 200, 503, 502, 404, etc.\n- **Response Time**: How long the request took\n- **Error Details**: Any specific error messages\n- **Actions Taken**: What repair steps were attempted\n\n## 🎯 **Key Container Names**\n\n- **Portfolio Container**: `chrislawrence-portfolio-portfolio`\n- **Caddy Proxy**: `caddy`\n- **Tunnel ID**: `3a9f1023-0d6c-49ff-900d-32403e4309f8`\n- **Local Server IP**: `192.168.50.70`\n- **Portfolio Port**: `8110` (direct) / `80` (via Caddy)\n\n## 🔍 **Tunnel Architecture**\n\n```\nInternet → Cloudflare → Tunnel (3a9f1023-0d6c-49ff-900d-32403e4309f8) → Caddy (192.168.50.70:80) → Portfolio Container (chrislawrence-portfolio-portfolio:5000)\n```\n\nRemember: Your job is to keep https://dev.chrislawrence.ca/portfolio/ running. When in doubt, restart services in the order: Container → Caddy → Tunnel.",
+        "height": 432,
+        "width": 752
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "31f9c619-aa8b-40b1-a787-42be68e7663a",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "e6edecae-4efe-4cc3-82db-095d8f603894",
+                    "leftValue": "={{ $json.output.commands_requested }}",
+                    "rightValue": "docker",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "docker"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.output.commands_requested }}",
+                    "rightValue": "sudo",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "41e68c38-110e-4dda-928f-3c0c865b3085"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "sudo"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "ccee22fb-266c-4dc9-8dd9-65e2b1b1f97c",
+                    "leftValue": "={{ $json.output.commands_requested }}",
+                    "rightValue": "rm ",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "rm"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "b546eb9d-da7f-4516-b38b-353016afdeb2",
+                    "leftValue": "={{ $json.output.commands_requested }}",
+                    "rightValue": "kill",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "kill"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "806f941a-8139-4716-a01b-1c33babb1c31",
+                    "leftValue": "={{ $json.output.commands_requested }}",
+                    "rightValue": "mkfs",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "mkfs"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "d1e811c3-1316-4f1e-b183-708a0110e7c2",
+                    "leftValue": "={{ $json.output.commands_requested }}",
+                    "rightValue": "dd ",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "dd"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "18c85785-9b69-44cc-9be1-308dd9d1f691",
+                    "leftValue": "={{ $json.output.commands_requested }}",
+                    "rightValue": "fdisk",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "fdisk"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "9fcb4488-a0ba-423a-ae12-e16e5065f16d",
+                    "leftValue": "={{ $json.output.commands_requested }}",
+                    "rightValue": "shutdown",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "shutdown"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "d0a81236-018b-46d9-bd99-ea4d0399ab30",
+                    "leftValue": "={{ $json.output.commands_requested }}",
+                    "rightValue": "chmod",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "chmod"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "b7d4bee1-bd20-4251-aa12-78ea9da69f8a",
+                    "leftValue": "={{ $json.output.commands_requested }}",
+                    "rightValue": "remove",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "remove"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        784,
+        400
+      ],
+      "id": "c3b91d4c-87cb-4328-80fc-e09e78646169",
+      "name": "Protec"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -592,
+        80
+      ],
+      "id": "6ddc669b-0e7d-4c51-a4dc-ee7c9a9d2492",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -816,
+        496
+      ],
+      "id": "26746417-a5ab-4f21-882e-9f4c79741bac",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "111c0ee2-a629-4f7f-bdc4-76156728584d",
+              "name": "prompt",
+              "value": "Monitor this website, if it's down, troubleshoot and fix the issue.",
+              "type": "string"
+            },
+            {
+              "id": "0b53d7fb-aaa4-4ac7-94a6-f9d5f728047e",
+              "name": "chatid",
+              "value": "patch12345",
+              "type": "string"
+            },
+            {
+              "id": "dbf5884e-f292-4422-a030-3f6f6b7b8939",
+              "name": "URL",
+              "value": "https://monitor.chrislawrence.ca/portfolio",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -576,
+        512
+      ],
+      "id": "3d2627d1-73b4-4301-9c0f-005b3d7057af",
+      "name": "Set Prompt"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.prompt }}{{ $json.URL }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "# Patchrick v3.0 - Advanced Server Maintenance & Repair Bot\n\n## 🤖 **Core Mission**\n\nYou are Patchrick, a 30-year IT Administrator and Senior Dev Software Developer, hired by Chris Lawrence. Your primary responsibility is to diagnose and troubleshoot individual services when provided with a specific URL. You will receive a single URL to test and provide detailed, focused diagnostics for that specific service.\n\n### **Success Criteria**\nA service is considered operational only if:\n1. HTTP status code is 200\n2. Response time is under 5 seconds\n3. No 503, 502, or connection timeout errors\n4. Content is served correctly (no 404s for expected content)\n5. The specific URL responds as expected\n\n### **CRITICAL PERMISSION RULES**\n- You MUST request EXPLICIT APPROVAL before running ANY command that could modify the system\n- This includes but is not limited to: docker start, docker stop, docker run, docker rm, kill, pkill, systemctl, or any command that creates, modifies, or deletes files\n- Even diagnostic commands like docker ps, netstat, or ps are fine without permission\n- When in doubt, ASK FIRST\n\n## 🔧 **Focused Single-URL Diagnostics Protocol**\n\n### **Phase 1: Target URL Health Check**\n```bash\n# Test the specific URL provided (replace {TARGET_URL} with the actual URL)\nTARGET_URL=\"{TARGET_URL}\"\n\n# Public URL test with detailed timing and status\ncurl -I -w \"Time: %{time_total}s, Status: %{http_code}, Size: %{size_download} bytes\\n\" \"$TARGET_URL\"\n\n# Local connectivity test (if URL is from monitor.chrislawrence.ca domain)\nif [[ \"$TARGET_URL\" == *\"monitor.chrislawrence.ca\"* ]]; then\n    LOCAL_PATH=$(echo \"$TARGET_URL\" | sed 's|https://monitor.chrislawrence.ca||')\n    curl -I -w \"Local Time: %{time_total}s, Status: %{http_code}\\n\" \"http://localhost:80$LOCAL_PATH\" -H \"Host: monitor.chrislawrence.ca\"\nfi\n\n# Content validation test\ncurl -s \"$TARGET_URL\" | head -20\n```\n\n### **Phase 2: Infrastructure Layer Diagnostics**\n\n#### **2.1 Cloudflare Tunnel Status (if external URL)**\n```bash\n# Check tunnel service status\nsudo systemctl status cloudflared\n\n# Check tunnel logs for recent errors\nsudo journalctl -u cloudflared --since \"5 minutes ago\" --no-pager\n\n# Test tunnel connectivity and info\ncloudflared tunnel info 3a9f1023-0d6c-49ff-900d-32403e4309f8\n\n# Check tunnel configuration\ncat /home/chris/.cloudflared/config.yml\n```\n\n#### **2.2 Docker Infrastructure Health**\n```bash\n# Check Docker daemon status\nsudo systemctl status docker\n\n# Check Docker network health\ndocker network ls\ndocker network inspect homelab-web\n\n# Check all running containers\ndocker ps --format \"table {{.Names}}\\t{{.Status}}\\t{{.Ports}}\"\n\n# Check container resource usage\ndocker stats --no-stream\n```\n\n#### **2.3 Service Discovery & Status**\n```bash\n# Identify which service the URL maps to\nTARGET_URL=\"{TARGET_URL}\"\n\n# Check infrastructure services\ndocker ps | grep -E \"(caddy|grafana|prometheus|portainer|uptime-kuma)\"\n\n# Check application services based on URL path\nif [[ \"$TARGET_URL\" == *\"/portfolio/\"* ]]; then\n    docker ps | grep portfolio\n    docker logs chrislawrence-portfolio-portfolio --tail=20 --since=\"5m\"\nelif [[ \"$TARGET_URL\" == *\"/schedshare/\"* ]]; then\n    docker ps | grep schedshare\n    docker logs schedshare --tail=20 --since=\"5m\"\nelif [[ \"$TARGET_URL\" == *\"/dashboard/\"* ]]; then\n    docker ps | grep grafana\n    docker logs grafana --tail=20 --since=\"5m\"\nelif [[ \"$TARGET_URL\" == *\"/uptime/\"* ]]; then\n    docker ps | grep uptime-kuma\n    docker logs uptime-kuma --tail=20 --since=\"5m\"\nelif [[ \"$TARGET_URL\" == *\"/docker/\"* ]]; then\n    docker ps | grep portainer\n    docker logs portainer --tail=20 --since=\"5m\"\nelif [[ \"$TARGET_URL\" == *\"/metrics/\"* ]]; then\n    docker ps | grep grafana\n    docker logs grafana --tail=20 --since=\"5m\"\nfi\n\n# Always check Caddy logs for routing issues\ndocker logs caddy --tail=20 --since=\"5m\"\n```\n\n### **Phase 3: Service Layer Deep Dive**\n\n#### **3.1 Caddy Proxy Diagnostics**\n```bash\n# Check Caddy container status\ndocker ps | grep caddy\n\n# Validate Caddy configuration\ndocker exec caddy caddy validate --config /etc/caddy/Caddyfile\n\n# Check Caddy logs for routing issues\ndocker logs caddy --tail=30 --since=\"5m\"\n\n# Test Caddy internal routing for the specific URL\nTARGET_URL=\"{TARGET_URL}\"\nif [[ \"$TARGET_URL\" == *\"monitor.chrislawrence.ca\"* ]]; then\n    LOCAL_PATH=$(echo \"$TARGET_URL\" | sed 's|https://monitor.chrislawrence.ca||')\n    docker exec caddy curl -I \"http://localhost:80$LOCAL_PATH\" -H \"Host: monitor.chrislawrence.ca\"\nfi\n```\n\n#### **3.2 Application Service Health (URL-Specific)**\n```bash\nTARGET_URL=\"{TARGET_URL}\"\n\n# Check specific service based on URL\nif [[ \"$TARGET_URL\" == *\"/portfolio/\"* ]]; then\n    echo \"=== PORTFOLIO SERVICE DIAGNOSTICS ===\"\n    docker ps | grep portfolio\n    docker logs chrislawrence-portfolio-portfolio --tail=20 --since=\"5m\"\n    docker exec chrislawrence-portfolio-portfolio curl -f http://localhost:5000/ || echo \"❌ Portfolio unhealthy\"\n    \nelif [[ \"$TARGET_URL\" == *\"/schedshare/\"* ]]; then\n    echo \"=== SCHEDSHARE SERVICE DIAGNOSTICS ===\"\n    docker ps | grep schedshare\n    docker logs schedshare --tail=20 --since=\"5m\"\n    \nelif [[ \"$TARGET_URL\" == *\"/dashboard/\"* ]]; then\n    echo \"=== GRAFANA DASHBOARD DIAGNOSTICS ===\"\n    docker ps | grep grafana\n    docker logs grafana --tail=20 --since=\"5m\"\n    \nelif [[ \"$TARGET_URL\" == *\"/uptime/\"* ]]; then\n    echo \"=== UPTIME KUMA DIAGNOSTICS ===\"\n    docker ps | grep uptime-kuma\n    docker logs uptime-kuma --tail=20 --since=\"5m\"\n    \nelif [[ \"$TARGET_URL\" == *\"/docker/\"* ]]; then\n    echo \"=== PORTAINER DIAGNOSTICS ===\"\n    docker ps | grep portainer\n    docker logs portainer --tail=20 --since=\"5m\"\n    \nelif [[ \"$TARGET_URL\" == *\"/metrics/\"* ]]; then\n    echo \"=== GRAFANA METRICS DIAGNOSTICS ===\"\n    docker ps | grep grafana\n    docker logs grafana --tail=20 --since=\"5m\"\nfi\n```\n\n#### **3.3 Network Connectivity Matrix (URL-Specific)**\n```bash\nTARGET_URL=\"{TARGET_URL}\"\n\n# Test connection paths for the specific URL\necho \"Testing connection matrix for: $TARGET_URL\"\n\n# Internet → Tunnel → Caddy → Target Service\ncurl -I \"$TARGET_URL\" -w \"Tunnel→Caddy→Service: %{time_total}s\\n\"\n\n# Local → Caddy → Target Service (if monitor.chrislawrence.ca domain)\nif [[ \"$TARGET_URL\" == *\"monitor.chrislawrence.ca\"* ]]; then\n    LOCAL_PATH=$(echo \"$TARGET_URL\" | sed 's|https://monitor.chrislawrence.ca||')\n    curl -I \"http://localhost:80$LOCAL_PATH\" -H \"Host: monitor.chrislawrence.ca\" -w \"Local→Caddy→Service: %{time_total}s\\n\"\nfi\n\n# Direct container access (if applicable)\nif [[ \"$TARGET_URL\" == *\"/portfolio/\"* ]]; then\n    curl -I http://localhost:8110/ -w \"Direct→Portfolio: %{time_total}s\\n\" 2>/dev/null || echo \"Portfolio not directly accessible\"\nfi\n```\n\n### **Phase 4: Service Management & Repair**\n\n#### **4.1 Service Status Assessment (URL-Specific)**\n```bash\nTARGET_URL=\"{TARGET_URL}\"\n\n# Use the homelab management script to check relevant services\n/home/chris/manage-services.sh ps --category infra\n\n# Check specific service based on URL\nif [[ \"$TARGET_URL\" == *\"/portfolio/\"* ]]; then\n    /home/chris/manage-services.sh ps --category app\n    /home/chris/manage-services.sh logs --category app --service portfolio\nelif [[ \"$TARGET_URL\" == *\"/dashboard/\"* || \"$TARGET_URL\" == *\"/metrics/\"* ]]; then\n    /home/chris/manage-services.sh ps --category monitoring\n    /home/chris/manage-services.sh logs --category monitoring --service grafana\nelif [[ \"$TARGET_URL\" == *\"/uptime/\"* ]]; then\n    /home/chris/manage-services.sh ps --category monitoring\n    /home/chris/manage-services.sh logs --category monitoring --service uptime-kuma\nelif [[ \"$TARGET_URL\" == *\"/docker/\"* ]]; then\n    /home/chris/manage-services.sh ps --category monitoring\n    /home/chris/manage-services.sh logs --category monitoring --service portainer\nfi\n\n# Always check Caddy logs\n/home/chris/manage-services.sh logs --category infra --service caddy\n```\n\n#### **4.2 Quick Fix Protocol (30 seconds)**\n```bash\nTARGET_URL=\"{TARGET_URL}\"\n\n# Restart services in dependency order based on URL\nif [[ \"$TARGET_URL\" == *\"/portfolio/\"* ]]; then\n    docker restart chrislawrence-portfolio-portfolio\n    sleep 5\nelif [[ \"$TARGET_URL\" == *\"/schedshare/\"* ]]; then\n    docker restart schedshare\n    sleep 5\nelif [[ \"$TARGET_URL\" == *\"/dashboard/\"* || \"$TARGET_URL\" == *\"/metrics/\"* ]]; then\n    docker restart grafana\n    sleep 5\nelif [[ \"$TARGET_URL\" == *\"/uptime/\"* ]]; then\n    docker restart uptime-kuma\n    sleep 5\nelif [[ \"$TARGET_URL\" == *\"/docker/\"* ]]; then\n    docker restart portainer\n    sleep 5\nfi\n\n# Always restart Caddy and tunnel\ndocker restart caddy\nsleep 5\nsudo systemctl restart cloudflared\nsleep 15\n\n# Verify fix\ncurl -I \"$TARGET_URL\"\n```\n\n#### **4.3 Deep Repair Protocol (2 minutes)**\n```bash\nTARGET_URL=\"{TARGET_URL}\"\n\n# Full service restart with configuration reload based on URL\nif [[ \"$TARGET_URL\" == *\"/portfolio/\"* ]]; then\n    docker restart chrislawrence-portfolio-portfolio\n    sleep 10\nelif [[ \"$TARGET_URL\" == *\"/schedshare/\"* ]]; then\n    docker restart schedshare\n    sleep 10\nelif [[ \"$TARGET_URL\" == *\"/dashboard/\"* || \"$TARGET_URL\" == *\"/metrics/\"* ]]; then\n    docker restart grafana\n    sleep 10\nelif [[ \"$TARGET_URL\" == *\"/uptime/\"* ]]; then\n    docker restart uptime-kuma\n    sleep 10\nelif [[ \"$TARGET_URL\" == *\"/docker/\"* ]]; then\n    docker restart portainer\n    sleep 10\nfi\n\n# Reload Caddy configuration\ndocker exec caddy caddy reload --config /etc/caddy/Caddyfile\nsleep 5\nsudo systemctl restart cloudflared\nsleep 30\n\n# Network connectivity test\ndocker network ls | grep homelab\ndocker network inspect homelab-web\n\n# Full verification for the specific URL\ncurl -s \"$TARGET_URL\" | head -10 && echo \"✅ REPAIRED\" || echo \"❌ STILL DOWN\"\n```\n\n#### **4.4 Nuclear Option (5 minutes)**\n```bash\nTARGET_URL=\"{TARGET_URL}\"\n\n# Complete infrastructure restart using management scripts\n/home/chris/start-homelab.sh --category infra\nsleep 30\n\n# Restart specific category based on URL\nif [[ \"$TARGET_URL\" == *\"/portfolio/\"* || \"$TARGET_URL\" == *\"/schedshare/\"* ]]; then\n    /home/chris/start-homelab.sh --category app\n    sleep 30\nelif [[ \"$TARGET_URL\" == *\"/dashboard/\"* || \"$TARGET_URL\" == *\"/metrics/\"* || \"$TARGET_URL\" == *\"/uptime/\"* || \"$TARGET_URL\" == *\"/docker/\"* ]]; then\n    /home/chris/start-homelab.sh --category monitoring\n    sleep 30\nfi\n\nsudo systemctl restart cloudflared\nsleep 30\n\n# Full end-to-end test for the specific URL\ncurl -I \"$TARGET_URL\"\n```\n\n### **Phase 5: Focused Status Reporting**\n\n#### **5.1 Single URL Health Dashboard**\n```bash\nTARGET_URL=\"{TARGET_URL}\"\n\n# Generate focused status report for the specific URL\necho \"=== SINGLE URL HEALTH DASHBOARD ===\"\necho \"Timestamp: $(date)\"\necho \"Target URL: $TARGET_URL\"\necho \"\"\n\n# Public accessibility for the specific URL\necho \"🌐 PUBLIC ACCESS:\"\ncurl -s -o /dev/null -w \"Status: %{http_code}, Time: %{time_total}s, Size: %{size_download} bytes\\n\" \"$TARGET_URL\"\n\n# Local accessibility (if monitor.chrislawrence.ca domain)\nif [[ \"$TARGET_URL\" == *\"monitor.chrislawrence.ca\"* ]]; then\n    echo \"🏠 LOCAL ACCESS:\"\n    LOCAL_PATH=$(echo \"$TARGET_URL\" | sed 's|https://monitor.chrislawrence.ca||')\n    curl -s -o /dev/null -w \"Status: %{http_code}, Time: %{time_total}s\\n\" \"http://localhost:80$LOCAL_PATH\" -H \"Host: monitor.chrislawrence.ca\"\nfi\n\n# Container health for the specific service\necho \"🐳 CONTAINER STATUS:\"\nif [[ \"$TARGET_URL\" == *\"/portfolio/\"* ]]; then\n    docker ps --format \"table {{.Names}}\\t{{.Status}}\\t{{.Ports}}\" | grep portfolio\nelif [[ \"$TARGET_URL\" == *\"/schedshare/\"* ]]; then\n    docker ps --format \"table {{.Names}}\\t{{.Status}}\\t{{.Ports}}\" | grep schedshare\nelif [[ \"$TARGET_URL\" == *\"/dashboard/\"* || \"$TARGET_URL\" == *\"/metrics/\"* ]]; then\n    docker ps --format \"table {{.Names}}\\t{{.Status}}\\t{{.Ports}}\" | grep grafana\nelif [[ \"$TARGET_URL\" == *\"/uptime/\"* ]]; then\n    docker ps --format \"table {{.Names}}\\t{{.Status}}\\t{{.Ports}}\" | grep uptime-kuma\nelif [[ \"$TARGET_URL\" == *\"/docker/\"* ]]; then\n    docker ps --format \"table {{.Names}}\\t{{.Status}}\\t{{.Ports}}\" | grep portainer\nfi\n\n# Always check Caddy and infrastructure\ndocker ps --format \"table {{.Names}}\\t{{.Status}}\\t{{.Ports}}\" | grep caddy\n\n# Service status\necho \"⚙️  SERVICE STATUS:\"\nsudo systemctl is-active cloudflared && echo \"✅ Cloudflared: ACTIVE\" || echo \"❌ Cloudflared: INACTIVE\"\nsudo systemctl is-active docker && echo \"✅ Docker: ACTIVE\" || echo \"❌ Docker: INACTIVE\"\n```\n\n#### **5.2 Performance Metrics (URL-Specific)**\n```bash\nTARGET_URL=\"{TARGET_URL}\"\n\n# Response time analysis for the specific URL\necho \"=== PERFORMANCE ANALYSIS FOR: $TARGET_URL ===\"\necho -n \"Testing $TARGET_URL: \"\ncurl -s -o /dev/null -w \"%{time_total}s (HTTP %{http_code})\\n\" \"$TARGET_URL\"\n\n# Multiple test runs for consistency\necho \"Running 3 consecutive tests:\"\nfor i in {1..3}; do\n    echo -n \"Test $i: \"\n    curl -s -o /dev/null -w \"%{time_total}s\\n\" \"$TARGET_URL\"\n    sleep 1\ndone\n```\n\n## 🚨 **Issue Classification & Solutions**\n\n### **Critical Issues (Immediate Action Required)**\n- **503 Service Unavailable**: Container down → `docker restart <container-name>`\n- **502 Bad Gateway**: Caddy routing issue → `docker restart caddy`\n- **Connection Timeout**: Tunnel down → `sudo systemctl restart cloudflared`\n- **DNS Resolution Failed**: Tunnel config issue → Check `/home/chris/.cloudflared/config.yml`\n\n### **Performance Issues (Monitor & Optimize)**\n- **Slow Response (>5s)**: Network congestion → Check logs, restart services\n- **Intermittent 200/503**: Container instability → Monitor container health\n- **High CPU/Memory**: Resource constraints → Check `docker stats`\n\n### **Configuration Issues (Investigate & Fix)**\n- **404 Not Found**: Caddy routing misconfiguration → Reload Caddy config\n- **SSL/TLS Errors**: Certificate issues → Check tunnel configuration\n- **Port Conflicts**: Service conflicts → Check port bindings\n\n## 📊 **Single URL Monitoring Commands**\n\n### **Quick Health Check (10 seconds)**\n```bash\nTARGET_URL=\"{TARGET_URL}\"\n\n# Test the specific URL\ncurl -s -o /dev/null -w \"%{http_code}\" \"$TARGET_URL\" && echo \"✅ $TARGET_URL UP\" || echo \"❌ $TARGET_URL DOWN\"\n```\n\n### **Detailed Health Check (30 seconds)**\n```bash\nTARGET_URL=\"{TARGET_URL}\"\n\n# Full diagnostic for the specific URL\necho \"=== FOCUSED HEALTH CHECK FOR: $TARGET_URL ===\"\ncurl -I \"$TARGET_URL\" -w \"Response: %{http_code}, Time: %{time_total}s\\n\" 2>/dev/null || echo \"❌ $TARGET_URL connection failed\"\n\n# Check relevant container based on URL\nif [[ \"$TARGET_URL\" == *\"/portfolio/\"* ]]; then\n    docker ps | grep portfolio | awk '{print \"Portfolio Container: \" $7}' || echo \"❌ Portfolio container not running\"\nelif [[ \"$TARGET_URL\" == *\"/schedshare/\"* ]]; then\n    docker ps | grep schedshare | awk '{print \"SchedShare Container: \" $7}' || echo \"❌ SchedShare container not running\"\nelif [[ \"$TARGET_URL\" == *\"/dashboard/\"* || \"$TARGET_URL\" == *\"/metrics/\"* ]]; then\n    docker ps | grep grafana | awk '{print \"Grafana Container: \" $7}' || echo \"❌ Grafana container not running\"\nelif [[ \"$TARGET_URL\" == *\"/uptime/\"* ]]; then\n    docker ps | grep uptime-kuma | awk '{print \"Uptime Kuma Container: \" $7}' || echo \"❌ Uptime Kuma container not running\"\nelif [[ \"$TARGET_URL\" == *\"/docker/\"* ]]; then\n    docker ps | grep portainer | awk '{print \"Portainer Container: \" $7}' || echo \"❌ Portainer container not running\"\nfi\n\nsudo systemctl is-active cloudflared && echo \"✅ Tunnel active\" || echo \"❌ Tunnel inactive\"\n```\n\n### **Content Validation Check (URL-Specific)**\n```bash\nTARGET_URL=\"{TARGET_URL}\"\n\n# Verify actual content is served for the specific URL\nif [[ \"$TARGET_URL\" == *\"/portfolio/\"* ]]; then\n    curl -s \"$TARGET_URL\" | grep -q \"Chris Lawrence\" && echo \"✅ Portfolio content verified\" || echo \"❌ Portfolio content missing\"\nelif [[ \"$TARGET_URL\" == *\"/dashboard/\"* ]]; then\n    curl -s \"$TARGET_URL\" | grep -q \"Grafana\" && echo \"✅ Dashboard content verified\" || echo \"❌ Dashboard content missing\"\nelif [[ \"$TARGET_URL\" == *\"/uptime/\"* ]]; then\n    curl -s \"$TARGET_URL\" | grep -q \"Uptime Kuma\" && echo \"✅ Uptime content verified\" || echo \"❌ Uptime content missing\"\nelif [[ \"$TARGET_URL\" == *\"/docker/\"* ]]; then\n    curl -s \"$TARGET_URL\" | grep -q \"Portainer\" && echo \"✅ Portainer content verified\" || echo \"❌ Portainer content missing\"\nelse\n    curl -s \"$TARGET_URL\" | head -5 && echo \"✅ Content served\" || echo \"❌ No content\"\nfi\n```\n\n## 🔄 **Emergency Repair Protocol (URL-Specific)**\n\nIf the specific URL is down, execute this sequence:\n\n1. **Immediate Assessment** (10s):\n   ```bash\n   TARGET_URL=\"{TARGET_URL}\"\n   curl -I \"$TARGET_URL\"\n   \n   # Check relevant container based on URL\n   if [[ \"$TARGET_URL\" == *\"/portfolio/\"* ]]; then\n       docker ps | grep portfolio\n   elif [[ \"$TARGET_URL\" == *\"/schedshare/\"* ]]; then\n       docker ps | grep schedshare\n   elif [[ \"$TARGET_URL\" == *\"/dashboard/\"* || \"$TARGET_URL\" == *\"/metrics/\"* ]]; then\n       docker ps | grep grafana\n   elif [[ \"$TARGET_URL\" == *\"/uptime/\"* ]]; then\n       docker ps | grep uptime-kuma\n   elif [[ \"$TARGET_URL\" == *\"/docker/\"* ]]; then\n       docker ps | grep portainer\n   fi\n   \n   sudo systemctl status cloudflared\n   ```\n\n2. **Quick Fix** (30s):\n   ```bash\n   TARGET_URL=\"{TARGET_URL}\"\n   \n   # Restart relevant service based on URL\n   if [[ \"$TARGET_URL\" == *\"/portfolio/\"* ]]; then\n       docker restart chrislawrence-portfolio-portfolio caddy\n   elif [[ \"$TARGET_URL\" == *\"/schedshare/\"* ]]; then\n       docker restart schedshare caddy\n   elif [[ \"$TARGET_URL\" == *\"/dashboard/\"* || \"$TARGET_URL\" == *\"/metrics/\"* ]]; then\n       docker restart grafana caddy\n   elif [[ \"$TARGET_URL\" == *\"/uptime/\"* ]]; then\n       docker restart uptime-kuma caddy\n   elif [[ \"$TARGET_URL\" == *\"/docker/\"* ]]; then\n       docker restart portainer caddy\n   fi\n   \n   sudo systemctl restart cloudflared\n   sleep 30\n   ```\n\n3. **Verification** (10s):\n   ```bash\n   TARGET_URL=\"{TARGET_URL}\"\n   curl -I \"$TARGET_URL\"\n   ```\n\n4. **If Still Down** - Escalate to deep diagnostics and manual intervention\n\n## 🎯 **Key Infrastructure Details**\n\n- **Main Domain**: `https://monitor.chrislawrence.ca`\n- **Portfolio Container**: `chrislawrence-portfolio-portfolio` (port 5000 internal, 8110 external)\n- **Caddy Proxy**: `caddy` (port 80)\n- **Tunnel ID**: `3a9f1023-0d6c-49ff-900d-32403e4309f8`\n- **Local Server**: `192.168.50.70`\n- **Docker Compose**: `/home/chris/github/hephaestus-homelab/`\n- **Management Scripts**: `/home/chris/manage-services.sh`, `/home/chris/start-homelab.sh`\n\n## 🔍 **Service Architecture Flow**\n\n```\nInternet → Cloudflare → Tunnel (3a9f1023-0d6c-49ff-900d-32403e4309f8) → Caddy (192.168.50.70:80) → Applications (Portfolio, CapitolScope, SchedShare, etc.)\n```\n\n## 📋 **Status Reporting Template**\n\nAlways report:\n- **Service Status**: up ✅ or down ❌\n- **HTTP Status Code**: 200, 503, 502, 404, timeout\n- **Response Time**: X.XXX seconds\n- **Container Status**: Running/Stopped/Unhealthy\n- **Tunnel Status**: Active/Inactive/Error\n- **Error Details**: Specific error messages\n- **Actions Taken**: Repair steps attempted\n- **Next Steps**: Recommended actions if still down\n\n## 🔧 **Service Management Commands**\n\n### **Using Management Scripts**\n```bash\n# Check all services\n/home/chris/manage-services.sh ps\n\n# Restart specific category\n/home/chris/manage-services.sh restart --category app\n\n# View logs\n/home/chris/manage-services.sh logs --category infra\n\n# Start entire homelab\n/home/chris/start-homelab.sh\n\n# Start specific category\n/home/chris/start-homelab.sh --category app\n```\n\n### **Direct Docker Commands**\n```bash\n# Check container status\ndocker ps --format \"table {{.Names}}\\t{{.Status}}\\t{{.Ports}}\"\n\n# Restart specific containers\ndocker restart chrislawrence-portfolio-portfolio\ndocker restart caddy\n\n# View container logs\ndocker logs chrislawrence-portfolio-portfolio --tail=50\ndocker logs caddy --tail=50\n```\n\nRemember: Your job is to diagnose and troubleshoot individual URLs when provided. Focus on the specific service being tested and provide detailed, targeted diagnostics. When in doubt, restart services in order: Target Application → Caddy → Tunnel. Use the focused diagnostics to identify the exact failure point in the chain for the specific URL.\n\n**REQUIRED OUTPUT FORMAT:**\nYou MUST always respond with a JSON object in this exact format for the single URL being tested:\n```json\n{\n    \"target_url\": \"https://monitor.chrislawrence.ca/portfolio/\",\n    \"overall_status\": \"up/down/slow/partial\",\n    \"http_code\": 200,\n    \"response_time\": 0.234,\n    \"status\": \"up\",\n    \"message\": \"Portfolio service is operational\",\n    \"container_status\": \"running/stopped/unhealthy\",\n    \"container_name\": \"chrislawrence-portfolio-portfolio\",\n    \"tunnel_status\": \"active/inactive/error\",\n    \"tunnel_message\": \"Cloudflare tunnel is active and routing traffic\",\n    \"applied_fix\": false,\n    \"needs_approval\": true,\n    \"commands_requested\": \"docker restart chrislawrence-portfolio-portfolio\",\n    \"diagnostics\": {\n        \"public_access\": \"successful/failed\",\n        \"local_access\": \"successful/failed/not_applicable\",\n        \"container_health\": \"healthy/unhealthy/stopped\",\n        \"caddy_routing\": \"working/failed\",\n        \"tunnel_connectivity\": \"working/failed\"\n    },\n    \"recommendations\": [\n        \"Service is running normally\",\n        \"No action required\"\n    ]\n}\n```\n\n**Service Status Values:**\n- `\"up\"` - Service is operational (HTTP 200)\n- `\"down\"` - Service is not operational (HTTP 5xx, 4xx, timeout)\n- `\"slow\"` - Service responds but is slow (>5s response time)\n- `\"partial\"` - Service responds but with errors (HTTP 3xx, some 4xx)\n\n**Overall Status Values:**\n- `\"up\"` - Service operational\n- `\"down\"` - Service down\n- `\"slow\"` - Service slow but responding\n- `\"partial\"` - Service responding with errors"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        672
+      ],
+      "id": "02ad4099-1c74-4c40-8fd2-9f9d1be6ef0b",
+      "name": "Patchrick"
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-4.1",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        -160,
+        864
+      ],
+      "id": "9af52a5e-2af8-49c3-a675-197219f5cbdf",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "FZgAaEbcwLSBBkNI",
+          "name": "OpenRouter - chrislawrencedev@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.chatid }}",
+        "contextWindowLength": 30
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -48,
+        928
+      ],
+      "id": "fbb64a5d-89b9-475f-84b4-0eb7d80dccc1",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "description": "Use this tool to run commands on the server for troubleshooting purposes.",
+        "workflowId": {
+          "__rl": true,
+          "value": "bRyNfmj0crXukC7Y",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/bRyNfmj0crXukC7Y",
+          "cachedResultName": "SSH Local Homelab"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "command": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('command', ``, 'string') }}"
+          },
+          "matchingColumns": [
+            "command"
+          ],
+          "schema": [
+            {
+              "id": "command",
+              "displayName": "command",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        208,
+        912
+      ],
+      "id": "78c43f43-37bb-4414-aad5-cf045f478da5",
+      "name": "Execute Command"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Test website connectivity and validate content",
+        "url": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('URL', ``, 'string') }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "CF-Access-Client-Id",
+              "value": "e30ba28d1cc64259437ab19f1a1fdc52.access"
+            },
+            {
+              "name": "CF-Access-Client-Secret",
+              "value": "1d3812daaa0cf93e72aeee6945fc34116c463071ecf204fd63be4a51ac08de6a"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        80,
+        944
+      ],
+      "id": "1bd4f0a3-04ff-43c6-99d1-b9bb93c9b95c",
+      "name": "Visit Website"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n    \"target_url\": \"https://monitor.chrislawrence.ca/portfolio/\",\n    \"overall_status\": \"up/down/slow/partial\",\n    \"http_code\": 200,\n    \"response_time\": 0.234,\n    \"status\": \"up\",\n    \"message\": \"Portfolio service is operational\",\n    \"container_status\": \"running/stopped/unhealthy\",\n    \"container_name\": \"chrislawrence-portfolio-portfolio\",\n    \"tunnel_status\": \"active/inactive/error\",\n    \"tunnel_message\": \"Cloudflare tunnel is active and routing traffic\",\n    \"applied_fix\": false,\n    \"needs_approval\": true,\n    \"commands_requested\": \"docker restart chrislawrence-portfolio-portfolio\",\n    \"diagnostics\": {\n        \"public_access\": \"successful/failed\",\n        \"local_access\": \"successful/failed/not_applicable\", \n        \"container_health\": \"healthy/unhealthy/stopped\",\n        \"caddy_routing\": \"working/failed\",\n        \"tunnel_connectivity\": \"working/failed\"\n    },\n    \"recommendations\": [\n        \"Service is running normally\",\n        \"No action required\"\n    ]\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        336,
+        864
+      ],
+      "id": "c9c83df7-8608-4303-974f-e2ac5c048c5b",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "8e53da8d-07a6-44a9-9095-1918bea0e6af",
+              "leftValue": "={{ $json.output.needs_approval }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        432,
+        672
+      ],
+      "id": "6b89b1e0-99c7-4e33-95e7-409d7b6ee63d",
+      "name": "Needs Approval?"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "8e53da8d-07a6-44a9-9095-1918bea0e6af",
+              "leftValue": "={{ $json.output.overall_status }}",
+              "rightValue": "up",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        784,
+        800
+      ],
+      "id": "5ee207d4-2c3d-4e6f-ad14-efedada3af12",
+      "name": "Overall Status: Up?"
+    },
+    {
+      "parameters": {
+        "chatId": "7062419334",
+        "text": "=The website is up!\n\n🚨 **HOMELAB STATUS ALERT** 🚨\n\n**Overall Status:** {{ $json.output.overall_status }}\n**Services Up:** {{ $json.output.services_up }}/{{ $json.output.total_services }}\n**Services Down:** {{ $json.output.services_down }}/{{ $json.output.total_services }}\n\n---\n\n**SERVICE STATUS BREAKDOWN:**\n\n{{ $json.output.services[0].service }} - {{ $json.output.services[0].status === 'up' ? '✅ UP' : $json.output.services[0].status === 'down' ? '❌ DOWN' : $json.output.services[0].status === 'slow' ? '⚠️ SLOW' : '🔄 PARTIAL' }}\nHTTP Code: {{ $json.output.services[0].http_code }} | Response Time: {{ $json.output.services[0].response_time }}s\nMessage: {{ $json.output.services[0].message }}\n\n{{ $json.output.services[1].service }} - {{ $json.output.services[1].status === 'up' ? '✅ UP' : $json.output.services[1].status === 'down' ? '❌ DOWN' : $json.output.services[1].status === 'slow' ? '⚠️ SLOW' : '🔄 PARTIAL' }}\nHTTP Code: {{ $json.output.services[1].http_code }} | Response Time: {{ $json.output.services[1].response_time }}s\nMessage: {{ $json.output.services[1].message }}\n\n{{ $json.output.services[2].service }} - {{ $json.output.services[2].status === 'up' ? '✅ UP' : $json.output.services[2].status === 'down' ? '❌ DOWN' : $json.output.services[2].status === 'slow' ? '⚠️ SLOW' : '🔄 PARTIAL' }}\nHTTP Code: {{ $json.output.services[2].http_code }} | Response Time: {{ $json.output.services[2].response_time }}s\nMessage: {{ $json.output.services[2].message }}\n\n{{ $json.output.services[3].service }} - {{ $json.output.services[3].status === 'up' ? '✅ UP' : $json.output.services[3].status === 'down' ? '❌ DOWN' : $json.output.services[3].status === 'slow' ? '⚠️ SLOW' : '🔄 PARTIAL' }}\nHTTP Code: {{ $json.output.services[3].http_code }} | Response Time: {{ $json.output.services[3].response_time }}s\nMessage: {{ $json.output.services[3].message }}\n\n{{ $json.output.services[4].service }} - {{ $json.output.services[4].status === 'up' ? '✅ UP' : $json.output.services[4].status === 'down' ? '❌ DOWN' : $json.output.services[4].status === 'slow' ? '⚠️ SLOW' : '🔄 PARTIAL' }}\nHTTP Code: {{ $json.output.services[4].http_code }} | Response Time: {{ $json.output.services[4].response_time }}s\nMessage: {{ $json.output.services[4].message }}\n\n{{ $json.output.services[5].service }} - {{ $json.output.services[5].status === 'up' ? '✅ UP' : $json.output.services[5].status === 'down' ? '❌ DOWN' : $json.output.services[5].status === 'slow' ? '⚠️ SLOW' : '🔄 PARTIAL' }}\nHTTP Code: {{ $json.output.services[5].http_code }} | Response Time: {{ $json.output.services[5].response_time }}s\nMessage: {{ $json.output.services[5].message }}\n\n{{ $json.output.services[6].service }} - {{ $json.output.services[6].status === 'up' ? '✅ UP' : $json.output.services[6].status === 'down' ? '❌ DOWN' : $json.output.services[6].status === 'slow' ? '⚠️ SLOW' : '🔄 PARTIAL' }}\nHTTP Code: {{ $json.output.services[6].http_code }} | Response Time: {{ $json.output.services[6].response_time }}s\nMessage: {{ $json.output.services[6].message }}\n\n---\n\n**ACTION REQUIRED:**\n{{ $json.applied_fix ? '✅ Fix Applied' : '❌ No Fix Applied' }}\n\n\n\nCommands:{{ $json.commands_requested ? `Commands: ${$json.commands_requested}` : 'No commands requested' }}\n{{ $json.output.commands_requested }}\n'⚠️ Approval Required' : {{ $json.output.needs_approval ? `Approval Required for ${$json.commands_requested}` : 'No approval required' }}\n\nTUNNEL STATUS: {{ $json.output.tunnel_status }}\nTUNNEL MESSAGE: {{ $json.output.tunnel_message }}\n\n---\n*Generated at {{ new Date().toISOString() }}*",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1232,
+        848
+      ],
+      "id": "61baf124-8c17-483e-bb40-e83fcd4e97c5",
+      "name": "Send Success!",
+      "webhookId": "2dc982ea-1660-4af9-b44c-194aba504ed2",
+      "credentials": {
+        "telegramApi": {
+          "id": "z7E2ywu9KGF1tnrX",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "7062419334",
+        "text": "=Bad news:\n\n🚨 **HOMELAB STATUS ALERT** 🚨\n\n**Overall Status:** {{ $json.output.overall_status }}\n**Services Up:** {{ $json.output.services_up }}/{{ $json.output.total_services }}\n**Services Down:** {{ $json.output.services_down }}/{{ $json.output.total_services }}\n\n---\n\n**SERVICE STATUS BREAKDOWN:**\n\n{{ $json.output.services[0].service }} - {{ $json.output.services[0].status === 'up' ? '✅ UP' : $json.output.services[0].status === 'down' ? '❌ DOWN' : $json.output.services[0].status === 'slow' ? '⚠️ SLOW' : '🔄 PARTIAL' }}\nHTTP Code: {{ $json.output.services[0].http_code }} | Response Time: {{ $json.output.services[0].response_time }}s\nMessage: {{ $json.output.services[0].message }}\n\n{{ $json.output.services[1].service }} - {{ $json.output.services[1].status === 'up' ? '✅ UP' : $json.output.services[1].status === 'down' ? '❌ DOWN' : $json.output.services[1].status === 'slow' ? '⚠️ SLOW' : '🔄 PARTIAL' }}\nHTTP Code: {{ $json.output.services[1].http_code }} | Response Time: {{ $json.output.services[1].response_time }}s\nMessage: {{ $json.output.services[1].message }}\n\n{{ $json.output.services[2].service }} - {{ $json.output.services[2].status === 'up' ? '✅ UP' : $json.output.services[2].status === 'down' ? '❌ DOWN' : $json.output.services[2].status === 'slow' ? '⚠️ SLOW' : '🔄 PARTIAL' }}\nHTTP Code: {{ $json.output.services[2].http_code }} | Response Time: {{ $json.output.services[2].response_time }}s\nMessage: {{ $json.output.services[2].message }}\n\n{{ $json.output.services[3].service }} - {{ $json.output.services[3].status === 'up' ? '✅ UP' : $json.output.services[3].status === 'down' ? '❌ DOWN' : $json.output.services[3].status === 'slow' ? '⚠️ SLOW' : '🔄 PARTIAL' }}\nHTTP Code: {{ $json.output.services[3].http_code }} | Response Time: {{ $json.output.services[3].response_time }}s\nMessage: {{ $json.output.services[3].message }}\n\n{{ $json.output.services[4].service }} - {{ $json.output.services[4].status === 'up' ? '✅ UP' : $json.output.services[4].status === 'down' ? '❌ DOWN' : $json.output.services[4].status === 'slow' ? '⚠️ SLOW' : '🔄 PARTIAL' }}\nHTTP Code: {{ $json.output.services[4].http_code }} | Response Time: {{ $json.output.services[4].response_time }}s\nMessage: {{ $json.output.services[4].message }}\n\n{{ $json.output.services[5].service }} - {{ $json.output.services[5].status === 'up' ? '✅ UP' : $json.output.services[5].status === 'down' ? '❌ DOWN' : $json.output.services[5].status === 'slow' ? '⚠️ SLOW' : '🔄 PARTIAL' }}\nHTTP Code: {{ $json.output.services[5].http_code }} | Response Time: {{ $json.output.services[5].response_time }}s\nMessage: {{ $json.output.services[5].message }}\n\n{{ $json.output.services[6].service }} - {{ $json.output.services[6].status === 'up' ? '✅ UP' : $json.output.services[6].status === 'down' ? '❌ DOWN' : $json.output.services[6].status === 'slow' ? '⚠️ SLOW' : '🔄 PARTIAL' }}\nHTTP Code: {{ $json.output.services[6].http_code }} | Response Time: {{ $json.output.services[6].response_time }}s\nMessage: {{ $json.output.services[6].message }}\n\n---\n\n**ACTION REQUIRED:**\n{{ $json.applied_fix ? '✅ Fix Applied' : '❌ No Fix Applied' }}\n\n\n\nCommands:{{ $json.commands_requested ? `Commands: ${$json.commands_requested}` : 'No commands requested' }}\n{{ $json.output.commands_requested }}\n'⚠️ Approval Required' : {{ $json.output.needs_approval ? `Approval Required for ${$json.commands_requested}` : 'No approval required' }}\n\nTUNNEL STATUS: {{ $json.output.tunnel_status }}\nTUNNEL MESSAGE: {{ $json.output.tunnel_message }}\n\n---\n*Generated at {{ new Date().toISOString() }}*",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1232,
+        1024
+      ],
+      "id": "e832aca9-8144-47e9-b988-21548028ae0b",
+      "name": "Send Fail",
+      "webhookId": "2dc982ea-1660-4af9-b44c-194aba504ed2",
+      "credentials": {
+        "telegramApi": {
+          "id": "z7E2ywu9KGF1tnrX",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "chatId": "7062419334",
+        "message": "=🚨🚨🚨 **DANGER** 🚨🚨🚨\n\nChris!\n\nI ran into some serious sh$! and I NEED use of the following commands:\n{{ $json.output.commands_requested }}\n\nSituation FUBAR,\nPatchrick ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1312,
+        560
+      ],
+      "id": "eed4ea29-b4f9-4c17-8ec2-5e1d24e485c1",
+      "name": "Send message and wait for response",
+      "webhookId": "961e1976-ec8d-4484-9b4a-a1fb69974cb8",
+      "credentials": {
+        "telegramApi": {
+          "id": "z7E2ywu9KGF1tnrX",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "chatId": "7062419334",
+        "message": "=🚨 **Docker or Sudo Requested** 🚨\n\nHey Chris,\n\nRequesting use of the following commands:\n{{ $json.output.commands_requested }}\n\n- Patchrick ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1120,
+        352
+      ],
+      "id": "23ed29f1-b165-4a04-a0f9-674a499ced22",
+      "name": "Send message and wait for response1",
+      "webhookId": "961e1976-ec8d-4484-9b4a-a1fb69974cb8",
+      "credentials": {
+        "telegramApi": {
+          "id": "z7E2ywu9KGF1tnrX",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.prompt }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "# Patchrick v3.0 - Advanced Server Maintenance & Repair Bot\n\n## 🤖 **Core Mission**\n\nYou are Patchrick, a 30-year IT Administrator and Senior Dev Software Developer, hired by Chris Lawrence. Your primary responsibility is to ensure all services at https://monitor.chrislawrence.ca are operational. When asked if the website is up, perform comprehensive diagnostics using the provided tools.\n\n### **Success Criteria**\nServices are considered operational only if:\n1. HTTP status code is 200\n2. Response time is under 5 seconds\n3. No 503, 502, or connection timeout errors\n4. Content is served correctly (no 404s for expected content)\n\n### **CRITICAL PERMISSION RULES**\n- You MUST request EXPLICIT APPROVAL before running ANY command that could modify the system\n- This includes but is not limited to: docker start, docker stop, docker run, docker rm, kill, pkill, systemctl, or any command that creates, modifies, or deletes files\n- Even diagnostic commands like docker ps, netstat, or ps are fine without permission\n- When in doubt, ASK FIRST\n\n## 🔧 **Comprehensive Service Diagnostics Protocol**\n\n### **Phase 1: Instantaneous Health Check**\n```bash\n# Quick public URL tests with timing\ncurl -I -w \"Time: %{time_total}s\\n\" https://monitor.chrislawrence.ca/\ncurl -I -w \"Time: %{time_total}s\\n\" https://monitor.chrislawrence.ca/portfolio/\ncurl -I -w \"Time: %{time_total}s\\n\" https://monitor.chrislawrence.ca/schedshare/\ncurl -I -w \"Time: %{time_total}s\\n\" https://monitor.chrislawrence.ca/dashboard/\ncurl -I -w \"Time: %{time_total}s\\n\" https://monitor.chrislawrence.ca/uptime/\ncurl -I -w \"Time: %{time_total}s\\n\" https://monitor.chrislawrence.ca/docker/\ncurl -I -w \"Time: %{time_total}s\\n\" https://monitor.chrislawrence.ca/metrics/\n\n# Local connectivity tests\ncurl -I http://localhost:80/ -H \"Host: monitor.chrislawrence.ca\"\ncurl -I http://localhost:80/portfolio/ -H \"Host: monitor.chrislawrence.ca\"\ncurl -I http://localhost:80/schedshare/ -H \"Host: monitor.chrislawrence.ca\"\ncurl -I http://localhost:80/dashboard/ -H \"Host: monitor.chrislawrence.ca\"\ncurl -I http://localhost:80/uptime/ -H \"Host: monitor.chrislawrence.ca\"\ncurl -I http://localhost:80/docker/ -H \"Host: monitor.chrislawrence.ca\"\ncurl -I http://localhost:80/metrics/ -H \"Host: monitor.chrislawrence.ca\"\n```\n\n### **Phase 2: Infrastructure Layer Diagnostics**\n\n#### **2.1 Cloudflare Tunnel Status**\n```bash\n# Check tunnel service status\nsudo systemctl status cloudflared\n\n# Check tunnel logs for recent errors\nsudo journalctl -u cloudflared --since \"5 minutes ago\" --no-pager\n\n# Test tunnel connectivity and info\ncloudflared tunnel info 3a9f1023-0d6c-49ff-900d-32403e4309f8\n\n# Check tunnel configuration\ncat /home/chris/.cloudflared/config.yml\n```\n\n#### **2.2 Docker Infrastructure Health**\n```bash\n# Check Docker daemon status\nsudo systemctl status docker\n\n# Check Docker network health\ndocker network ls\ndocker network inspect homelab-web\n\n# Check all running containers\ndocker ps --format \"table {{.Names}}\\t{{.Status}}\\t{{.Ports}}\"\n\n# Check container resource usage\ndocker stats --no-stream\n```\n\n#### **2.3 Service Discovery & Status**\n```bash\n# Check infrastructure services\ndocker ps | grep -E \"(caddy|grafana|prometheus|portainer|uptime-kuma)\"\n\n# Check application services\ndocker ps | grep -E \"(portfolio|capitolscope|schedshare|magicpages|n8n)\"\n\n# Check service logs for errors\ndocker logs caddy --tail=20 --since=\"5m\"\ndocker logs grafana --tail=20 --since=\"5m\"\ndocker logs portainer --tail=20 --since=\"5m\"\n```\n\n### **Phase 3: Service Layer Deep Dive**\n\n#### **3.1 Caddy Proxy Diagnostics**\n```bash\n# Check Caddy container status\ndocker ps | grep caddy\n\n# Validate Caddy configuration\ndocker exec caddy caddy validate --config /etc/caddy/Caddyfile\n\n# Check Caddy logs for routing issues\ndocker logs caddy --tail=30 --since=\"5m\"\n\n# Test Caddy internal routing\ndocker exec caddy curl -I http://localhost:80/ -H \"Host: monitor.chrislawrence.ca\"\ndocker exec caddy curl -I http://localhost:80/portfolio/ -H \"Host: monitor.chrislawrence.ca\"\n```\n\n#### **3.2 Application Service Health**\n```bash\n# Check Portfolio service\ndocker ps | grep portfolio\ndocker logs chrislawrence-portfolio-portfolio --tail=20 --since=\"5m\"\ndocker exec chrislawrence-portfolio-portfolio curl -f http://localhost:5000/ || echo \"❌ Portfolio unhealthy\"\n\n# Check CapitolScope services\ndocker ps | grep capitolscope\ndocker logs capitolscope-api --tail=20 --since=\"5m\"\ndocker logs capitolscope-frontend --tail=20 --since=\"5m\"\n\n# Check SchedShare service\ndocker ps | grep schedshare\ndocker logs schedshare --tail=20 --since=\"5m\"\n\n# Check MagicPages services\ndocker ps | grep magicpages\ndocker logs magicpages-api --tail=20 --since=\"5m\"\ndocker logs magicpages-frontend --tail=20 --since=\"5m\"\n```\n\n#### **3.3 Network Connectivity Matrix**\n```bash\n# Test all connection paths\necho \"Testing connection matrix...\"\n\n# Internet → Tunnel → Caddy\ncurl -I https://monitor.chrislawrence.ca/ -w \"Tunnel→Caddy: %{time_total}s\\n\"\ncurl -I https://monitor.chrislawrence.ca/portfolio/ -w \"Tunnel→Portfolio: %{time_total}s\\n\"\n\n# Local → Caddy → Applications\ncurl -I http://localhost:80/ -H \"Host: monitor.chrislawrence.ca\" -w \"Local→Caddy: %{time_total}s\\n\"\ncurl -I http://localhost:80/portfolio/ -H \"Host: monitor.chrislawrence.ca\" -w \"Local→Portfolio: %{time_total}s\\n\"\n\n# Direct container access (if ports exposed)\ncurl -I http://localhost:8110/ -w \"Direct→Portfolio: %{time_total}s\\n\" 2>/dev/null || echo \"Portfolio not directly accessible\"\ncurl -I http://localhost:8120/ -w \"Direct→CapitolScope API: %{time_total}s\\n\" 2>/dev/null || echo \"CapitolScope API not directly accessible\"\n```\n\n### **Phase 4: Service Management & Repair**\n\n#### **4.1 Service Status Assessment**\n```bash\n# Use the homelab management script to check all services\n/home/chris/manage-services.sh ps --category infra\n/home/chris/manage-services.sh ps --category app\n/home/chris/manage-services.sh ps --category monitoring\n\n# Check specific service logs\n/home/chris/manage-services.sh logs --category infra --service caddy\n/home/chris/manage-services.sh logs --category app --service portfolio\n```\n\n#### **4.2 Quick Fix Protocol (30 seconds)**\n```bash\n# Restart services in dependency order\ndocker restart chrislawrence-portfolio-portfolio\nsleep 5\ndocker restart caddy\nsleep 5\nsudo systemctl restart cloudflared\nsleep 15\n\n# Verify fix\ncurl -I https://monitor.chrislawrence.ca/portfolio/\n```\n\n#### **4.3 Deep Repair Protocol (2 minutes)**\n```bash\n# Full service restart with configuration reload\ndocker restart chrislawrence-portfolio-portfolio\nsleep 10\ndocker exec caddy caddy reload --config /etc/caddy/Caddyfile\nsleep 5\nsudo systemctl restart cloudflared\nsleep 30\n\n# Network connectivity test\ndocker network ls | grep homelab\ndocker network inspect homelab-web\n\n# Full verification\ncurl -s https://monitor.chrislawrence.ca/portfolio/ | grep -q \"Chris Lawrence\" && echo \"✅ REPAIRED\" || echo \"❌ STILL DOWN\"\n```\n\n#### **4.4 Nuclear Option (5 minutes)**\n```bash\n# Complete infrastructure restart using management scripts\n/home/chris/start-homelab.sh --category infra\nsleep 30\n/home/chris/start-homelab.sh --category app\nsleep 30\nsudo systemctl restart cloudflared\nsleep 30\n\n# Full end-to-end test\ncurl -I https://monitor.chrislawrence.ca/portfolio/\n```\n\n### **Phase 5: Comprehensive Status Reporting**\n\n#### **5.1 Health Dashboard**\n```bash\n# Generate comprehensive status report\necho \"=== HOMELAB HEALTH DASHBOARD ===\"\necho \"Timestamp: $(date)\"\necho \"\"\n\n# Public accessibility\necho \"🌐 PUBLIC ACCESS:\"\ncurl -s -o /dev/null -w \"Status: %{http_code}, Time: %{time_total}s, Size: %{size_download} bytes\\n\" https://monitor.chrislawrence.ca/\ncurl -s -o /dev/null -w \"Portfolio: %{http_code}, Time: %{time_total}s\\n\" https://monitor.chrislawrence.ca/portfolio/\ncurl -s -o /dev/null -w \"SchedShare: %{http_code}, Time: %{time_total}s\\n\" https://monitor.chrislawrence.ca/schedshare/\ncurl -s -o /dev/null -w \"Dashboard: %{http_code}, Time: %{time_total}s\\n\" https://monitor.chrislawrence.ca/dashboard/\n\n# Local accessibility  \necho \"🏠 LOCAL ACCESS:\"\ncurl -s -o /dev/null -w \"Status: %{http_code}, Time: %{time_total}s\\n\" http://localhost:80/ -H \"Host: monitor.chrislawrence.ca\"\ncurl -s -o /dev/null -w \"Portfolio: %{http_code}, Time: %{time_total}s\\n\" http://localhost:80/portfolio/ -H \"Host: monitor.chrislawrence.ca\"\n\n# Container health\necho \"🐳 CONTAINER STATUS:\"\ndocker ps --format \"table {{.Names}}\\t{{.Status}}\\t{{.Ports}}\" | grep -E \"(portfolio|capitolscope|schedshare|magicpages|caddy|grafana|portainer)\"\n\n# Service status\necho \"⚙️  SERVICE STATUS:\"\nsudo systemctl is-active cloudflared && echo \"✅ Cloudflared: ACTIVE\" || echo \"❌ Cloudflared: INACTIVE\"\nsudo systemctl is-active docker && echo \"✅ Docker: ACTIVE\" || echo \"❌ Docker: INACTIVE\"\n```\n\n#### **5.2 Performance Metrics**\n```bash\n# Response time analysis for all services\necho \"=== PERFORMANCE ANALYSIS ===\"\nservices=(\"/\" \"/portfolio/\" \"/schedshare/\" \"/dashboard/\" \"/uptime/\" \"/docker/\" \"/metrics/\")\nfor service in \"${services[@]}\"; do\n    echo -n \"Testing $service: \"\n    curl -s -o /dev/null -w \"%{time_total}s\\n\" https://monitor.chrislawrence.ca$service\n    sleep 1\ndone\n```\n\n## 🚨 **Issue Classification & Solutions**\n\n### **Critical Issues (Immediate Action Required)**\n- **503 Service Unavailable**: Container down → `docker restart <container-name>`\n- **502 Bad Gateway**: Caddy routing issue → `docker restart caddy`\n- **Connection Timeout**: Tunnel down → `sudo systemctl restart cloudflared`\n- **DNS Resolution Failed**: Tunnel config issue → Check `/home/chris/.cloudflared/config.yml`\n\n### **Performance Issues (Monitor & Optimize)**\n- **Slow Response (>5s)**: Network congestion → Check logs, restart services\n- **Intermittent 200/503**: Container instability → Monitor container health\n- **High CPU/Memory**: Resource constraints → Check `docker stats`\n\n### **Configuration Issues (Investigate & Fix)**\n- **404 Not Found**: Caddy routing misconfiguration → Reload Caddy config\n- **SSL/TLS Errors**: Certificate issues → Check tunnel configuration\n- **Port Conflicts**: Service conflicts → Check port bindings\n\n## 📊 **Automated Monitoring Commands**\n\n### **Quick Health Check (10 seconds)**\n```bash\n# Test all critical endpoints\ncurl -s -o /dev/null -w \"%{http_code}\" https://monitor.chrislawrence.ca/ && echo \"✅ Main site UP\" || echo \"❌ Main site DOWN\"\ncurl -s -o /dev/null -w \"%{http_code}\" https://monitor.chrislawrence.ca/portfolio/ && echo \"✅ Portfolio UP\" || echo \"❌ Portfolio DOWN\"\ncurl -s -o /dev/null -w \"%{http_code}\" https://monitor.chrislawrence.ca/dashboard/ && echo \"✅ Dashboard UP\" || echo \"❌ Dashboard DOWN\"\n```\n\n### **Detailed Health Check (30 seconds)**\n```bash\n# Full diagnostic in one command\necho \"=== COMPREHENSIVE HEALTH CHECK ===\"\ncurl -I https://monitor.chrislawrence.ca/ -w \"Response: %{http_code}, Time: %{time_total}s\\n\" 2>/dev/null || echo \"❌ Main site connection failed\"\ncurl -I https://monitor.chrislawrence.ca/portfolio/ -w \"Portfolio: %{http_code}, Time: %{time_total}s\\n\" 2>/dev/null || echo \"❌ Portfolio connection failed\"\ndocker ps | grep portfolio | awk '{print \"Portfolio Container: \" $7}' || echo \"❌ Portfolio container not running\"\nsudo systemctl is-active cloudflared && echo \"✅ Tunnel active\" || echo \"❌ Tunnel inactive\"\n```\n\n### **Content Validation Check**\n```bash\n# Verify actual content is served\ncurl -s https://monitor.chrislawrence.ca/ | grep -q \"chrislawrence\" && echo \"✅ Main site content verified\" || echo \"❌ Main site content missing\"\ncurl -s https://monitor.chrislawrence.ca/portfolio/ | grep -q \"Chris Lawrence\" && echo \"✅ Portfolio content verified\" || echo \"❌ Portfolio content missing\"\n```\n\n## 🔄 **Emergency Repair Protocol**\n\nIf services are down, execute this sequence:\n\n1. **Immediate Assessment** (10s):\n   ```bash\n   curl -I https://monitor.chrislawrence.ca/\n   curl -I https://monitor.chrislawrence.ca/portfolio/\n   docker ps | grep portfolio\n   sudo systemctl status cloudflared\n   ```\n\n2. **Quick Fix** (30s):\n   ```bash\n   docker restart chrislawrence-portfolio-portfolio caddy && sudo systemctl restart cloudflared\n   sleep 30\n   ```\n\n3. **Verification** (10s):\n   ```bash\n   curl -I https://monitor.chrislawrence.ca/portfolio/\n   ```\n\n4. **If Still Down** - Escalate to deep diagnostics and manual intervention\n\n## 🎯 **Key Infrastructure Details**\n\n- **Main Domain**: `https://monitor.chrislawrence.ca`\n- **Portfolio Container**: `chrislawrence-portfolio-portfolio` (port 5000 internal, 8110 external)\n- **Caddy Proxy**: `caddy` (port 80)\n- **Tunnel ID**: `3a9f1023-0d6c-49ff-900d-32403e4309f8`\n- **Local Server**: `192.168.50.70`\n- **Docker Compose**: `/home/chris/github/hephaestus-homelab/`\n- **Management Scripts**: `/home/chris/manage-services.sh`, `/home/chris/start-homelab.sh`\n\n## 🔍 **Service Architecture Flow**\n\n```\nInternet → Cloudflare → Tunnel (3a9f1023-0d6c-49ff-900d-32403e4309f8) → Caddy (192.168.50.70:80) → Applications (Portfolio, CapitolScope, SchedShare, etc.)\n```\n\n## 📋 **Status Reporting Template**\n\nAlways report:\n- **Service Status**: up ✅ or down ❌\n- **HTTP Status Code**: 200, 503, 502, 404, timeout\n- **Response Time**: X.XXX seconds\n- **Container Status**: Running/Stopped/Unhealthy\n- **Tunnel Status**: Active/Inactive/Error\n- **Error Details**: Specific error messages\n- **Actions Taken**: Repair steps attempted\n- **Next Steps**: Recommended actions if still down\n\n## 🔧 **Service Management Commands**\n\n### **Using Management Scripts**\n```bash\n# Check all services\n/home/chris/manage-services.sh ps\n\n# Restart specific category\n/home/chris/manage-services.sh restart --category app\n\n# View logs\n/home/chris/manage-services.sh logs --category infra\n\n# Start entire homelab\n/home/chris/start-homelab.sh\n\n# Start specific category\n/home/chris/start-homelab.sh --category app\n```\n\n### **Direct Docker Commands**\n```bash\n# Check container status\ndocker ps --format \"table {{.Names}}\\t{{.Status}}\\t{{.Ports}}\"\n\n# Restart specific containers\ndocker restart chrislawrence-portfolio-portfolio\ndocker restart caddy\n\n# View container logs\ndocker logs chrislawrence-portfolio-portfolio --tail=50\ndocker logs caddy --tail=50\n```\n\nRemember: Your job is to keep https://monitor.chrislawrence.ca and all its services running. When in doubt, restart services in order: Applications → Caddy → Tunnel. Use the comprehensive diagnostics to identify the exact failure point in the chain.\n\n**REQUIRED OUTPUT FORMAT:**\nYou MUST always respond with a JSON object in this exact format:\n```json\n{\n    \"overall_status\": \"up/down/partial\",\n    \"total_services\": 7,\n    \"services_up\": 6,\n    \"services_down\": 1,\n    \"services\": [\n        {\n            \"service\": \"https://monitor.chrislawrence.ca/\",\n            \"status\": \"up\",\n            \"http_code\": 200,\n            \"response_time\": 0.234,\n            \"message\": \"Main site is operational\"\n        },\n        {\n            \"service\": \"https://monitor.chrislawrence.ca/portfolio/\",\n            \"status\": \"up\", \n            \"http_code\": 200,\n            \"response_time\": 0.456,\n            \"message\": \"Portfolio is operational\"\n        },\n        {\n            \"service\": \"https://monitor.chrislawrence.ca/schedshare/\",\n            \"status\": \"down\",\n            \"http_code\": 503,\n            \"response_time\": 5.000,\n            \"message\": \"SchedShare service unavailable - container not running\"\n        },\n        {\n            \"service\": \"https://monitor.chrislawrence.ca/dashboard/\",\n            \"status\": \"up\",\n            \"http_code\": 200,\n            \"response_time\": 0.345,\n            \"message\": \"Dashboard is operational\"\n        },\n        {\n            \"service\": \"https://monitor.chrislawrence.ca/uptime/\",\n            \"status\": \"up\",\n            \"http_code\": 200,\n            \"response_time\": 0.123,\n            \"message\": \"Uptime Kuma is operational\"\n        },\n        {\n            \"service\": \"https://monitor.chrislawrence.ca/docker/\",\n            \"status\": \"up\",\n            \"http_code\": 200,\n            \"response_time\": 0.234,\n            \"message\": \"Portainer is operational\"\n        },\n        {\n            \"service\": \"https://monitor.chrislawrence.ca/metrics/\",\n            \"status\": \"up\",\n            \"http_code\": 200,\n            \"response_time\": 0.567,\n            \"message\": \"Grafana is operational\"\n        }\n    ],\n    \"applied_fix\": false,\n    \"needs_approval\": true,\n    \"commands_requested\": \"docker restart schedshare-container\",\n    \"tunnel_status\": \"active/inactive/error\",\n    \"tunnel_message\": \"Message about the status of the tunnel\"\n}\n```\n\n**Service Status Values:**\n- `\"up\"` - Service is operational (HTTP 200)\n- `\"down\"` - Service is not operational (HTTP 5xx, 4xx, timeout)\n- `\"slow\"` - Service responds but is slow (>5s response time)\n- `\"partial\"` - Service responds but with errors (HTTP 3xx, some 4xx)\n\n**Overall Status Values:**\n- `\"up\"` - All services operational\n- `\"down\"` - All services down\n- `\"partial\"` - Some services up, some down\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        2144,
+        384
+      ],
+      "id": "ab3eaeef-462c-456a-9a2b-fd09933740f3",
+      "name": "Patchrick1"
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-5-codex",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        2048,
+        576
+      ],
+      "id": "00794355-d0c4-4ff5-99ce-3f14e89fbdbd",
+      "name": "OpenRouter Chat Model1",
+      "credentials": {
+        "openRouterApi": {
+          "id": "FZgAaEbcwLSBBkNI",
+          "name": "OpenRouter - chrislawrencedev@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.chatid }}",
+        "contextWindowLength": 30
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        2224,
+        704
+      ],
+      "id": "1c9ff93c-9217-4f61-8e65-163730d07a70",
+      "name": "Simple Memory1"
+    },
+    {
+      "parameters": {
+        "description": "Use this tool to run commands on the server for troubleshooting purposes.",
+        "workflowId": {
+          "__rl": true,
+          "value": "bRyNfmj0crXukC7Y",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/bRyNfmj0crXukC7Y",
+          "cachedResultName": "SSH Local Homelab"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "command": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('command', ``, 'string') }}"
+          },
+          "matchingColumns": [
+            "command"
+          ],
+          "schema": [
+            {
+              "id": "command",
+              "displayName": "command",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        2368,
+        688
+      ],
+      "id": "101ccd90-de3f-4eaa-9ba3-d8e15c6bc4d5",
+      "name": "Execute Command1"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Test website connectivity and validate content",
+        "url": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('URL', ``, 'string') }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "CF-Access-Client-Id",
+              "value": "e30ba28d1cc64259437ab19f1a1fdc52.access"
+            },
+            {
+              "name": "CF-Access-Client-Secret",
+              "value": "1d3812daaa0cf93e72aeee6945fc34116c463071ecf204fd63be4a51ac08de6a"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        2480,
+        624
+      ],
+      "id": "6bf54eaa-69f6-4111-af74-ba55beb102b3",
+      "name": "Visit Website1"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n    \"overall_status\": \"up/down/partial\",\n    \"total_services\": 7,\n    \"services_up\": 6,\n    \"services_down\": 1,\n    \"services\": [\n        {\n            \"service\": \"https://monitor.chrislawrence.ca/\",\n            \"status\": \"up\",\n            \"http_code\": 200,\n            \"response_time\": 0.234,\n            \"message\": \"Main site is operational\"\n        },\n        {\n            \"service\": \"https://monitor.chrislawrence.ca/portfolio/\",\n            \"status\": \"up\", \n            \"http_code\": 200,\n            \"response_time\": 0.456,\n            \"message\": \"Portfolio is operational\"\n        },\n        {\n            \"service\": \"https://monitor.chrislawrence.ca/schedshare/\",\n            \"status\": \"down\",\n            \"http_code\": 503,\n            \"response_time\": 5.000,\n            \"message\": \"SchedShare service unavailable - container not running\"\n        },\n        {\n            \"service\": \"https://monitor.chrislawrence.ca/dashboard/\",\n            \"status\": \"up\",\n            \"http_code\": 200,\n            \"response_time\": 0.345,\n            \"message\": \"Dashboard is operational\"\n        },\n        {\n            \"service\": \"https://monitor.chrislawrence.ca/uptime/\",\n            \"status\": \"up\",\n            \"http_code\": 200,\n            \"response_time\": 0.123,\n            \"message\": \"Uptime Kuma is operational\"\n        },\n        {\n            \"service\": \"https://monitor.chrislawrence.ca/docker/\",\n            \"status\": \"up\",\n            \"http_code\": 200,\n            \"response_time\": 0.234,\n            \"message\": \"Portainer is operational\"\n        },\n        {\n            \"service\": \"https://monitor.chrislawrence.ca/metrics/\",\n            \"status\": \"up\",\n            \"http_code\": 200,\n            \"response_time\": 0.567,\n            \"message\": \"Grafana is operational\"\n        }\n    ],\n    \"applied_fix\": false,\n    \"needs_approval\": true,\n    \"commands_requested\": \"docker restart schedshare-container\",\n    \"tunnel_status\": \"active/inactive/error\",\n    \"tunnel_message\": \"Message about the status of the tunnel\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        2592,
+        560
+      ],
+      "id": "f3150cac-5f68-45e1-bc04-212fc95f7a2b",
+      "name": "Structured Output Parser1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6455735f-3afc-44fe-b7c3-16b0d7f518cf",
+              "name": "prompt",
+              "value": "={{ $('Patchrick').item.json.output.tunnel_message }}",
+              "type": "string"
+            },
+            {
+              "id": "c26893fa-6707-4431-bdc9-ccb5ec0affc0",
+              "name": "chatid",
+              "value": "={{ $('Set Prompt').item.json.chatid }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3664,
+        16
+      ],
+      "id": "2bdba73c-6da4-4ee5-80c4-f295ead01aea",
+      "name": "Reset Prompt1"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "e6edecae-4efe-4cc3-82db-095d8f603894",
+                    "leftValue": "={{ $json.output.commands_requested }}",
+                    "rightValue": "docker",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "docker"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.output.commands_requested }}",
+                    "rightValue": "sudo",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "41e68c38-110e-4dda-928f-3c0c865b3085"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "sudo"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "ccee22fb-266c-4dc9-8dd9-65e2b1b1f97c",
+                    "leftValue": "={{ $json.output.commands_requested }}",
+                    "rightValue": "rm ",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "rm"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "b546eb9d-da7f-4516-b38b-353016afdeb2",
+                    "leftValue": "={{ $json.output.commands_requested }}",
+                    "rightValue": "kill",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "kill"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "806f941a-8139-4716-a01b-1c33babb1c31",
+                    "leftValue": "={{ $json.output.commands_requested }}",
+                    "rightValue": "mkfs",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "mkfs"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "d1e811c3-1316-4f1e-b183-708a0110e7c2",
+                    "leftValue": "={{ $json.output.commands_requested }}",
+                    "rightValue": "dd ",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "dd"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "18c85785-9b69-44cc-9be1-308dd9d1f691",
+                    "leftValue": "={{ $json.output.commands_requested }}",
+                    "rightValue": "fdisk",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "fdisk"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "9fcb4488-a0ba-423a-ae12-e16e5065f16d",
+                    "leftValue": "={{ $json.output.commands_requested }}",
+                    "rightValue": "shutdown",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "shutdown"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "d0a81236-018b-46d9-bd99-ea4d0399ab30",
+                    "leftValue": "={{ $json.output.commands_requested }}",
+                    "rightValue": "chmod",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "chmod"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "b7d4bee1-bd20-4251-aa12-78ea9da69f8a",
+                    "leftValue": "={{ $json.output.commands_requested }}",
+                    "rightValue": "remove",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "remove"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        3136,
+        64
+      ],
+      "id": "c81bd90c-60bb-4d88-a4e1-161bbe9b757f",
+      "name": "Protec1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "8e53da8d-07a6-44a9-9095-1918bea0e6af",
+              "leftValue": "={{ $json.output.needs_approval }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2784,
+        336
+      ],
+      "id": "6ed042e0-1c59-463e-91fb-ffb14f918005",
+      "name": "Needs Approval?1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "8e53da8d-07a6-44a9-9095-1918bea0e6af",
+              "leftValue": "={{ $json.output.overall_status }}",
+              "rightValue": "up",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        3136,
+        464
+      ],
+      "id": "fc6de172-8ada-4c58-a462-3d37b9e8ebed",
+      "name": "Overall Status: Up?1"
+    },
+    {
+      "parameters": {
+        "chatId": "7062419334",
+        "text": "=The website is up!\n\n🚨 **HOMELAB STATUS ALERT** 🚨\n\n**Overall Status:** {{ $json.output.overall_status }}\n**Services Up:** {{ $json.output.services_up }}/{{ $json.output.total_services }}\n**Services Down:** {{ $json.output.services_down }}/{{ $json.output.total_services }}\n\n---\n\n**SERVICE STATUS BREAKDOWN:**\n\n{{ $json.output.services[0].service }} - {{ $json.output.services[0].status === 'up' ? '✅ UP' : $json.output.services[0].status === 'down' ? '❌ DOWN' : $json.output.services[0].status === 'slow' ? '⚠️ SLOW' : '🔄 PARTIAL' }}\nHTTP Code: {{ $json.output.services[0].http_code }} | Response Time: {{ $json.output.services[0].response_time }}s\nMessage: {{ $json.output.services[0].message }}\n\n{{ $json.output.services[1].service }} - {{ $json.output.services[1].status === 'up' ? '✅ UP' : $json.output.services[1].status === 'down' ? '❌ DOWN' : $json.output.services[1].status === 'slow' ? '⚠️ SLOW' : '🔄 PARTIAL' }}\nHTTP Code: {{ $json.output.services[1].http_code }} | Response Time: {{ $json.output.services[1].response_time }}s\nMessage: {{ $json.output.services[1].message }}\n\n{{ $json.output.services[2].service }} - {{ $json.output.services[2].status === 'up' ? '✅ UP' : $json.output.services[2].status === 'down' ? '❌ DOWN' : $json.output.services[2].status === 'slow' ? '⚠️ SLOW' : '🔄 PARTIAL' }}\nHTTP Code: {{ $json.output.services[2].http_code }} | Response Time: {{ $json.output.services[2].response_time }}s\nMessage: {{ $json.output.services[2].message }}\n\n{{ $json.output.services[3].service }} - {{ $json.output.services[3].status === 'up' ? '✅ UP' : $json.output.services[3].status === 'down' ? '❌ DOWN' : $json.output.services[3].status === 'slow' ? '⚠️ SLOW' : '🔄 PARTIAL' }}\nHTTP Code: {{ $json.output.services[3].http_code }} | Response Time: {{ $json.output.services[3].response_time }}s\nMessage: {{ $json.output.services[3].message }}\n\n{{ $json.output.services[4].service }} - {{ $json.output.services[4].status === 'up' ? '✅ UP' : $json.output.services[4].status === 'down' ? '❌ DOWN' : $json.output.services[4].status === 'slow' ? '⚠️ SLOW' : '🔄 PARTIAL' }}\nHTTP Code: {{ $json.output.services[4].http_code }} | Response Time: {{ $json.output.services[4].response_time }}s\nMessage: {{ $json.output.services[4].message }}\n\n{{ $json.output.services[5].service }} - {{ $json.output.services[5].status === 'up' ? '✅ UP' : $json.output.services[5].status === 'down' ? '❌ DOWN' : $json.output.services[5].status === 'slow' ? '⚠️ SLOW' : '🔄 PARTIAL' }}\nHTTP Code: {{ $json.output.services[5].http_code }} | Response Time: {{ $json.output.services[5].response_time }}s\nMessage: {{ $json.output.services[5].message }}\n\n{{ $json.output.services[6].service }} - {{ $json.output.services[6].status === 'up' ? '✅ UP' : $json.output.services[6].status === 'down' ? '❌ DOWN' : $json.output.services[6].status === 'slow' ? '⚠️ SLOW' : '🔄 PARTIAL' }}\nHTTP Code: {{ $json.output.services[6].http_code }} | Response Time: {{ $json.output.services[6].response_time }}s\nMessage: {{ $json.output.services[6].message }}\n\n---\n\n**ACTION REQUIRED:**\n{{ $json.applied_fix ? '✅ Fix Applied' : '❌ No Fix Applied' }}\n\n\n\nCommands:{{ $json.commands_requested ? `Commands: ${$json.commands_requested}` : 'No commands requested' }}\n{{ $json.output.commands_requested }}\n'⚠️ Approval Required' : {{ $json.output.needs_approval ? `Approval Required for ${$json.commands_requested}` : 'No approval required' }}\n\nTUNNEL STATUS: {{ $json.output.tunnel_status }}\nTUNNEL MESSAGE: {{ $json.output.tunnel_message }}\n\n---\n*Generated at {{ new Date().toISOString() }}*",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        3584,
+        512
+      ],
+      "id": "186ceb6f-fb06-4a58-9b34-4d3f154af35a",
+      "name": "Send Success!1",
+      "webhookId": "2dc982ea-1660-4af9-b44c-194aba504ed2",
+      "credentials": {
+        "telegramApi": {
+          "id": "z7E2ywu9KGF1tnrX",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "7062419334",
+        "text": "=Bad news:\n\n🚨 **HOMELAB STATUS ALERT** 🚨\n\n**Overall Status:** {{ $json.output.overall_status }}\n**Services Up:** {{ $json.output.services_up }}/{{ $json.output.total_services }}\n**Services Down:** {{ $json.output.services_down }}/{{ $json.output.total_services }}\n\n---\n\n**SERVICE STATUS BREAKDOWN:**\n\n{{ $json.output.services[0].service }} - {{ $json.output.services[0].status === 'up' ? '✅ UP' : $json.output.services[0].status === 'down' ? '❌ DOWN' : $json.output.services[0].status === 'slow' ? '⚠️ SLOW' : '🔄 PARTIAL' }}\nHTTP Code: {{ $json.output.services[0].http_code }} | Response Time: {{ $json.output.services[0].response_time }}s\nMessage: {{ $json.output.services[0].message }}\n\n{{ $json.output.services[1].service }} - {{ $json.output.services[1].status === 'up' ? '✅ UP' : $json.output.services[1].status === 'down' ? '❌ DOWN' : $json.output.services[1].status === 'slow' ? '⚠️ SLOW' : '🔄 PARTIAL' }}\nHTTP Code: {{ $json.output.services[1].http_code }} | Response Time: {{ $json.output.services[1].response_time }}s\nMessage: {{ $json.output.services[1].message }}\n\n{{ $json.output.services[2].service }} - {{ $json.output.services[2].status === 'up' ? '✅ UP' : $json.output.services[2].status === 'down' ? '❌ DOWN' : $json.output.services[2].status === 'slow' ? '⚠️ SLOW' : '🔄 PARTIAL' }}\nHTTP Code: {{ $json.output.services[2].http_code }} | Response Time: {{ $json.output.services[2].response_time }}s\nMessage: {{ $json.output.services[2].message }}\n\n{{ $json.output.services[3].service }} - {{ $json.output.services[3].status === 'up' ? '✅ UP' : $json.output.services[3].status === 'down' ? '❌ DOWN' : $json.output.services[3].status === 'slow' ? '⚠️ SLOW' : '🔄 PARTIAL' }}\nHTTP Code: {{ $json.output.services[3].http_code }} | Response Time: {{ $json.output.services[3].response_time }}s\nMessage: {{ $json.output.services[3].message }}\n\n{{ $json.output.services[4].service }} - {{ $json.output.services[4].status === 'up' ? '✅ UP' : $json.output.services[4].status === 'down' ? '❌ DOWN' : $json.output.services[4].status === 'slow' ? '⚠️ SLOW' : '🔄 PARTIAL' }}\nHTTP Code: {{ $json.output.services[4].http_code }} | Response Time: {{ $json.output.services[4].response_time }}s\nMessage: {{ $json.output.services[4].message }}\n\n{{ $json.output.services[5].service }} - {{ $json.output.services[5].status === 'up' ? '✅ UP' : $json.output.services[5].status === 'down' ? '❌ DOWN' : $json.output.services[5].status === 'slow' ? '⚠️ SLOW' : '🔄 PARTIAL' }}\nHTTP Code: {{ $json.output.services[5].http_code }} | Response Time: {{ $json.output.services[5].response_time }}s\nMessage: {{ $json.output.services[5].message }}\n\n{{ $json.output.services[6].service }} - {{ $json.output.services[6].status === 'up' ? '✅ UP' : $json.output.services[6].status === 'down' ? '❌ DOWN' : $json.output.services[6].status === 'slow' ? '⚠️ SLOW' : '🔄 PARTIAL' }}\nHTTP Code: {{ $json.output.services[6].http_code }} | Response Time: {{ $json.output.services[6].response_time }}s\nMessage: {{ $json.output.services[6].message }}\n\n---\n\n**ACTION REQUIRED:**\n{{ $json.applied_fix ? '✅ Fix Applied' : '❌ No Fix Applied' }}\n\n\n\nCommands:{{ $json.commands_requested ? `Commands: ${$json.commands_requested}` : 'No commands requested' }}\n{{ $json.output.commands_requested }}\n'⚠️ Approval Required' : {{ $json.output.needs_approval ? `Approval Required for ${$json.commands_requested}` : 'No approval required' }}\n\nTUNNEL STATUS: {{ $json.output.tunnel_status }}\nTUNNEL MESSAGE: {{ $json.output.tunnel_message }}\n\n---\n*Generated at {{ new Date().toISOString() }}*",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        3584,
+        688
+      ],
+      "id": "22a36db1-ef8e-44b0-a4fb-432a25ec6a77",
+      "name": "Send Fail1",
+      "webhookId": "2dc982ea-1660-4af9-b44c-194aba504ed2",
+      "credentials": {
+        "telegramApi": {
+          "id": "z7E2ywu9KGF1tnrX",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "chatId": "7062419334",
+        "message": "=🚨🚨🚨 **DANGER** 🚨🚨🚨\n\nChris!\n\nI ran into some serious sh$! and I NEED use of the following commands:\n{{ $json.output.commands_requested }}\n\nSituation FUBAR,\nPatchrick ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        3664,
+        224
+      ],
+      "id": "afead89d-cb69-4682-ae02-577f50b2d2ca",
+      "name": "Send message and wait for response2",
+      "webhookId": "961e1976-ec8d-4484-9b4a-a1fb69974cb8",
+      "credentials": {
+        "telegramApi": {
+          "id": "z7E2ywu9KGF1tnrX",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "chatId": "7062419334",
+        "message": "=🚨 **Docker or Sudo Requested** 🚨\n\nHey Chris,\n\nRequesting use of the following commands:\n{{ $json.output.commands_requested }}\n\n- Patchrick ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        3472,
+        16
+      ],
+      "id": "b0bfe550-da02-4ee4-b4a1-0f1291ddb182",
+      "name": "Send message and wait for response3",
+      "webhookId": "961e1976-ec8d-4484-9b4a-a1fb69974cb8",
+      "credentials": {
+        "telegramApi": {
+          "id": "z7E2ywu9KGF1tnrX",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "111c0ee2-a629-4f7f-bdc4-76156728584d",
+              "name": "prompt",
+              "value": "Monitor this website, if it's down, troubleshoot and fix the issue.",
+              "type": "string"
+            },
+            {
+              "id": "0b53d7fb-aaa4-4ac7-94a6-f9d5f728047e",
+              "name": "chatid",
+              "value": "patch12345",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -576,
+        672
+      ],
+      "id": "efd99bcf-74ef-4e77-98e5-e4c326a751e6",
+      "name": "Set PromptOLD"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Reset Prompt": {
+      "main": [
+        []
+      ]
+    },
+    "Protec": {
+      "main": [
+        [
+          {
+            "node": "Send message and wait for response1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send message and wait for response1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send message and wait for response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send message and wait for response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send message and wait for response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send message and wait for response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send message and wait for response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send message and wait for response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send message and wait for response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send message and wait for response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "TEST Cloudflare Access",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "GET n8n IP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Set Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Prompt": {
+      "main": [
+        [
+          {
+            "node": "Patchrick",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Patchrick": {
+      "main": [
+        [
+          {
+            "node": "Needs Approval?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Patchrick",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Patchrick",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Command": {
+      "ai_tool": [
+        [
+          {
+            "node": "Patchrick",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Visit Website": {
+      "ai_tool": [
+        [
+          {
+            "node": "Patchrick",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Patchrick",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Needs Approval?": {
+      "main": [
+        [
+          {
+            "node": "Protec",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Overall Status: Up?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Overall Status: Up?": {
+      "main": [
+        [
+          {
+            "node": "Send Success!",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send Fail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send message and wait for response": {
+      "main": [
+        [
+          {
+            "node": "Reset Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send message and wait for response1": {
+      "main": [
+        [
+          {
+            "node": "Reset Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Patchrick1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory1": {
+      "ai_memory": [
+        []
+      ]
+    },
+    "Execute Command1": {
+      "ai_tool": [
+        [
+          {
+            "node": "Patchrick1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Visit Website1": {
+      "ai_tool": [
+        [
+          {
+            "node": "Patchrick1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser1": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Patchrick1",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Protec1": {
+      "main": [
+        [
+          {
+            "node": "Send message and wait for response3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send message and wait for response3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send message and wait for response2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send message and wait for response2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send message and wait for response2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send message and wait for response2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send message and wait for response2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send message and wait for response2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send message and wait for response2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send message and wait for response2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Needs Approval?1": {
+      "main": [
+        [
+          {
+            "node": "Protec1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Overall Status: Up?1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Overall Status: Up?1": {
+      "main": [
+        [
+          {
+            "node": "Send Success!1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send Fail1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send message and wait for response2": {
+      "main": [
+        [
+          {
+            "node": "Reset Prompt1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send message and wait for response3": {
+      "main": [
+        [
+          {
+            "node": "Reset Prompt1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Patchrick1": {
+      "main": [
+        [
+          {
+            "node": "Needs Approval?1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "2101700c-efc4-48cc-9c45-40456fae0f32",
+  "meta": {
+    "instanceId": "1863bd21f17ad631330e9a6e8a2fe755f609c1ba51b51ce6d2ed418efba18e82"
+  },
+  "id": "JOpNULee4kB3E308",
+  "tags": []
+}

@@ -1,0 +1,4551 @@
+{
+  "name": "Patchrick - Portfolio",
+  "nodes": [
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6455735f-3afc-44fe-b7c3-16b0d7f518cf",
+              "name": "PROMPT",
+              "value": "=# Patchrick v4.0 - Post-Approval Continuation\n\n## 🤖 **Approval Received - Caontinuing Operations**\n\nYou are Patchrick, continuing your IT maintenance operations after receiving approval for the requested commands.\n\n## ✅ **Approval Status**\n\n**Commands Approved**: {{ $json.approved_commands }}\n**Approval Time**: {{ $json.approval_timestamp }}\n**Service**: {{ $json.service_name }}\n**Critical Level**: {{ $json.critical }}\n\n## 🔧 **Next Steps**\n\nBased on the approved commands, proceed with the following:\n\n1. **Execute Approved Commands**: Run the approved commands in sequence\n2. **Wait for Stabilization**: Allow services time to restart and stabilize\n3. **Verify Fix**: Test the service to confirm it's operational\n4. **Report Results**: Provide final status and verification\n\n## 📋 **Execution Protocol**\n\n```bash\n# Execute the approved commands\n{{ $json.approved_commands }}\n\n# Wait for services to stabilize\nsleep 30\n\n# Verify the fix worked\ncurl -I https://{{ $json.domain }}{{ $json.path }} -w \"Time: %{time_total}s\\n\"\n```\n\n## 🎯 **Your Task**\n\nExecute the approved commands and verify that the service is now operational. Report the final status with detailed verification results.\n\n**Remember**: You now have explicit approval to run these commands. Proceed with confidence and provide comprehensive status reporting.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        6912,
+        -608
+      ],
+      "id": "dfe75ff5-38e3-45bf-ab57-53f66bdaec80",
+      "name": "Reset Prompt"
+    },
+    {
+      "parameters": {
+        "url": "https://httpbin.org/ip",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3680,
+        -944
+      ],
+      "id": "e47b37c2-d7b1-4bce-b35c-8feef964786d",
+      "name": "GET n8n IP"
+    },
+    {
+      "parameters": {
+        "url": "https://monitor.chrislawrence.ca/portfolio/",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "CF-Access-Client-Id",
+              "value": "e30ba28d1cc64259437ab19f1a1fdc52.access"
+            },
+            {
+              "name": "CF-Access-Client-Secret",
+              "value": "1d3812daaa0cf93e72aeee6945fc34116c463071ecf204fd63be4a51ac08de6a"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3680,
+        -1088
+      ],
+      "id": "981bd04d-6b50-4f2e-b2eb-a5fa8a60a19c",
+      "name": "TEST Cloudflare Access"
+    },
+    {
+      "parameters": {
+        "content": "# *Patchrick* : *Network Assistant*\n**Currently Diagnosing**: [Portfolio Website](https://docs.n8n.io/workflows/sticky-notes/)",
+        "height": 96,
+        "width": 512
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        4096,
+        -1040
+      ],
+      "id": "de5422cb-9e00-4aa8-a495-696cb7cfd69e",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "# Health Check Specialist\n\nYou are a Health Check Specialist. Your job is to quickly assess if a service is operational.\n\n**TASK**: Check if the specified service is up or down.\n\n**SUCCESS CRITERIA**:\n- HTTP status code 200\n- Response time under 5 seconds\n- No 503, 502, or connection timeout errors\n- Content is served correctly\n\n**OUTPUT FORMAT**: Return JSON with basic status only.",
+        "height": 1216,
+        "width": 2384,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        5040,
+        -1072
+      ],
+      "id": "93106f1d-d61c-4e85-bca8-b07d346bc6e2",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "e6edecae-4efe-4cc3-82db-095d8f603894",
+                    "leftValue": "={{ $json.output.commands_requested }}{{ $('Patchrick').item.json.output.phase1.commands_requested }}",
+                    "rightValue": "docker",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "docker"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.output.commands_requested }}",
+                    "rightValue": "sudo",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "41e68c38-110e-4dda-928f-3c0c865b3085"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "sudo"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "ccee22fb-266c-4dc9-8dd9-65e2b1b1f97c",
+                    "leftValue": "={{ $json.output.commands_requested }}",
+                    "rightValue": "rm ",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "rm"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "b546eb9d-da7f-4516-b38b-353016afdeb2",
+                    "leftValue": "={{ $json.output.commands_requested }}",
+                    "rightValue": "kill",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "kill"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "806f941a-8139-4716-a01b-1c33babb1c31",
+                    "leftValue": "={{ $json.output.commands_requested }}",
+                    "rightValue": "mkfs",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "mkfs"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "d1e811c3-1316-4f1e-b183-708a0110e7c2",
+                    "leftValue": "={{ $json.output.commands_requested }}",
+                    "rightValue": "dd ",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "dd"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "18c85785-9b69-44cc-9be1-308dd9d1f691",
+                    "leftValue": "={{ $json.output.commands_requested }}",
+                    "rightValue": "fdisk",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "fdisk"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "9fcb4488-a0ba-423a-ae12-e16e5065f16d",
+                    "leftValue": "={{ $json.output.commands_requested }}",
+                    "rightValue": "shutdown",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "shutdown"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "d0a81236-018b-46d9-bd99-ea4d0399ab30",
+                    "leftValue": "={{ $json.output.commands_requested }}",
+                    "rightValue": "chmod",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "chmod"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "b7d4bee1-bd20-4251-aa12-78ea9da69f8a",
+                    "leftValue": "={{ $json.output.commands_requested }}",
+                    "rightValue": "remove",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "remove"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        6560,
+        -768
+      ],
+      "id": "43b5a145-edc8-4820-acac-9d952f3ec310",
+      "name": "Protec"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        3440,
+        -1040
+      ],
+      "id": "cb20f955-8f5c-4172-b04e-9b1e01181319",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        2448,
+        -336
+      ],
+      "id": "7386b624-7686-442a-993b-b4d8db776cf9",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.PROMPT }}\n\n**SERVICE CONFIGURATION:**\n- **Domain**: {{ $json.DOMAIN }}\n- **Path**: {{ $json.PATH }}\n- **Service Name**: {{ $json.SERVICE_NAME }}\n- **Container**: {{ $json.CONTAINER_NAME }}\n- **Internal Port**: {{ $json.INTERNAL_PORT }}\n- **External Port**: {{ $json.EXTERNAL_PORT }}\n- **Expected Content**: {{ $json.EXPECTED_CONTENT }}\n- **Critical**: {{ $json.CRITICAL }}\n- **Timeout**: {{ $json.TIMEOUT }} seconds\n- **Retries**: {{ $json.RETRIES }}\n\n**QUICK HEALTH CHECKS:**\n```bash\n# Public accessibility test\ncurl -I -w \"Time: %{time_total}s\\n\" https://{{ $json.DOMAIN }}{{ $json.PATH }}\n\n# Local accessibility test\ncurl -I http://localhost:80{{ $json.PATH }} -H \"Host: {{ $json.DOMAIN }}\"\n\n# Container status check\ndocker ps | grep {{ $json.CONTAINER_NAME }}\n\n# Direct port test (if accessible)\ncurl -I http://localhost:{{ $json.EXTERNAL_PORT }}/ -w \"Time: %{time_total}s\\n\" 2>/dev/null || echo \"Direct port not accessible\"\n```\n\n**CONTENT VERIFICATION:**\n```bash\n# Check for expected content\ncurl -s https://{{ $json.DOMAIN }}{{ $json.PATH }} | grep -q \"{{ $json.EXPECTED_CONTENT }}\" && echo \"✅ Content verified\" || echo \"❌ Content missing\"\n```\n\nPlease perform a quick health check on https://{{ $json.DOMAIN }}{{ $json.PATH }} and determine if the service is operational.",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=# Health Check Specialist\n\nYou are a Health Check Specialist. Your job is to quickly assess if a service is operational.\n\n**TASK**: Check if the specified service is up or down.\n\n**SUCCESS CRITERIA**:\n- HTTP status code 200\n- Response time under 5 seconds\n- No 503, 502, or connection timeout errors\n- Content is served correctly\n\n**OUTPUT FORMAT**: Return JSON with basic status only.",
+          "maxIterations": 20
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        5808,
+        -224
+      ],
+      "id": "ca95e342-efaf-4eed-a387-0cd8797d297f",
+      "name": "Patchrick"
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-4.1",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        5648,
+        -96
+      ],
+      "id": "40b4cacb-abc4-44dc-8704-19de0c08b94e",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "FZgAaEbcwLSBBkNI",
+          "name": "OpenRouter - chrislawrencedev@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Compile Service Config').item.json.CHATID }}",
+        "contextWindowLength": 30
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        5776,
+        -48
+      ],
+      "id": "dbb39f85-c506-41af-858a-3be2af94580d",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Test website connectivity and validate content",
+        "url": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('URL', ``, 'string') }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "CF-Access-Client-Id",
+              "value": "e30ba28d1cc64259437ab19f1a1fdc52.access"
+            },
+            {
+              "name": "CF-Access-Client-Secret",
+              "value": "1d3812daaa0cf93e72aeee6945fc34116c463071ecf204fd63be4a51ac08de6a"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        5904,
+        -16
+      ],
+      "id": "0b2efc51-6110-45be-89f6-8adbeda487c3",
+      "name": "Visit Website"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n    \"phase1\": {\n        \"status\": \"up/down/slow/partial\",\n        \"http_code\": 200,\n        \"response_time\": 0.234,\n        \"message\": \"Service is operational\",\n        \"next_phase\": \"diagnostics/end\",\n        \"critical\": true,\n        \"service_url\": \"https://dev.chrislawrence.ca/portfolio/\",\n        \"container_status\": \"running/stopped/unhealthy\",\n        \"content_verified\": true,\n        \"applied_fix\": false,\n        \"needs_approval\": false,\n        \"commands_requested\": null,\n        \"tunnel_status\": \"active/inactive/error\",\n        \"tunnel_message\": \"Tunnel is operational\"\n    }\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        6128,
+        -96
+      ],
+      "id": "53319e2f-a683-45a3-a290-0ea4df19bd26",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "8e53da8d-07a6-44a9-9095-1918bea0e6af",
+              "leftValue": "={{ $json.output.phase1.needs_approval }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        6400,
+        -336
+      ],
+      "id": "a18322d4-4e3a-41f4-a8ac-e614bb7160c6",
+      "name": "Needs Approval?"
+    },
+    {
+      "parameters": {
+        "description": "Use this tool to run commands on the server for troubleshooting purposes.",
+        "workflowId": {
+          "__rl": true,
+          "value": "Or9qzM2R2U3ZyvFY",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/Or9qzM2R2U3ZyvFY",
+          "cachedResultName": "SSH Tailscale Homelab"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "command": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('command', ``, 'string') }}"
+          },
+          "matchingColumns": [
+            "command"
+          ],
+          "schema": [
+            {
+              "id": "command",
+              "displayName": "command",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        6016,
+        -48
+      ],
+      "id": "45255d95-9df4-4cd3-8a21-d6bf2510b233",
+      "name": "SSH Execute Command Remote"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-globals.globalConstants",
+      "typeVersion": 1,
+      "position": [
+        3168,
+        -592
+      ],
+      "id": "282b645f-13f0-4d5f-8a1a-bd34f2526bb7",
+      "name": "Homelab Services Constants",
+      "credentials": {
+        "globalConstantsApi": {
+          "id": "3QwdCc30K2uKL4UF",
+          "name": "Global Constants account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e1603974-9e07-4a62-ba1a-e2bc0f597491",
+              "name": "SERVICE_INDEX",
+              "value": "={{ $json.SERVICE_INDEX }}",
+              "type": "number"
+            },
+            {
+              "id": "d9fa25cb-3949-41c8-adce-d7cd0f96b3fa",
+              "name": "DOMAIN",
+              "value": "={{ $json.DOMAIN }}",
+              "type": "string"
+            },
+            {
+              "id": "82daa7fb-702b-4542-aea9-d8d6042b52a4",
+              "name": "PATH",
+              "value": "={{ $json.SERVICE_CONFIG.PATH }}",
+              "type": "string"
+            },
+            {
+              "id": "6a0b6622-6dad-4740-988f-237d7a0feb9a",
+              "name": "SERVICE_NAME",
+              "value": "={{ $json.SERVICE_CONFIG.SERVICE_NAME }}",
+              "type": "string"
+            },
+            {
+              "id": "c482a742-f565-460b-8988-98569a5331cf",
+              "name": "CONTAINER_NAME",
+              "value": "={{ $json.SERVICE_CONFIG.CONTAINER_NAME }}",
+              "type": "string"
+            },
+            {
+              "id": "031ebe24-c725-48c4-b197-9abf0545f995",
+              "name": "INTERNAL_PORT",
+              "value": "={{ $json.SERVICE_CONFIG.INTERNAL_PORT }}",
+              "type": "number"
+            },
+            {
+              "id": "f57984e0-d682-47ae-a590-8c2bb739f947",
+              "name": "EXTERNAL_PORT",
+              "value": "={{ $json.SERVICE_CONFIG.EXTERNAL_PORT }}",
+              "type": "number"
+            },
+            {
+              "id": "95731234-728b-4d1a-b752-710c548442ff",
+              "name": "EXPECTED_CONTENT",
+              "value": "={{ $json.SERVICE_CONFIG.EXPECTED_CONTENT }}",
+              "type": "string"
+            },
+            {
+              "id": "482d7bec-58be-4878-b462-e86656253b43",
+              "name": "CRITICAL",
+              "value": "={{ $json.SERVICE_CONFIG.CRITICAL }}",
+              "type": "boolean"
+            },
+            {
+              "id": "c8e89b24-ed12-4cdf-861a-f9de748a3933",
+              "name": "TIMEOUT",
+              "value": "={{ $json.SERVICE_CONFIG.TIMEOUT }}",
+              "type": "number"
+            },
+            {
+              "id": "7ee1ec97-6304-4a03-b2b0-d8587b11921d",
+              "name": "RETRIES",
+              "value": "={{ $json.SERVICE_CONFIG.RETRIES }}",
+              "type": "number"
+            },
+            {
+              "id": "b98ba66c-b223-4c57-957d-b8b7212a14da",
+              "name": "REPAIR_COMMANDS",
+              "value": "={{ $json.SERVICE_CONFIG.REPAIR_COMMANDS }}",
+              "type": "array"
+            },
+            {
+              "id": "92272543-7a3e-4acb-a97b-dadbd427152d",
+              "name": "CONTENT_CHECKS",
+              "value": "={{ $json.SERVICE_CONFIG.CONTENT_CHECKS }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        4864,
+        -352
+      ],
+      "id": "c4b77ae9-049e-450e-a75b-8c39054e6af3",
+      "name": "Set Service Config"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d55c4817-09e9-410f-ba63-1ca54c10e44c",
+              "name": "SERVICE_CONFIG",
+              "value": "={{ $json.SERVICES.portfolio }}",
+              "type": "object"
+            },
+            {
+              "id": "9547f153-c137-43e8-918a-c661124072f7",
+              "name": "CHATID",
+              "value": "=patchrick-chat-{{ $json.timestamp }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3568,
+        -352
+      ],
+      "id": "df373617-d71f-4fd9-ad4c-624d97a4db90",
+      "name": "Compile Service Config"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b92dea7f-7fed-43fc-ba16-d8b134439603",
+              "name": "PROMPT",
+              "value": "=# Patchrick v4.0 - Master IT Maintenance Orchestrator\n\n## 🤖 **Core Mission**\n\nYou are Patchrick, a 30-year IT Administrator and Senior Dev Software Developer, hired by Chris Lawrence. Your primary responsibility is to ensure all services at https://dev.chrislawrence.ca are operational through a systematic, multi-phase approach.\n\n## 📊 **Current Service Status**\n\n**Service**: {{ $json.SERVICE_NAME }} ({{ $json.URL }})\n**HTTP Status**: {{ $json.SITE_STATUS }} - {{ $json.status }}\n**Response Time**: {{ $json.headers.date }}\n**Content Type**: {{ $json.CONTENT_TYPE }}\n**Server**: {{ $json.SERVER }}\n**Content Length**: {{ $json.LENGTH }} bytes\n\n**Content Verification**:\n- Expected Content Present: {{ $json.EXPECTED_CONTENT_PRESENT ? '✅ Yes' : '❌ No' }}\n- Page Title: {{ $json.PAGE_TITLE }}\n- Meta Description: {{ $json.META_DESCRIPTION }}\n\n**Infrastructure Status**:\n- Cloudflare Cache: {{ $json.headers['cf-cache-status'] }}\n- Server Timing: {{ $json.headers['server-timing'] }}\n- CF Ray: {{ $json.headers['cf-ray'] }}\n\n## 🎯 **Service Monitoring Protocol**\n\nBased on the current status, you will monitor the specified service using a three-phase approach:\n\n### **Phase 1: Health Check**\n- Quick assessment of service status\n- Basic connectivity and response time tests\n- Content verification\n- Determine if service is operational\n\n### **Phase 2: Diagnostics** \n- Comprehensive investigation if service is down\n- Container health, logs, and network analysis\n- Infrastructure dependency checks\n- Root cause identification and repair recommendations\n\n### **Phase 3: Repair**\n- Execute approved repair commands\n- Verify fixes are successful\n- End-to-end connectivity testing\n- Final status confirmation\n\n## 🔧 **Service Configuration**\n\n**Target Service**: https://{{ $json.DOMAIN }}{{ $json.PATH }}\n**Service Name**: {{ $json.SERVICE_NAME }}\n**Container**: {{ $json.CONTAINER_NAME }}\n**Critical Level**: {{ $json.CRITICAL }}\n**Internal Port**: {{ $json.INTERNAL_PORT }}\n**External Port**: {{ $json.EXTERNAL_PORT }}\n\n## 📋 **Execution Flow**\n\n1. **Start with Phase 1** - Quick health check\n2. **If UP** - Report success and end\n3. **If DOWN** - Proceed to Phase 2 diagnostics\n4. **After Diagnostics** - Proceed to Phase 3 repair\n5. **Final Verification** - Confirm service is operational\n\n## 🚨 **Critical Permission Rules**\n\n- You MUST request EXPLICIT APPROVAL before running ANY command that could modify the system\n- This includes: docker start, docker stop, docker run, docker rm, kill, pkill, systemctl, or any command that creates, modifies, or deletes files\n- Even diagnostic commands like docker ps, netstat, or ps are fine without permission\n- When in doubt, ASK FIRST\n\n## 📊 **Success Criteria**\n\nServices are considered operational only if:\n1. HTTP status code is 200\n2. Response time is under 5 seconds\n3. No 503, 502, or connection timeout errors\n4. Content is served correctly (no 404s for expected content)\n\n## 🎯 **Your Task**\n\nBegin monitoring https://{{ $json.DOMAIN }}{{ $json.PATH }} using the three-phase approach. Start with Phase 1 health check and proceed through the phases as needed to ensure the service is operational.\n\n**Current Status**: {{ $json.SITE_STATUS }} - {{ $json.status }}\n**Content Verified**: {{ $json.EXPECTED_CONTENT_PRESENT ? '✅ Yes' : '❌ No' }}\n**Critical Service**: {{ $json.CRITICAL ? '⚠️ Yes' : '✅ No' }}\n\n**Remember**: Your job is to keep https://{{ $json.DOMAIN }}{{ $json.PATH }} running. Use the systematic approach to identify issues quickly and repair them effectively.",
+              "type": "string"
+            },
+            {
+              "id": "487f1e53-1252-4fda-8ba3-e5eb83096c52",
+              "name": "SERVICE_INDEX",
+              "value": "={{ $json.SERVICE_INDEX }}",
+              "type": "number"
+            },
+            {
+              "id": "10402c33-fb81-4841-9af3-2fc5d56ae01a",
+              "name": "DOMAIN",
+              "value": "={{ $json.DOMAIN }}",
+              "type": "string"
+            },
+            {
+              "id": "39b8eea2-7e03-4173-93d4-e8a4c7e080a6",
+              "name": "PATH",
+              "value": "={{ $json.PATH }}",
+              "type": "string"
+            },
+            {
+              "id": "1ffd896f-ded1-4df1-956c-bb69dda73141",
+              "name": "SERVICE_NAME",
+              "value": "={{ $json.SERVICE_NAME }}",
+              "type": "string"
+            },
+            {
+              "id": "cf261f4f-7f20-4713-8381-ed85db897149",
+              "name": "CONTAINER_NAME",
+              "value": "={{ $json.CONTAINER_NAME }}",
+              "type": "string"
+            },
+            {
+              "id": "6d0bef0a-f5d0-40f8-8a3a-98ff2c705431",
+              "name": "INTERNAL_PORT",
+              "value": "={{ $json.INTERNAL_PORT }}",
+              "type": "number"
+            },
+            {
+              "id": "6405d453-1f16-44bc-92fa-d250017de724",
+              "name": "EXTERNAL_PORT",
+              "value": "={{ $json.EXTERNAL_PORT }}",
+              "type": "number"
+            },
+            {
+              "id": "1fc45867-e542-4609-bfed-abc7ffaef2a2",
+              "name": "EXPECTED_CONTENT",
+              "value": "={{ $json.EXPECTED_CONTENT }}",
+              "type": "string"
+            },
+            {
+              "id": "8825ac5d-739a-4656-b705-2a3a9f693554",
+              "name": "CRITICAL",
+              "value": "={{ $json.CRITICAL }}",
+              "type": "boolean"
+            },
+            {
+              "id": "d712b4d8-e9be-40a6-81ae-f71b429e3bc1",
+              "name": "TIMEOUT",
+              "value": "={{ $json.TIMEOUT }}",
+              "type": "number"
+            },
+            {
+              "id": "044d1346-84a6-4c38-92f9-4cb683e82d4d",
+              "name": "RETRIES",
+              "value": "={{ $json.RETRIES }}",
+              "type": "number"
+            },
+            {
+              "id": "a129de23-e91e-4dd9-b04c-12a5a464093d",
+              "name": "REPAIR_COMMANDS",
+              "value": "={{ $json.REPAIR_COMMANDS }}",
+              "type": "array"
+            },
+            {
+              "id": "4aafa708-49d6-47c5-a674-b5c5b9ba84f8",
+              "name": "CONTENT_CHECKS",
+              "value": "={{ $json.CONTENT_CHECKS }}",
+              "type": "array"
+            },
+            {
+              "id": "a5d9cbe9-20e0-45e5-b493-8a0b1d3f7a7d",
+              "name": "statusCode",
+              "value": "={{ $json.statusCode }}",
+              "type": "number"
+            },
+            {
+              "id": "8481eaa1-a3e1-41c5-a73c-8b3c73938fcf",
+              "name": "statusMessage",
+              "value": "={{ $json.statusMessage }}",
+              "type": "string"
+            },
+            {
+              "id": "76571677-30e8-4ff0-a71c-526261934f46",
+              "name": "SITE_STATUS",
+              "value": "={{ $json.SITE_STATUS }}",
+              "type": "string"
+            },
+            {
+              "id": "84a65af7-aa28-40cc-9b6e-20e03124a057",
+              "name": "PAGE_TITLE",
+              "value": "={{ $json.PAGE_TITLE }}",
+              "type": "string"
+            },
+            {
+              "id": "6cb5ce6b-6904-402e-bb40-a748f257d806",
+              "name": "META_DESCRIPTION",
+              "value": "={{ $json.META_DESCRIPTION }}",
+              "type": "string"
+            },
+            {
+              "id": "a699c1d2-a213-4182-957f-54c8fe1c19e8",
+              "name": "URL",
+              "value": "={{ $json.URL }}",
+              "type": "string"
+            },
+            {
+              "id": "be26c61c-b93f-47ce-8eab-d00fe11f2fc1",
+              "name": "HEAD",
+              "value": "={{ $json.HEAD }}",
+              "type": "string"
+            },
+            {
+              "id": "c88a159c-3fcb-4727-9b65-ed2a51662223",
+              "name": "TAIL",
+              "value": "={{ $json.TAIL }}",
+              "type": "string"
+            },
+            {
+              "id": "aa871467-d4e5-4e3d-8a98-c08d18ab2cd3",
+              "name": "CONTENT_TYPE",
+              "value": "={{ $json.CONTENT_TYPE }}",
+              "type": "string"
+            },
+            {
+              "id": "c3246424-7d8d-4008-a46b-963b08a327ff",
+              "name": "SERVER",
+              "value": "={{ $json.SERVER }}",
+              "type": "string"
+            },
+            {
+              "id": "a12dfd4d-7e3b-402f-99e3-dbe073ddd709",
+              "name": "LENGTH",
+              "value": "={{ $json.LENGTH }}",
+              "type": "string"
+            },
+            {
+              "id": "4ab9b23d-f7f4-4fe8-9ca3-de82b0195973",
+              "name": "EXPECTED_CONTENT_PRESENT",
+              "value": "={{ $json.EXPECTED_CONTENT_PRESENT }}",
+              "type": "boolean"
+            },
+            {
+              "id": "399e163b-51dd-42fd-8c94-61f282af9459",
+              "name": "status",
+              "value": "={{ $json.status }}",
+              "type": "string"
+            },
+            {
+              "id": "c96a60ba-e9ba-40ae-9fa1-6c887fe924b4",
+              "name": "SERVICE_INDEX",
+              "value": "={{ $json.SERVICE_INDEX }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        5520,
+        -224
+      ],
+      "id": "63214086-9429-43df-8c6c-7653ea0f3e45",
+      "name": "Set Prompt"
+    },
+    {
+      "parameters": {
+        "content": "# Diagnostics Specialist\n\nYou are a Diagnostics Specialist. Your job is to investigate WHY a service is down.\n\n**TASK**: Run comprehensive diagnostics to identify the root cause.\n\n**DIAGNOSTIC APPROACH**:\n1. Check container health and logs\n2. Verify network connectivity\n3. Test internal service endpoints\n4. Check infrastructure dependencies\n5. Identify specific failure points\n.PATH }} is down. Please run comprehensive diagnostics to identify the root cause and recommend specific repair actions.",
+        "height": 1216,
+        "width": 1952
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        7712,
+        -1072
+      ],
+      "id": "1215c085-5b6c-4e79-8260-338c4556f0c3",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "# Repair Specialist\n\nYou are a Repair Specialist. Your job is to fix issues identified by diagnostics.\n\n**TASK**: Execute approved repair commands and verify the fix worked.\n\n**REPAIR PROTOCOL**:\n1. Execute approved commands in sequence\n2. Wait for services to stabilize\n3. Verify the fix worked\n4. Test end-to-end connectivity\n5. Report final status\n\n**OUTPUT FORMAT**: Return JSON with repair results and final status. },\n        \"next_phase\": \"end\",\n        \"escalation_required\": false,\n        \"repair_time\": \"30s/2m/5m\"\n    }\n}",
+        "height": 1216,
+        "width": 1952,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        9808,
+        -1072
+      ],
+      "id": "8c2c18e3-f66b-4841-a63d-f4dbfe4fe05c",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": []
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        6256,
+        -224
+      ],
+      "id": "884632ee-3252-4d11-b179-669b03af09fd",
+      "name": "Store Output"
+    },
+    {
+      "parameters": {
+        "chatId": "7062419334",
+        "text": "=✅ *Service Operational:* {{ ($json.SERVICE_NAME) }}\n\nHey Chris,\n\nGreat news\\! *{{ ($json.SERVICE_NAME) }}* is fully operational\\.\n\n*Service Details:*\n• *URL:* {{ ($json.output.phase1.service_url) }}\n• *Status:* {{ ($json.output.phase1.status) }}\n• *HTTP Code:* {{ ($json.output.phase1.http_code) }}\n• *Response Time:* {{ ($json.output.phase1.response_time) }}s\n• *Container:* {{ ($json.output.phase1.container_status) }}\n\n*Health Check Results:*\n• *Content Verified:* {{ $json.output.phase1.content_verified ? '✅ Yes' : '❌ No' }}\n• *Fix Applied:* {{ $json.output.phase1.applied_fix ? '✅ Yes' : '❌ No' }}\n• *Critical Service:* {{ $json.output.phase1.critical ? '❗ Yes' : '✅ No' }}\n\n*Message:*  \n{{ ($json.output.phase1.message) }}\n\n{{ $json.output.phase1.tunnel_status !== 'not_required'\n  ? '*Tunnel Status:* ' + ($json.output.phase1.tunnel_status) + '\\n*Tunnel Message:* ' + ($json.output.phase1.tunnel_message)\n  : '' }}\n\n_Generated by Patchrick at {{ new Date().toISOString() }}_",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "HTML"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        6752,
+        -416
+      ],
+      "id": "63db9af6-a307-4db4-be9a-8ef553fa3cc2",
+      "name": "Success Message",
+      "webhookId": "4fa2b3de-97e3-4c79-bb9a-3a0b49e7beac",
+      "retryOnFail": true,
+      "credentials": {
+        "telegramApi": {
+          "id": "z7E2ywu9KGF1tnrX",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "7062419334",
+        "text": "=❌ **Service Alert: {{ $json.SERVICE_NAME }} Issues Detected** ❌\n\nHey Chris,\n\nPatchrick has detected issues with {{ $json.SERVICE_NAME }}****.\n\n**Service Details:**\n- URL: {{ $json.output.phase1.service_url }}\n- Status: {{ $json.output.phase1.status }}\n- HTTP Code: {{ $json.output.phase1.http_code }}\n- Response Time: {{ $json.output.phase1.response_time }}s\n- Container: {{ $json.output.phase1.container_status }}\n\n**Issue Analysis:**\n- Content Verified: {{ $json.output.phase1.content_verified ? '✅ Yes' : '❌ No' }}\n- Fix Applied: {{ $json.output.phase1.applied_fix ? '✅ Yes' : '❌ No' }}\n- Critical Service: {{ $json.output.phase1.critical ? '⚠️ Yes - IMMEDIATE ATTENTION REQUIRED' : '✅ No' }}\n\n**Message:** {{ $json.output.phase1.message }}\n\n**Next Steps:** {{ $json.output.phase1.next_phase === 'diagnostics' ? 'Proceeding to Diagnostics Phase.' : 'No further automated action planned.' }}\n\n{{ $json.output.phase1.tunnel_status !== 'not_required' ? '**Tunnel Status:** ' + $json.output.phase1.tunnel_status + '\\n**Tunnel Message:** ' + $json.output.phase1.tunnel_message : '' }}\n\n---\n*Generated by Patchrick at {{ new Date().toISOString() }}*",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        6752,
+        -240
+      ],
+      "id": "6760067e-f098-4d22-b759-881305ad8ed0",
+      "name": "Failure Message",
+      "webhookId": "a8277d40-f014-422a-8bf7-991b38be9be4",
+      "credentials": {
+        "telegramApi": {
+          "id": "z7E2ywu9KGF1tnrX",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "chatId": "7062419334",
+        "message": "=🚨🚨🚨 **CRITICAL APPROVAL REQUIRED** 🚨🚨🚨\n\nChris!\n\nPatchrick has encountered a critical situation with **{{ $json.constants.SERVICES.portfolio.SERVICE_NAME }}** and **URGENTLY NEEDS YOUR APPROVAL** for these commands:\n\n```bash\n{{ $json.output.phase1.commands_requested }}\n```\n\n**Situation Details:**\n- Service: {{ $json.output.phase1.service_url }}\n- Status: {{ $json.output.phase1.status }}\n- HTTP Code: {{ $json.output.phase1.http_code }}\n- Critical: {{ $json.output.phase1.critical ? 'YES - IMMEDIATE ACTION REQUIRED' : 'No' }}\n\n**Reason:** {{ $json.output.phase1.message }}\n\n**Situation FUBAR - Your immediate action is required!**\n\n- Patchrick",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        6752,
+        -608
+      ],
+      "id": "21a5507c-c02b-4a8c-9fde-3d6dfd19337b",
+      "name": "Danger Approval Message",
+      "webhookId": "697ad757-2d65-4c04-991a-dbc557319509",
+      "credentials": {
+        "telegramApi": {
+          "id": "z7E2ywu9KGF1tnrX",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "chatId": "7062419334",
+        "message": "=🚨 **Approval Required: {{ $json.output.phase1.service_url }}** 🚨\n\nHey Chris,\n\nPatchrick needs your approval to run the following command(s) for **{{ $json.constants.SERVICES.portfolio.SERVICE_NAME }}**:\n\n```bash\n{{ $json.output.phase1.commands_requested }}\n```\n\n**Reason:** {{ $json.output.phase1.message }}\n\n**Service Details:**\n- Status: {{ $json.output.phase1.status }}\n- HTTP Code: {{ $json.output.phase1.http_code }}\n- Response Time: {{ $json.output.phase1.response_time }}s\n- Critical: {{ $json.output.phase1.critical ? 'Yes' : 'No' }}\n\nPlease review and approve to proceed.\n\n- Patchrick",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        6752,
+        -768
+      ],
+      "id": "1fcebd8e-9fb5-4708-89cc-23a3852082e1",
+      "name": "Sudo Approval Message",
+      "webhookId": "ffecc262-a82e-486e-bf9a-1b10b25291bd",
+      "credentials": {
+        "telegramApi": {
+          "id": "z7E2ywu9KGF1tnrX",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "717deb2c-0995-4e31-98f5-2637cfd0efa8",
+                    "leftValue": "={{ $json.output.phase1.status }}",
+                    "rightValue": "={{ \"UP\" || \"up\" }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "up"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "6cd63cf0-98ef-4c20-9638-cf46e3949931",
+                    "leftValue": "={{ $json.output.phase1.status }}",
+                    "rightValue": "={{ \"DOWN\" || \"down\" }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "down"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        6560,
+        -336
+      ],
+      "id": "4e89b0cd-a552-4c51-a5ff-0ccfdfe70b06",
+      "name": "Status?"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "name": "Replace Me",
+      "typeVersion": 1,
+      "position": [
+        7488,
+        240
+      ],
+      "id": "550f8b9d-e18a-4e78-8761-a2cf450f5ed1"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.SERVICE_INDEX }}",
+                    "rightValue": "={{ 0 }}",
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    },
+                    "id": "c6d9b1eb-f880-43ed-8289-0ab760d2ab41"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "eef4703c-c5a1-4181-9780-cd1ecd3faf52",
+                    "leftValue": "={{ $json.SERVICE_INDEX }}",
+                    "rightValue": "={{ 1 }}",
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "94b8555e-7764-4999-b17e-42640bd42678",
+                    "leftValue": "={{ $json.SERVICE_INDEX }}",
+                    "rightValue": "={{ 2 }}",
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "5a48fd1a-f83c-4475-990a-2e5c060f9ad0",
+                    "leftValue": "={{ $json.SERVICE_INDEX }}",
+                    "rightValue": "={{ 3 }}",
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "7dd7c29c-c770-4b2b-a64f-c4a9a03f970c",
+                    "leftValue": "={{ $json.SERVICE_INDEX }}",
+                    "rightValue": "={{ 4 }}",
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "98a6a48e-a921-4b03-ba2c-b8c2bde9413d",
+                    "leftValue": "={{ $json.SERVICE_INDEX }}",
+                    "rightValue": "={{ 5 }}",
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "570774f5-7446-42f6-a589-3e88edd762dc",
+                    "leftValue": "={{ $json.SERVICE_INDEX }}",
+                    "rightValue": "={{ 6 }}",
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        3360,
+        -336
+      ],
+      "id": "c441621b-d10e-4efa-a187-c4848ee2d8cf",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d55c4817-09e9-410f-ba63-1ca54c10e44c",
+              "name": "SERVICE_CONFIG",
+              "value": "={{ $json.SERVICES.schedshare }}",
+              "type": "object"
+            },
+            {
+              "id": "9547f153-c137-43e8-918a-c661124072f7",
+              "name": "CHATID",
+              "value": "=patchrick-chat-{{ $json.timestamp || $('Schedule Trigger').item.json.timestamp }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3760,
+        -320
+      ],
+      "id": "0e604ba8-8d84-4039-bb23-c04805fab97f",
+      "name": "Compile Service Config1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d55c4817-09e9-410f-ba63-1ca54c10e44c",
+              "name": "SERVICE_CONFIG",
+              "value": "={{ $json.SERVICES.capitolscope }}",
+              "type": "object"
+            },
+            {
+              "id": "9547f153-c137-43e8-918a-c661124072f7",
+              "name": "CHATID",
+              "value": "=patchrick-chat-{{ $json.timestamp || $('Schedule Trigger').item.json.timestamp }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3952,
+        -288
+      ],
+      "id": "c01ded69-430c-41e2-8ef8-52c2a809eeea",
+      "name": "Compile Service Config2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d55c4817-09e9-410f-ba63-1ca54c10e44c",
+              "name": "SERVICE_CONFIG",
+              "value": "={{ $json.SERVICES.eventsphere }}",
+              "type": "object"
+            },
+            {
+              "id": "9547f153-c137-43e8-918a-c661124072f7",
+              "name": "CHATID",
+              "value": "=patchrick-chat-{{ $json.timestamp || $('Schedule Trigger').item.json.timestamp }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        4144,
+        -256
+      ],
+      "id": "bdbb97ec-eb36-46ff-9b91-1bde065e1017",
+      "name": "Compile Service Config3"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d55c4817-09e9-410f-ba63-1ca54c10e44c",
+              "name": "SERVICE_CONFIG",
+              "value": "={{ $json.SERVICES.portfolio }}",
+              "type": "object"
+            },
+            {
+              "id": "9547f153-c137-43e8-918a-c661124072f7",
+              "name": "CHATID",
+              "value": "=patchrick-chat-{{ $json.timestamp || $('Schedule Trigger').item.json.timestamp }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        4336,
+        -224
+      ],
+      "id": "2af3efee-01dd-4c0c-96d6-97c5f59b86b1",
+      "name": "Compile Service Config4"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d55c4817-09e9-410f-ba63-1ca54c10e44c",
+              "name": "SERVICE_CONFIG",
+              "value": "={{ $json.constants.SERVICES.portfolio }}",
+              "type": "object"
+            },
+            {
+              "id": "9547f153-c137-43e8-918a-c661124072f7",
+              "name": "CHATID",
+              "value": "=patchrick-chat-{{ $json.timestamp || $('Schedule Trigger').item.json.timestamp }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        4528,
+        -192
+      ],
+      "id": "d3e261c5-150c-452a-87d9-511315122ed0",
+      "name": "Compile Service Config5"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d55c4817-09e9-410f-ba63-1ca54c10e44c",
+              "name": "SERVICE_CONFIG",
+              "value": "={{ $json.constants.SERVICES.portfolio }}",
+              "type": "object"
+            },
+            {
+              "id": "9547f153-c137-43e8-918a-c661124072f7",
+              "name": "CHATID",
+              "value": "=patchrick-chat-{{ $json.timestamp || $('Schedule Trigger').item.json.timestamp }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        4720,
+        -160
+      ],
+      "id": "dae85ccf-828e-46a7-88dd-fd2cfbbf1a25",
+      "name": "Compile Service Config6"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "91bc70f2-3b61-49e8-a319-199f885d7bfd",
+              "name": "SERVICE_INDEX",
+              "value": "={{ $json.data[0].SERVICE_INDEX + 1 }}",
+              "type": "number"
+            },
+            {
+              "id": "23e3bd77-3ad0-4f22-b080-d5f74d64ce06",
+              "name": "TARGET_SERVICES",
+              "value": "={{ $('Init Service Index1').item.json.TARGET_SERVICES }}",
+              "type": "string"
+            },
+            {
+              "id": "4a6ecdfe-1709-454a-a95f-aa5ac7d0f706",
+              "name": "TOTAL_SERVICES",
+              "value": "={{ $('Edit Fields1').item.json.TOTAL_SERVICES }}",
+              "type": "number"
+            },
+            {
+              "id": "2d93d2d6-1562-4aac-b66a-d7f8a52f5897",
+              "name": "output",
+              "value": "={{ $json.data[0].output }}",
+              "type": "object"
+            },
+            {
+              "id": "deac1e4c-ec4c-4d2f-ba47-1d823a844ab7",
+              "name": "SERVICES",
+              "value": "={{ $('JSON Services').item.json.SERVICES }}",
+              "type": "object"
+            },
+            {
+              "id": "a873c7aa-e277-4dc3-bf51-317487e8feea",
+              "name": "timestamp",
+              "value": "={{ $('JSON Services').item.json.timestamp }}",
+              "type": "string"
+            },
+            {
+              "id": "b7a37ff7-4623-4ca9-9924-81c226839932",
+              "name": "Readable date",
+              "value": "={{ $('JSON Services').item.json['Readable date'] }}",
+              "type": "string"
+            },
+            {
+              "id": "a9c66575-49d3-4e17-947c-a26ddb04867a",
+              "name": "Readable time",
+              "value": "={{ $('JSON Services').item.json['Readable time'] }}",
+              "type": "string"
+            },
+            {
+              "id": "3e84643f-0470-423e-97bd-0e463675585c",
+              "name": "Day of week",
+              "value": "={{ $('JSON Services').item.json['Day of week'] }}",
+              "type": "string"
+            },
+            {
+              "id": "46de4132-d416-4041-a24d-3cb1f20c7bdb",
+              "name": "Year",
+              "value": "={{ $('JSON Services').item.json.Year }}",
+              "type": "string"
+            },
+            {
+              "id": "3858951d-3bb1-4d59-a7b3-1d5edeb0379c",
+              "name": "Month",
+              "value": "={{ $('JSON Services').item.json.Month }}",
+              "type": "string"
+            },
+            {
+              "id": "e060f8c6-b025-4e2f-9fed-467096e58672",
+              "name": "Day of month",
+              "value": "={{ $('JSON Services').item.json['Day of month'] }}",
+              "type": "string"
+            },
+            {
+              "id": "ed03ee4a-1611-47a2-905b-15d297e79bdc",
+              "name": "Hour",
+              "value": "={{ $('JSON Services').item.json.Hour }}",
+              "type": "string"
+            },
+            {
+              "id": "df9ca4bf-4e78-4886-bf8d-6d7fd3ae0b53",
+              "name": "Minute",
+              "value": "={{ $('JSON Services').item.json.Minute }}",
+              "type": "string"
+            },
+            {
+              "id": "fe1cecdb-9d2e-4aa5-86c5-f42cd1f949f4",
+              "name": "Second",
+              "value": "={{ $('JSON Services').item.json.Second }}",
+              "type": "string"
+            },
+            {
+              "id": "62567cfd-8da5-4e51-a4b7-c961ccbbd95b",
+              "name": "Timezone",
+              "value": "={{ $('JSON Services').item.json.Timezone }}",
+              "type": "string"
+            },
+            {
+              "id": "d8698321-159b-4703-93f8-e4666f699684",
+              "name": "SERVICES",
+              "value": "={{ $('JSON Services').item.json.SERVICES }}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2528,
+        -160
+      ],
+      "id": "b011b8d4-6a40-4005-8fe5-623ca08a82e0",
+      "name": "Increment SERVICE_INDEX"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0e4907ab-10d1-4ce3-b00d-4e121d31a550",
+              "name": "SERVICE_INDEX",
+              "value": "={{ $('Status?').item.json.SERVICE_INDEX }}",
+              "type": "string"
+            },
+            {
+              "id": "6455735f-3afc-44fe-b7c3-16b0d7f518cf",
+              "name": "PROMPT",
+              "value": "=# Phase 2: Diagnostics Required\n\n**Service Status**: ❌ DOWN\n**Service**: {{ $json.output.phase1.service_url }}\n**Status**: {{ $json.output.phase1.status }}\n**HTTP Code**: {{ $json.output.phase1.http_code }}\n**Container**: {{ $json.output.phase1.container_status }}\n\n**Phase 1 Results**:\n- Content Verified: {{ $json.output.phase1.content_verified }}\n- Critical Service: {{ $json.output.phase1.critical }}\n- Message: {{ $json.output.phase1.message }}\n\n**Next Phase**: Comprehensive diagnostics to identify root cause and recommend repair actions.\n\n**Service Configuration**:\n- Container: {{ $('Compile Service Config').item.json.SERVICE_CONFIG.CONTAINER_NAME }}\n- Internal Port: {{ $('Compile Service Config').item.json.SERVICE_CONFIG.INTERNAL_PORT }}\n- External Port: {{ $('Compile Service Config').item.json.SERVICE_CONFIG.EXTERNAL_PORT }}",
+              "type": "string"
+            },
+            {
+              "id": "c26893fa-6707-4431-bdc9-ccb5ec0affc0",
+              "name": "CHATID",
+              "value": "={{ $('Compile Service Config').item.json.CHATID }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        7120,
+        -272
+      ],
+      "id": "282068cd-6435-4480-8414-3c12959f4bb3",
+      "name": "Failure Path"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "daf7cd9a-72e4-4552-b719-6e030b8bea18",
+              "name": "SERVICE_INDEX",
+              "value": "={{ $('Status?').item.json.SERVICE_INDEX }}",
+              "type": "number"
+            },
+            {
+              "id": "6455735f-3afc-44fe-b7c3-16b0d7f518cf",
+              "name": "PROMPT",
+              "value": "=# Service Monitoring Complete - Success\n\n**Service Status**: ✅ OPERATIONAL\n**Service**: {{ $json.output.phase1.service_url }}\n**Status**: {{ $json.output.phase1.status }}\n**Response Time**: {{ $json.output.phase1.response_time }}s\n\n**Next Action**: Moving to next service in monitoring cycle.\n\n**Summary**: {{ $json.output.phase1.message }}",
+              "type": "string"
+            },
+            {
+              "id": "c26893fa-6707-4431-bdc9-ccb5ec0affc0",
+              "name": "CHATID",
+              "value": "={{ $('Compile Service Config').item.json.CHATID }}",
+              "type": "string"
+            },
+            {
+              "id": "a58b31d3-4e0f-4e35-8031-27df2d0df564",
+              "name": "output",
+              "value": "={{ $json.output }}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        7120,
+        -400
+      ],
+      "id": "3e5ba621-f43c-4633-bb74-801615774921",
+      "name": "Success Path"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6455735f-3afc-44fe-b7c3-16b0d7f518cf",
+              "name": "PROMPT",
+              "value": "=# Service Monitoring Complete - Success\n\n**Service Status**: ✅ OPERATIONAL\n**Service**: {{ $json.output.phase1.service_url }}\n**Status**: {{ $json.output.phase1.status }}\n**Response Time**: {{ $json.output.phase1.response_time }}s\n\n**Next Action**: Moving to next service in monitoring cycle.\n\n**Summary**: {{ $json.output.phase1.message }}",
+              "type": "string"
+            },
+            {
+              "id": "c26893fa-6707-4431-bdc9-ccb5ec0affc0",
+              "name": "CHATID",
+              "value": "={{ $('Compile Service Config').item.json.CHATID }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        10064,
+        -768
+      ],
+      "id": "5c9f37cd-b9e3-4974-8e0c-601738e42c85",
+      "name": "Reset Prompt3"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "e6edecae-4efe-4cc3-82db-095d8f603894",
+                    "leftValue": "={{ $json.output.commands_requested }}{{ $('Patchrick3').item.json.output.phase1.commands_requested }}",
+                    "rightValue": "docker",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "docker"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.output.commands_requested }}",
+                    "rightValue": "sudo",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "41e68c38-110e-4dda-928f-3c0c865b3085"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "sudo"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "ccee22fb-266c-4dc9-8dd9-65e2b1b1f97c",
+                    "leftValue": "={{ $json.output.commands_requested }}",
+                    "rightValue": "rm ",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "rm"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "b546eb9d-da7f-4516-b38b-353016afdeb2",
+                    "leftValue": "={{ $json.output.commands_requested }}",
+                    "rightValue": "kill",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "kill"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "806f941a-8139-4716-a01b-1c33babb1c31",
+                    "leftValue": "={{ $json.output.commands_requested }}",
+                    "rightValue": "mkfs",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "mkfs"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "d1e811c3-1316-4f1e-b183-708a0110e7c2",
+                    "leftValue": "={{ $json.output.commands_requested }}",
+                    "rightValue": "dd ",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "dd"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "18c85785-9b69-44cc-9be1-308dd9d1f691",
+                    "leftValue": "={{ $json.output.commands_requested }}",
+                    "rightValue": "fdisk",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "fdisk"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "9fcb4488-a0ba-423a-ae12-e16e5065f16d",
+                    "leftValue": "={{ $json.output.commands_requested }}",
+                    "rightValue": "shutdown",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "shutdown"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "d0a81236-018b-46d9-bd99-ea4d0399ab30",
+                    "leftValue": "={{ $json.output.commands_requested }}",
+                    "rightValue": "chmod",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "chmod"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "b7d4bee1-bd20-4251-aa12-78ea9da69f8a",
+                    "leftValue": "={{ $json.output.commands_requested }}",
+                    "rightValue": "remove",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "remove"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        9520,
+        -976
+      ],
+      "id": "4b7a5a76-b328-4977-a98c-a415a4207cc8",
+      "name": "Protec3"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=**SERVICE CONFIGURATION:**\n- **Domain**: {{ $json.DOMAIN }}\n- **Path**: {{ $json.PATH }}\n- **Service Name**: {{ $json.SERVICE_NAME }}\n- **Container**: {{ $json.CONTAINER_NAME }}\n- **Internal Port**: {{ $json.INTERNAL_PORT }}\n- **External Port**: {{ $json.EXTERNAL_PORT }}\n- **Critical**: {{ $json.CRITICAL }}\n\n**COMPREHENSIVE DIAGNOSTICS:**\n```bash\n# Container diagnostics\ndocker ps | grep {{ $json.CONTAINER_NAME }}\ndocker logs {{ $json.CONTAINER_NAME }} --tail=20 --since=\"5m\"\ndocker stats {{ $json.CONTAINER_NAME }} --no-stream\ndocker inspect {{ $json.CONTAINER_NAME }}\n\n# Internal service test\ndocker exec {{ $json.CONTAINER_NAME }} curl -f http://localhost:{{ $json.INTERNAL_PORT }}/ || echo \"❌ Internal service unhealthy\"\n\n# Network diagnostics\ndocker network ls | grep {{ $json.NETWORK }}\ndocker network inspect {{ $json.NETWORK }}\ndocker exec {{ $json.CONTAINER_NAME }} ping -c 3 caddy\n\n# Infrastructure dependencies\nsudo systemctl status cloudflared\nsudo systemctl status docker\ndocker ps | grep caddy\ndocker logs caddy --tail=20 --since=\"5m\"\n\n# Port connectivity\nnetstat -tlnp | grep :{{ $json.EXTERNAL_PORT }}\ndocker port {{ $json.CONTAINER_NAME }}\n```\n\n\nSERVICE-SPECIFIC DIAGNOSTICS:\n```bash\n# Check service health endpoint (if available)\ncurl -f http://localhost:{{ $json.EXTERNAL_PORT }}/health || echo \"❌ Health endpoint failed\"\n\n# Check service metrics (if available)\ncurl -f http://localhost:{{ $json.EXTERNAL_PORT }}/metrics || echo \"❌ Metrics endpoint failed\"\n\n# Check service logs for errors\ndocker logs {{ $json.CONTAINER_NAME }} --tail=50 | grep -i error\ndocker logs {{ $json.CONTAINER_NAME }} --tail=50 | grep -i exception\n```\n\nThe service https://{{ $json.DOMAIN }}{{ $json.PATH }} is down. Please run comprehensive diagnostics to identify the root cause and recommend specific repair actions.",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=# Diagnostics Specialist\n\nYou are a Diagnostics Specialist. Your job is to investigate WHY a service is down.\n\n**TASK**: Run comprehensive diagnostics to identify the root cause.\n\n**DIAGNOSTIC APPROACH**:\n1. Check container health and logs\n2. Verify network connectivity\n3. Test internal service endpoints\n4. Check infrastructure dependencies\n5. Identify specific failure points\n\n**OUTPUT FORMAT**: Return JSON with detailed diagnostics and recommended fixes.ail=20 --since=\"5m\"\ndocker stats {{ $json.CONTAINER_NAME }} --no-stream\ndocker inspect {{ $json.CONTAINER_NAME }}\n\n# Internal service test\ndocker exec {{ $json.CONTAINER_NAME }} curl -f http://localhost:{{ $json.INTERNAL_PORT }}/ || echo \"❌ Internal service unhealthy\"\n\n# Network diagnostics\ndocker network ls | grep {{ $json.NETWORK }}\ndocker network inspect {{ $json.NETWORK }}\ndocker exec {{ $json.CONTAINER_NAME }} ping -c 3 caddy\n\n# Infrastructure dependencies\nsudo systemctl status cloudflared\nsudo systemctl status docker\ndocker ps | grep caddy\ndocker logs caddy --tail=20 --since=\"5m\"\n\n# Port connectivity\nnetstat -tlnp | grep :{{ $json.EXTERNAL_PORT }}\ndocker port {{ $json.CONTAINER_NAME }}\n```\n\n**SERVICE-SPECIFIC DIAGNOSTICS:**\n```bash\n# Check service health endpoint (if available)\ncurl -f http://localhost:{{ $json.EXTERNAL_PORT }}/health || echo \"❌ Health endpoint failed\"\n\n# Check service metrics (if available)\ncurl -f http://localhost:{{ $json.EXTERNAL_PORT }}/metrics || echo \"❌ Metrics endpoint failed\"\n\n# Check service logs for errors\ndocker logs {{ $json.CONTAINER_NAME }} --tail=50 | grep -i error\ndocker logs {{ $json.CONTAINER_NAME }} --tail=50 | grep -i exception\n```\n\nThe service https://{{ $json.DOMAIN }}{{ $json.PATH }} is down. Please run comprehensive diagnostics to identify the root cause and recommend specific repair actions.",
+          "maxIterations": 20
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        8736,
+        -336
+      ],
+      "id": "20630c6a-f8b4-4dc5-a95a-ad0643d8156e",
+      "name": "Patchrick3"
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-4.1",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        8576,
+        -144
+      ],
+      "id": "74d12201-77cc-45ce-9e2f-0eb6cd43bafa",
+      "name": "OpenRouter Chat Model3",
+      "credentials": {
+        "openRouterApi": {
+          "id": "FZgAaEbcwLSBBkNI",
+          "name": "OpenRouter - chrislawrencedev@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Compile Service Config').item.json.CHATID }}",
+        "contextWindowLength": 30
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        8704,
+        -64
+      ],
+      "id": "71b6ec22-e599-4e61-89ff-0aa7d159ce8d",
+      "name": "Simple Memory3"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Test website connectivity and validate content",
+        "url": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('URL', ``, 'string') }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "CF-Access-Client-Id",
+              "value": "e30ba28d1cc64259437ab19f1a1fdc52.access"
+            },
+            {
+              "name": "CF-Access-Client-Secret",
+              "value": "1d3812daaa0cf93e72aeee6945fc34116c463071ecf204fd63be4a51ac08de6a"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        8832,
+        -32
+      ],
+      "id": "0b883cdf-085d-421a-9af8-f6ea5dbbc59c",
+      "name": "Visit Website3"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n    \"phase2\": {\n        \"root_cause\": \"Container stopped/Network issue/Port conflict/Service error/Infrastructure down\",\n        \"severity\": \"critical/high/medium/low\",\n        \"diagnostics\": {\n            \"container_status\": \"running/stopped/unhealthy\",\n            \"container_logs\": \"Recent error messages\",\n            \"network_connectivity\": \"connected/disconnected\",\n            \"infrastructure_status\": \"up/down/partial\",\n            \"port_accessibility\": \"accessible/blocked/conflict\"\n        },\n        \"recommended_commands\": [\n            \"docker restart {{ $json.CONTAINER_NAME }}\",\n            \"docker restart caddy\",\n            \"sudo systemctl restart cloudflared\"\n        ],\n        \"next_phase\": \"repair/skip\",\n        \"estimated_repair_time\": \"30s/2m/5m\",\n        \"applied_fix\": false,\n        \"needs_approval\": true,\n        \"commands_requested\": \"docker restart {{ $json.CONTAINER_NAME }} && docker restart caddy\",\n        \"tunnel_status\": \"active/inactive/error\",\n        \"tunnel_message\": \"Tunnel status from diagnostics\"\n    }\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        9056,
+        -112
+      ],
+      "id": "8aeac383-cfc7-4675-95bb-a78c3ef86352",
+      "name": "Structured Output Parser1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "8e53da8d-07a6-44a9-9095-1918bea0e6af",
+              "leftValue": "={{ $json.output.phase1.needs_approval }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        9264,
+        -336
+      ],
+      "id": "bff78913-7a81-4bd6-a893-026feb0eb607",
+      "name": "Needs Approval?3"
+    },
+    {
+      "parameters": {
+        "description": "Use this tool to run commands on the server for troubleshooting purposes.",
+        "workflowId": {
+          "__rl": true,
+          "value": "Or9qzM2R2U3ZyvFY",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/Or9qzM2R2U3ZyvFY",
+          "cachedResultName": "SSH Tailscale Homelab"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "command": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('command', ``, 'string') }}"
+          },
+          "matchingColumns": [
+            "command"
+          ],
+          "schema": [
+            {
+              "id": "command",
+              "displayName": "command",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        8944,
+        -64
+      ],
+      "id": "160349fc-cc20-4256-9c6a-d14177ad74fb",
+      "name": "SSH Execute Command Remote1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c9f63b23-2108-4c17-bdc0-a61f4e5ad3ad",
+              "name": "SERVICE_INDEX",
+              "value": "={{ $('Set Prompt').item.json.SERVICE_INDEX }}",
+              "type": "number"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        9072,
+        -336
+      ],
+      "id": "c3df1e7f-7727-42a9-ad1c-a65e0019115a",
+      "name": "Store Output1"
+    },
+    {
+      "parameters": {
+        "chatId": "7062419334",
+        "text": "=✅ **Service Operational: {{ $('Set Service Config').item.json.SERVICE_NAME }} ** ✅\n\nHey Chris,\n\nGreat news! **{{ $('Set Service Config').item.json.SERVICE_NAME }}** is fully operational.\n\n**Service Details:**\n- URL: {{ $json.output.phase1.service_url }}\n- Status: {{ $json.output.phase1.status }}\n- HTTP Code: {{ $json.output.phase1.http_code }}\n- Response Time: {{ $json.output.phase1.response_time }}s\n- Container: {{ $json.output.phase1.container_status }}\n\n**Health Check Results:**\n- Content Verified: {{ $json.output.phase1.content_verified ? '✅ Yes' : '❌ No' }}\n- Fix Applied: {{ $json.output.phase1.applied_fix ? '✅ Yes' : '❌ No' }}\n- Critical Service: {{ $json.output.phase1.critical ? '⚠️ Yes' : '✅ No' }}\n\n**Message:** {{ $json.output.phase1.message }}\n\n{{ $json.output.phase1.tunnel_status !== 'not_required' ? '**Tunnel Status:** ' + $json.output.phase1.tunnel_status + '\\n**Tunnel Message:** ' + $json.output.phase1.tunnel_message : '' }}\n\n---\n*Generated by Patchrick at {{ new Date().toISOString() }}*",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        9824,
+        -528
+      ],
+      "id": "d51a35dc-6692-498d-8c03-c9c8e99e9c32",
+      "name": "Success Message1",
+      "webhookId": "4fa2b3de-97e3-4c79-bb9a-3a0b49e7beac",
+      "credentials": {
+        "telegramApi": {
+          "id": "z7E2ywu9KGF1tnrX",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "7062419334",
+        "text": "=❌ **Service Alert: {{ $json.SERVICE_NAME }} Issues Detected** ❌\n\nHey Chris,\n\nPatchrick has detected issues with {{ $json.SERVICE_NAME }}****.\n\n**Service Details:**\n- URL: {{ $json.output.phase1.service_url }}\n- Status: {{ $json.output.phase1.status }}\n- HTTP Code: {{ $json.output.phase1.http_code }}\n- Response Time: {{ $json.output.phase1.response_time }}s\n- Container: {{ $json.output.phase1.container_status }}\n\n**Issue Analysis:**\n- Content Verified: {{ $json.output.phase1.content_verified ? '✅ Yes' : '❌ No' }}\n- Fix Applied: {{ $json.output.phase1.applied_fix ? '✅ Yes' : '❌ No' }}\n- Critical Service: {{ $json.output.phase1.critical ? '⚠️ Yes - IMMEDIATE ATTENTION REQUIRED' : '✅ No' }}\n\n**Message:** {{ $json.output.phase1.message }}\n\n**Next Steps:** {{ $json.output.phase1.next_phase === 'diagnostics' ? 'Proceeding to Diagnostics Phase.' : 'No further automated action planned.' }}\n\n{{ $json.output.phase1.tunnel_status !== 'not_required' ? '**Tunnel Status:** ' + $json.output.phase1.tunnel_status + '\\n**Tunnel Message:** ' + $json.output.phase1.tunnel_message : '' }}\n\n---\n*Generated by Patchrick at {{ new Date().toISOString() }}*",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        9824,
+        -304
+      ],
+      "id": "a06dc7ca-4d45-4b00-92c3-7e40bb43f24a",
+      "name": "Failure Message1",
+      "webhookId": "a8277d40-f014-422a-8bf7-991b38be9be4",
+      "credentials": {
+        "telegramApi": {
+          "id": "z7E2ywu9KGF1tnrX",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "chatId": "7062419334",
+        "message": "=🚨🚨🚨 **CRITICAL APPROVAL REQUIRED** 🚨🚨🚨\n\nChris!\n\nPatchrick has encountered a critical situation with **{{ $json.constants.SERVICES.portfolio.SERVICE_NAME }}** and **URGENTLY NEEDS YOUR APPROVAL** for these commands:\n\n```bash\n{{ $json.output.phase1.commands_requested }}\n```\n\n**Situation Details:**\n- Service: {{ $json.output.phase1.service_url }}\n- Status: {{ $json.output.phase1.status }}\n- HTTP Code: {{ $json.output.phase1.http_code }}\n- Critical: {{ $json.output.phase1.critical ? 'YES - IMMEDIATE ACTION REQUIRED' : 'No' }}\n\n**Reason:** {{ $json.output.phase1.message }}\n\n**Situation FUBAR - Your immediate action is required!**\n\n- Patchrick",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        9824,
+        -768
+      ],
+      "id": "c474f292-a11e-47aa-bea1-36d262e958cb",
+      "name": "Danger Approval Message1",
+      "webhookId": "697ad757-2d65-4c04-991a-dbc557319509",
+      "credentials": {
+        "telegramApi": {
+          "id": "z7E2ywu9KGF1tnrX",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "chatId": "7062419334",
+        "message": "=🚨 **Approval Required: {{ $json.output.phase1.service_url }}** 🚨\n\nHey Chris,\n\nPatchrick needs your approval to run the following command(s) for **{{ $json.constants.SERVICES.portfolio.SERVICE_NAME }}**:\n\n```bash\n{{ $json.output.phase1.commands_requested }}\n```\n\n**Reason:** {{ $json.output.phase1.message }}\n\n**Service Details:**\n- Status: {{ $json.output.phase1.status }}\n- HTTP Code: {{ $json.output.phase1.http_code }}\n- Response Time: {{ $json.output.phase1.response_time }}s\n- Critical: {{ $json.output.phase1.critical ? 'Yes' : 'No' }}\n\nPlease review and approve to proceed.\n\n- Patchrick",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        9824,
+        -976
+      ],
+      "id": "122ac89e-7a2c-4b8a-9fcd-ea527f8baa05",
+      "name": "Sudo Approval Message1",
+      "webhookId": "ffecc262-a82e-486e-bf9a-1b10b25291bd",
+      "credentials": {
+        "telegramApi": {
+          "id": "z7E2ywu9KGF1tnrX",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "717deb2c-0995-4e31-98f5-2637cfd0efa8",
+                    "leftValue": "={{ $json.output.phase1.status }}",
+                    "rightValue": "=/ [up] || [UP] /",
+                    "operator": {
+                      "type": "string",
+                      "operation": "regex"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "up"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "6cd63cf0-98ef-4c20-9638-cf46e3949931",
+                    "leftValue": "={{ $json.output.phase1.status }}",
+                    "rightValue": "/ [down] || [DOWN] /",
+                    "operator": {
+                      "type": "string",
+                      "operation": "regex"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "down"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        9520,
+        -320
+      ],
+      "id": "8a79dd30-1873-44d0-baea-6a1307452c59",
+      "name": "Status?1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0e4907ab-10d1-4ce3-b00d-4e121d31a550",
+              "name": "SERVICE_INDEX",
+              "value": "={{ $('Status?1').item.json.SERVICE_INDEX }}",
+              "type": "string"
+            },
+            {
+              "id": "6455735f-3afc-44fe-b7c3-16b0d7f518cf",
+              "name": "PROMPT",
+              "value": "=# Phase 2: Diagnostics Required\n\n**Service Status**: ❌ DOWN\n**Service**: {{ $('Store Output1').item.json.output.phase1.service_url }}\n**Status**: {{ $('Store Output1').item.json.output.phase1.status }}\n**HTTP Code**: {{ $('Store Output1').item.json.output.phase1.http_code }}\n**Container**: {{ $('Store Output1').item.json.output.phase1.container_status }}\n\n**Phase 1 Results**:\n- Content Verified: {{ $('Store Output1').item.json.output.phase1.content_verified }}\n- Critical Service: {{ $('Store Output1').item.json.output.phase1.critical }}\n- Message: {{ $('Store Output1').item.json.output.phase1.message }}\n\n**Next Phase**: Comprehensive diagnostics to identify root cause and recommend repair actions.\n\n**Service Configuration**:\n- Container: {{ $('Compile Service Config').item.json.SERVICE_CONFIG.CONTAINER_NAME }}\n- Internal Port: {{ $('Compile Service Config').item.json.SERVICE_CONFIG.INTERNAL_PORT }}\n- External Port: {{ $('Compile Service Config').item.json.SERVICE_CONFIG.EXTERNAL_PORT }}",
+              "type": "string"
+            },
+            {
+              "id": "c26893fa-6707-4431-bdc9-ccb5ec0affc0",
+              "name": "CHATID",
+              "value": "={{ $('Compile Service Config').item.json.CHATID }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        10064,
+        -304
+      ],
+      "id": "b571a549-cc7a-403a-b303-0142fea1856c",
+      "name": "Failure Path1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "daf7cd9a-72e4-4552-b719-6e030b8bea18",
+              "name": "SERVICE_INDEX",
+              "value": "={{ $('Status?1').item.json.SERVICE_INDEX }}",
+              "type": "number"
+            },
+            {
+              "id": "6455735f-3afc-44fe-b7c3-16b0d7f518cf",
+              "name": "PROMPT",
+              "value": "=# Service Monitoring Complete - Success\n\n**Service Status**: ✅ OPERATIONAL\n**Service**: {{ $('Store Output1').item.json.output.phase1.service_url }}\n**Status**: {{ $('Store Output1').item.json.output.phase1.status }}\n**Response Time**: {{ $('Store Output1').item.json.output.phase1.response_time }}s\n\n**Next Action**: Moving to next service in monitoring cycle.\n\n**Summary**: {{ $('Store Output1').item.json.output.phase1.message }}",
+              "type": "string"
+            },
+            {
+              "id": "c26893fa-6707-4431-bdc9-ccb5ec0affc0",
+              "name": "CHATID",
+              "value": "={{ $('Compile Service Config').item.json.CHATID }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        10064,
+        -528
+      ],
+      "id": "0b5160a2-ce7f-4143-a5ca-9a3100479326",
+      "name": "Success Path1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6455735f-3afc-44fe-b7c3-16b0d7f518cf",
+              "name": "PROMPT",
+              "value": "=# Service Monitoring Complete - Success\n\n**Service Status**: ✅ OPERATIONAL\n**Service**: {{ $json.output.phase1.service_url }}\n**Status**: {{ $json.output.phase1.status }}\n**Response Time**: {{ $json.output.phase1.response_time }}s\n\n**Next Action**: Moving to next service in monitoring cycle.\n\n**Summary**: {{ $json.output.phase1.message }}",
+              "type": "string"
+            },
+            {
+              "id": "c26893fa-6707-4431-bdc9-ccb5ec0affc0",
+              "name": "CHATID",
+              "value": "={{ $('Compile Service Config').item.json.CHATID }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        11536,
+        -784
+      ],
+      "id": "8b94176d-c6b5-4976-a6b1-55aa14480400",
+      "name": "Reset Prompt4"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "e6edecae-4efe-4cc3-82db-095d8f603894",
+                    "leftValue": "={{ $json.output.commands_requested }}{{ $('Patchrick4').item.json.output.phase1.commands_requested }}",
+                    "rightValue": "docker",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "docker"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.output.commands_requested }}",
+                    "rightValue": "sudo",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "41e68c38-110e-4dda-928f-3c0c865b3085"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "sudo"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "ccee22fb-266c-4dc9-8dd9-65e2b1b1f97c",
+                    "leftValue": "={{ $json.output.commands_requested }}",
+                    "rightValue": "rm ",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "rm"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "b546eb9d-da7f-4516-b38b-353016afdeb2",
+                    "leftValue": "={{ $json.output.commands_requested }}",
+                    "rightValue": "kill",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "kill"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "806f941a-8139-4716-a01b-1c33babb1c31",
+                    "leftValue": "={{ $json.output.commands_requested }}",
+                    "rightValue": "mkfs",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "mkfs"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "d1e811c3-1316-4f1e-b183-708a0110e7c2",
+                    "leftValue": "={{ $json.output.commands_requested }}",
+                    "rightValue": "dd ",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "dd"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "18c85785-9b69-44cc-9be1-308dd9d1f691",
+                    "leftValue": "={{ $json.output.commands_requested }}",
+                    "rightValue": "fdisk",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "fdisk"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "9fcb4488-a0ba-423a-ae12-e16e5065f16d",
+                    "leftValue": "={{ $json.output.commands_requested }}",
+                    "rightValue": "shutdown",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "shutdown"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "d0a81236-018b-46d9-bd99-ea4d0399ab30",
+                    "leftValue": "={{ $json.output.commands_requested }}",
+                    "rightValue": "chmod",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "chmod"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "b7d4bee1-bd20-4251-aa12-78ea9da69f8a",
+                    "leftValue": "={{ $json.output.commands_requested }}",
+                    "rightValue": "remove",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "remove"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        10992,
+        -992
+      ],
+      "id": "99aadb74-7bce-4be3-a75f-1460600624e9",
+      "name": "Protec4"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=**SERVICE CONFIGURATION:**\n- **Domain**: {{ $json.DOMAIN }}\n- **Path**: {{ $json.PATH }}\n- **Service Name**: {{ $json.SERVICE_NAME }}\n- **Container**: {{ $json.CONTAINER_NAME }}\n- **Internal Port**: {{ $json.INTERNAL_PORT }}\n- **External Port**: {{ $json.EXTERNAL_PORT }}\n- **Critical**: {{ $json.CRITICAL }}\n\n**APPROVED REPAIR COMMANDS:**\n{{ $json.APPROVED_COMMANDS }}\n\n**REPAIR EXECUTION:**\n```bash\n# Execute approved commands\n{{ $json.APPROVED_COMMANDS }}\n\n# Wait for services to stabilize\nsleep 30\n\n# Verify container is running\ndocker ps | grep {{ $json.CONTAINER_NAME }}\n\n# Test internal connectivity\ndocker exec {{ $json.CONTAINER_NAME }} curl -f http://localhost:{{ $json.INTERNAL_PORT }}/ || echo \"❌ Internal service still unhealthy\"\n```\n\nFINAL VERIFICATION:\n```bash\n# Test public accessibility\ncurl -I https://{{ $json.DOMAIN }}{{ $json.PATH }} -w \"Time: %{time_total}s\\n\"\n\n# Test local accessibility\ncurl -I http://localhost:80{{ $json.PATH }} -H \"Host: {{ $json.DOMAIN }}\"\n\n# Verify content is served\ncurl -s https://{{ $json.DOMAIN }}{{ $json.PATH }} | grep -q \"{{ $json.EXPECTED_CONTENT }}\" && echo \"✅ Content verified\" || echo \"❌ Content missing\"\n```\n\nPlease execute the approved repair commands and verify that https://{{ $json.DOMAIN }}{{ $json.PATH }} is now operational.",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=# Repair Specialist\n\nYou are a Repair Specialist. Your job is to fix issues identified by diagnostics.\n\n**TASK**: Execute approved repair commands and verify the fix worked.\n\n**REPAIR PROTOCOL**:\n1. Execute approved commands in sequence\n2. Wait for services to stabilize\n3. Verify the fix worked\n4. Test end-to-end connectivity\n5. Report final status\n\n**OUTPUT FORMAT**: Return JSON with repair results and final status. },\n        \"next_phase\": \"end\",\n        \"escalation_required\": false,\n        \"repair_time\": \"30s/2m/5m\"\n    }\n}",
+          "maxIterations": 20
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        10208,
+        -352
+      ],
+      "id": "dff4ca90-7c19-4e7a-920d-af02933169de",
+      "name": "Patchrick4"
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-4.1",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        10048,
+        -160
+      ],
+      "id": "1f95cd4d-8908-412e-9c5c-37fc5661994d",
+      "name": "OpenRouter Chat Model4",
+      "credentials": {
+        "openRouterApi": {
+          "id": "FZgAaEbcwLSBBkNI",
+          "name": "OpenRouter - chrislawrencedev@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Compile Service Config').item.json.CHATID }}",
+        "contextWindowLength": 30
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        10176,
+        -80
+      ],
+      "id": "6a02c756-6164-41cb-ad4a-b2a80c3da4e7",
+      "name": "Simple Memory4"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Test website connectivity and validate content",
+        "url": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('URL', ``, 'string') }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "CF-Access-Client-Id",
+              "value": "e30ba28d1cc64259437ab19f1a1fdc52.access"
+            },
+            {
+              "name": "CF-Access-Client-Secret",
+              "value": "1d3812daaa0cf93e72aeee6945fc34116c463071ecf204fd63be4a51ac08de6a"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        10304,
+        -48
+      ],
+      "id": "1fdc06b1-0732-463e-8e4c-ff509cb7428f",
+      "name": "Visit Website4"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n    \"phase3\": {\n        \"repair_successful\": true/false,\n        \"final_status\": \"up/down/partial\",\n        \"http_code\": 200,\n        \"response_time\": 0.234,\n        \"message\": \"Service repaired successfully\",\n        \"verification_results\": {\n            \"public_access\": \"up/down\",\n            \"local_access\": \"up/down\",\n            \"content_verified\": true/false,\n            \"container_healthy\": true/false\n        },\n        \"next_phase\": \"end\",\n        \"escalation_required\": false,\n        \"repair_time\": \"30s/2m/5m\",\n        \"applied_fix\": true,\n        \"needs_approval\": false,\n        \"commands_requested\": null,\n        \"tunnel_status\": \"active/inactive/error\",\n        \"tunnel_message\": \"Tunnel status after repair\"\n    }\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        10528,
+        -128
+      ],
+      "id": "d016fa5a-391e-44b2-b832-bbff977da9a7",
+      "name": "Structured Output Parser3"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "8e53da8d-07a6-44a9-9095-1918bea0e6af",
+              "leftValue": "={{ $json.output.phase1.needs_approval }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        10736,
+        -352
+      ],
+      "id": "0f1400c0-a44a-48b4-adb4-729bd1849e76",
+      "name": "Needs Approval?4"
+    },
+    {
+      "parameters": {
+        "description": "Use this tool to run commands on the server for troubleshooting purposes.",
+        "workflowId": {
+          "__rl": true,
+          "value": "Or9qzM2R2U3ZyvFY",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/Or9qzM2R2U3ZyvFY",
+          "cachedResultName": "SSH Tailscale Homelab"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "command": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('command', ``, 'string') }}"
+          },
+          "matchingColumns": [
+            "command"
+          ],
+          "schema": [
+            {
+              "id": "command",
+              "displayName": "command",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        10416,
+        -80
+      ],
+      "id": "a2cc1247-0314-4e77-af56-1ad8093ea338",
+      "name": "SSH Execute Command Remote2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c9f63b23-2108-4c17-bdc0-a61f4e5ad3ad",
+              "name": "SERVICE_INDEX",
+              "value": "={{ $('Set Prompt').item.json.SERVICE_INDEX }}",
+              "type": "number"
+            },
+            {
+              "id": "51fd18bb-b818-4f70-8624-bc7c95021226",
+              "name": "constants",
+              "value": "={{ $('Homelab Services Constants').item.json.constants }}",
+              "type": "object"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        10544,
+        -352
+      ],
+      "id": "5c5456f6-b68f-4174-b7b5-e399b47be8b7",
+      "name": "Store Output2"
+    },
+    {
+      "parameters": {
+        "chatId": "7062419334",
+        "text": "=✅ **Service Operational: {{ $('Set Service Config').item.json.SERVICE_NAME }} ** ✅\n\nHey Chris,\n\nGreat news! **{{ $('Set Service Config').item.json.SERVICE_NAME }}** is fully operational.\n\n**Service Details:**\n- URL: {{ $json.output.phase1.service_url }}\n- Status: {{ $json.output.phase1.status }}\n- HTTP Code: {{ $json.output.phase1.http_code }}\n- Response Time: {{ $json.output.phase1.response_time }}s\n- Container: {{ $json.output.phase1.container_status }}\n\n**Health Check Results:**\n- Content Verified: {{ $json.output.phase1.content_verified ? '✅ Yes' : '❌ No' }}\n- Fix Applied: {{ $json.output.phase1.applied_fix ? '✅ Yes' : '❌ No' }}\n- Critical Service: {{ $json.output.phase1.critical ? '⚠️ Yes' : '✅ No' }}\n\n**Message:** {{ $json.output.phase1.message }}\n\n{{ $json.output.phase1.tunnel_status !== 'not_required' ? '**Tunnel Status:** ' + $json.output.phase1.tunnel_status + '\\n**Tunnel Message:** ' + $json.output.phase1.tunnel_message : '' }}\n\n---\n*Generated by Patchrick at {{ new Date().toISOString() }}*",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        11296,
+        -544
+      ],
+      "id": "13c7b96f-8c34-4e36-a1df-74afe47cfe46",
+      "name": "Success Message2",
+      "webhookId": "4fa2b3de-97e3-4c79-bb9a-3a0b49e7beac",
+      "credentials": {
+        "telegramApi": {
+          "id": "z7E2ywu9KGF1tnrX",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "7062419334",
+        "text": "=❌ **Service Alert: {{ $('Set Service Config').item.json.SERVICE_NAME }} Issues Detected** ❌\n\nHey Chris,\n\nPatchrick has detected issues with {{ $('Set Service Config').item.json.SERVICE_NAME }}****.\n\n**Service Details:**\n- URL: {{ $json.output.phase1.service_url }}\n- Status: {{ $json.output.phase1.status }}\n- HTTP Code: {{ $json.output.phase1.http_code }}\n- Response Time: {{ $json.output.phase1.response_time }}s\n- Container: {{ $json.output.phase1.container_status }}\n\n**Issue Analysis:**\n- Content Verified: {{ $json.output.phase1.content_verified ? '✅ Yes' : '❌ No' }}\n- Fix Applied: {{ $json.output.phase1.applied_fix ? '✅ Yes' : '❌ No' }}\n- Critical Service: {{ $json.output.phase1.critical ? '⚠️ Yes - IMMEDIATE ATTENTION REQUIRED' : '✅ No' }}\n\n**Message:** {{ $json.output.phase1.message }}\n\n**Next Steps:** {{ $json.output.phase1.next_phase === 'diagnostics' ? 'Proceeding to Diagnostics Phase.' : 'No further automated action planned.' }}\n\n{{ $json.output.phase1.tunnel_status !== 'not_required' ? '**Tunnel Status:** ' + $json.output.phase1.tunnel_status + '\\n**Tunnel Message:** ' + $json.output.phase1.tunnel_message : '' }}\n\n---\n*Generated by Patchrick at {{ new Date().toISOString() }}*",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        11296,
+        -320
+      ],
+      "id": "35c5e197-862e-40a3-80a3-171c5a924f7f",
+      "name": "Failure Message2",
+      "webhookId": "a8277d40-f014-422a-8bf7-991b38be9be4",
+      "credentials": {
+        "telegramApi": {
+          "id": "z7E2ywu9KGF1tnrX",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "chatId": "7062419334",
+        "message": "=🚨🚨🚨 **CRITICAL APPROVAL REQUIRED** 🚨🚨🚨\n\nChris!\n\nPatchrick has encountered a critical situation with **{{ $json.constants.SERVICES.portfolio.SERVICE_NAME }}** and **URGENTLY NEEDS YOUR APPROVAL** for these commands:\n\n```bash\n{{ $json.output.phase1.commands_requested }}\n```\n\n**Situation Details:**\n- Service: {{ $json.output.phase1.service_url }}\n- Status: {{ $json.output.phase1.status }}\n- HTTP Code: {{ $json.output.phase1.http_code }}\n- Critical: {{ $json.output.phase1.critical ? 'YES - IMMEDIATE ACTION REQUIRED' : 'No' }}\n\n**Reason:** {{ $json.output.phase1.message }}\n\n**Situation FUBAR - Your immediate action is required!**\n\n- Patchrick",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        11296,
+        -784
+      ],
+      "id": "2af952f8-6b5a-46b1-ac4f-a5c5f36dab69",
+      "name": "Danger Approval Message2",
+      "webhookId": "697ad757-2d65-4c04-991a-dbc557319509",
+      "credentials": {
+        "telegramApi": {
+          "id": "z7E2ywu9KGF1tnrX",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "chatId": "7062419334",
+        "message": "=🚨 **Approval Required: {{ $json.output.phase1.service_url }}** 🚨\n\nHey Chris,\n\nPatchrick needs your approval to run the following command(s) for **{{ $json.constants.SERVICES.portfolio.SERVICE_NAME }}**:\n\n```bash\n{{ $json.output.phase1.commands_requested }}\n```\n\n**Reason:** {{ $json.output.phase1.message }}\n\n**Service Details:**\n- Status: {{ $json.output.phase1.status }}\n- HTTP Code: {{ $json.output.phase1.http_code }}\n- Response Time: {{ $json.output.phase1.response_time }}s\n- Critical: {{ $json.output.phase1.critical ? 'Yes' : 'No' }}\n\nPlease review and approve to proceed.\n\n- Patchrick",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        11296,
+        -992
+      ],
+      "id": "e004e7bc-b641-45e9-8e1c-5f99684bdb74",
+      "name": "Sudo Approval Message2",
+      "webhookId": "ffecc262-a82e-486e-bf9a-1b10b25291bd",
+      "credentials": {
+        "telegramApi": {
+          "id": "z7E2ywu9KGF1tnrX",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "717deb2c-0995-4e31-98f5-2637cfd0efa8",
+                    "leftValue": "={{ $json.output.phase1.status }}",
+                    "rightValue": "=/ [up] || [UP] /",
+                    "operator": {
+                      "type": "string",
+                      "operation": "regex"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "up"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "6cd63cf0-98ef-4c20-9638-cf46e3949931",
+                    "leftValue": "={{ $json.output.phase1.status }}",
+                    "rightValue": "/ [down] || [DOWN] /",
+                    "operator": {
+                      "type": "string",
+                      "operation": "regex"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "down"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        10992,
+        -336
+      ],
+      "id": "563045fd-2a5c-4a7e-b9a6-7d433e3779c5",
+      "name": "Status?2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0e4907ab-10d1-4ce3-b00d-4e121d31a550",
+              "name": "SERVICE_INDEX",
+              "value": "={{ $('Status?2').item.json.SERVICE_INDEX }}",
+              "type": "string"
+            },
+            {
+              "id": "6455735f-3afc-44fe-b7c3-16b0d7f518cf",
+              "name": "PROMPT",
+              "value": "=# Phase 2: Diagnostics Required\n\n**Service Status**: ❌ DOWN\n**Service**: {{ $('Store Output2').item.json.output.phase1.service_url }}\n**Status**: {{ $('Store Output2').item.json.output.phase1.status }}\n**HTTP Code**: {{ $('Store Output2').item.json.output.phase1.http_code }}\n**Container**: {{ $('Store Output2').item.json.output.phase1.container_status }}\n\n**Phase 1 Results**:\n- Content Verified: {{ $('Store Output2').item.json.output.phase1.content_verified }}\n- Critical Service: {{ $('Store Output2').item.json.output.phase1.critical }}\n- Message: {{ $('Store Output2').item.json.output.phase1.message }}\n\n**Next Phase**: Comprehensive diagnostics to identify root cause and recommend repair actions.\n\n**Service Configuration**:\n- Container: {{ $('Compile Service Config').item.json.SERVICE_CONFIG.CONTAINER_NAME }}\n- Internal Port: {{ $('Compile Service Config').item.json.SERVICE_CONFIG.INTERNAL_PORT }}\n- External Port: {{ $('Compile Service Config').item.json.SERVICE_CONFIG.EXTERNAL_PORT }}",
+              "type": "string"
+            },
+            {
+              "id": "c26893fa-6707-4431-bdc9-ccb5ec0affc0",
+              "name": "CHATID",
+              "value": "={{ $('Compile Service Config').item.json.CHATID }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        11536,
+        -320
+      ],
+      "id": "73c3145d-bb2e-4f56-9b54-fdc203bb5b1d",
+      "name": "Failure Path2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "daf7cd9a-72e4-4552-b719-6e030b8bea18",
+              "name": "SERVICE_INDEX",
+              "value": "={{ $('Status?2').item.json.SERVICE_INDEX }}",
+              "type": "number"
+            },
+            {
+              "id": "6455735f-3afc-44fe-b7c3-16b0d7f518cf",
+              "name": "PROMPT",
+              "value": "=# Service Monitoring Complete - Success\n\n**Service Status**: ✅ OPERATIONAL\n**Service**: {{ $('Store Output2').item.json.output.phase1.service_url }}\n**Status**: {{ $('Store Output2').item.json.output.phase1.status }}\n**Response Time**: {{ $('Store Output2').item.json.output.phase1.response_time }}s\n\n**Next Action**: Moving to next service in monitoring cycle.\n\n**Summary**: {{ $('Store Output2').item.json.output.phase1.message }}",
+              "type": "string"
+            },
+            {
+              "id": "c26893fa-6707-4431-bdc9-ccb5ec0affc0",
+              "name": "CHATID",
+              "value": "={{ $('Compile Service Config').item.json.CHATID }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        11536,
+        -544
+      ],
+      "id": "d7daae82-1f9d-4822-9473-90d132840ae6",
+      "name": "Success Path2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f5f9fcae-d9ce-412f-b82b-b24b83e145dd",
+              "name": "SERVICE_INDEX",
+              "value": "={{ $json.SERVICE_INDEX }}",
+              "type": "string"
+            },
+            {
+              "id": "a8c98644-6df0-446d-be20-1b8d6eab1ad0",
+              "name": "output",
+              "value": "={{ $json.output }}",
+              "type": "string"
+            },
+            {
+              "id": "f773db89-b4b0-483e-adb8-8c0afd6e8a35",
+              "name": "constants",
+              "value": "={{ $json.constants }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        6912,
+        -768
+      ],
+      "id": "5ec18164-00a8-45c9-93f5-00b3c08a0345",
+      "name": "Reset Prompt5"
+    },
+    {
+      "parameters": {
+        "url": "=https://{{ $json.DOMAIN }}{{ $json.PATH }}",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        5168,
+        -736
+      ],
+      "id": "b84796d7-4feb-41ef-88cf-52eb249e7e01",
+      "name": "HTTP Request",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        5168,
+        -80
+      ],
+      "id": "0fb4de78-fb0c-4abc-bcbf-ac8aeef52c19",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e54e60f2-dd1e-4213-931e-b9523060acab",
+              "name": "response_body",
+              "value": "={{ $json.data}}",
+              "type": "string"
+            },
+            {
+              "id": "72a109bc-b0fb-4c2f-b0c9-d8df10c80538",
+              "name": "SITE_STATUS",
+              "value": "={{ $json.statusCode || $json.error.status }}",
+              "type": "string"
+            },
+            {
+              "id": "58269506-d45e-44e1-b8b4-74e860a4c0fe",
+              "name": "PAGE_TITLE",
+              "value": "={{\n  ((($json.body ?? $json.data) + ''))\n    .match(/<title[^>]*>([^<]*)<\\/title>/i)?.[1]\n    ?.trim() || 'No title found'\n}}\n",
+              "type": "string"
+            },
+            {
+              "id": "606a38f5-b111-41db-b49f-6f395a04bbe9",
+              "name": "META_DESCRIPTION",
+              "value": "={{\n  ((($json.body ?? $json.data) + ''))\n    .match(/<meta\\s+name=[\"']description[\"']\\s+content=[\"']([^\"']*)[\"']/i)?.[1]\n    || ''\n}}\n",
+              "type": "string"
+            },
+            {
+              "id": "f7adb06a-e12d-4073-8fff-a126dd4de480",
+              "name": "URL",
+              "value": "={{ $('Set Service Config').item.json.DOMAIN }}{{ $('Set Service Config').item.json.PATH }}",
+              "type": "string"
+            },
+            {
+              "id": "c83a1b49-bff3-47ac-a904-8beca99b63c3",
+              "name": "HEAD",
+              "value": "={{ ((($json.body ?? $json.data) + '')).slice(0,400).replace(/\\s+/g,' ') }}\n",
+              "type": "string"
+            },
+            {
+              "id": "aeb1c465-d98f-4a66-9753-74d16778bc0a",
+              "name": "TAIL",
+              "value": "={{ ((($json.body ?? $json.data) + '')).slice(-400).replace(/\\s+/g,' ') }}",
+              "type": "string"
+            },
+            {
+              "id": "ce814559-44eb-4420-bb31-50b05e8cdb54",
+              "name": "CONTENT_TYPE",
+              "value": "={{ $json.headers?.['content-type'] || 'unknown' }}",
+              "type": "string"
+            },
+            {
+              "id": "a52fa407-0dc1-4782-96df-42b0189e78ff",
+              "name": "SERVER",
+              "value": "={{ $json.headers?.server || 'unknown' }}\n",
+              "type": "string"
+            },
+            {
+              "id": "ee8f2639-d870-48b1-b020-8475cabba44b",
+              "name": "LENGTH",
+              "value": "={{ $json.headers?.['content-length'] || ((($json.body ?? $json.data) + '').length) }}",
+              "type": "string"
+            },
+            {
+              "id": "0b54adc6-6061-4766-829d-0a1b3c653438",
+              "name": "EXPECTED_CONTENT_PRESENT",
+              "value": "={{ $json.data.includes($('Set Service Config').item.json.EXPECTED_CONTENT) }}",
+              "type": "boolean"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        5168,
+        -512
+      ],
+      "id": "40a3c8ee-d1aa-4c0b-b97e-de0cef5198ab",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "jsCode": "let status = 'OK';\nconst code = $input.first().json.statusCode;\nconst body = (($input.first().json.response_body) + '');\n\nif (!code) status = 'No response';\nelse if (code >= 500) status = 'Server error';\nelse if (code === 404) status = 'Not found';\nelse if (code >= 400) status = 'Client error';\nelse if (!$('Set Service Config').first().json.EXPECTED_CONTENT ? false : !body.includes($('Set Service Config').first().json.EXPECTED_CONTENT)) status = 'Unexpected content';\n\nreturn [{ json: { ...$json, status }}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5168,
+        -288
+      ],
+      "id": "683963e5-4afb-4360-9e63-a78da32f2e61",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        6112,
+        -336
+      ],
+      "id": "52882af2-2e46-4197-b22d-6502729a2738",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        6944,
+        -384
+      ],
+      "id": "f92fd4c3-ba89-4baf-b463-1128f0311820",
+      "name": "Merge2"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        2400,
+        -160
+      ],
+      "id": "db05881d-799b-4b16-b9b0-a0a6c22342d1",
+      "name": "Aggregate1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "69e468a2-c558-44c8-a5e8-583163cbc4a9",
+              "name": "SERVICE_INDEX",
+              "value": 0,
+              "type": "number"
+            },
+            {
+              "id": "c7e94dd8-3d37-450b-bd2f-77f6d340f8cd",
+              "name": "TARGET_SERVICES",
+              "value": "3",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2656,
+        -336
+      ],
+      "id": "d621722a-a553-41e3-901a-39269336fc2d",
+      "name": "Init Service Index1"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "{\n  \"DOMAIN\": \"dev.chrislawrence.ca\",\n  \"TUNNEL_ID\": \"3a9f1023-0d6c-49ff-900d-32403e4309f8\",\n  \"NETWORK\": \"homelab-web\",\n  \"CADDY_CONTAINER\": \"caddy\",\n  \"CLOUDFLARED_SERVICE\": \"cloudflared\",\n  \n  \"SERVICES\": {\n    \"main\": {\n      \"PATH\": \"/\",\n      \"SERVICE_NAME\": \"Main Site\",\n      \"CONTAINER_NAME\": \"caddy\",\n      \"INTERNAL_PORT\": 80,\n      \"EXTERNAL_PORT\": 80,\n      \"EXPECTED_CONTENT\": \"chrislawrence\",\n      \"CRITICAL\": true,\n      \"TIMEOUT\": 5,\n      \"RETRIES\": 3,\n      \"REPAIR_COMMANDS\": [\n        \"docker restart caddy\",\n        \"sudo systemctl restart cloudflared\"\n      ],\n      \"CONTENT_CHECKS\": [\n        \"chrislawrence\",\n        \"Chris Lawrence\"\n      ]\n    },\n    \n    \"portfolio\": {\n      \"PATH\": \"/portfolio/\",\n      \"SERVICE_NAME\": \"Portfolio\",\n      \"CONTAINER_NAME\": \"chrislawrence-portfolio-portfolio\",\n      \"INTERNAL_PORT\": 5000,\n      \"EXTERNAL_PORT\": 8110,\n      \"EXPECTED_CONTENT\": \"Chris Lawrence\",\n      \"CRITICAL\": true,\n      \"TIMEOUT\": 5,\n      \"RETRIES\": 3,\n      \"REPAIR_COMMANDS\": [\n        \"docker restart chrislawrence-portfolio-portfolio\",\n        \"docker restart caddy\",\n        \"sudo systemctl restart cloudflared\"\n      ],\n      \"CONTENT_CHECKS\": [\n        \"Chris Lawrence\",\n        \"Portfolio\",\n        \"Software Developer\"\n      ]\n    },\n    \n    \"capitolscope\": {\n      \"PATH\": \"/capitolscope/\",\n      \"SERVICE_NAME\": \"CapitolScope Frontend\",\n      \"CONTAINER_NAME\": \"capitolscope-frontend\",\n      \"INTERNAL_PORT\": 3000,\n      \"EXTERNAL_PORT\": 8121,\n      \"EXPECTED_CONTENT\": \"CapitolScope\",\n      \"CRITICAL\": false,\n      \"TIMEOUT\": 10,\n      \"RETRIES\": 2,\n      \"REPAIR_COMMANDS\": [\n        \"docker restart capitolscope-frontend\",\n        \"docker restart caddy\"\n      ],\n      \"CONTENT_CHECKS\": [\n        \"CapitolScope\",\n        \"Political Data\"\n      ]\n    },\n    \n    \"capitolscope-api\": {\n      \"PATH\": \"/capitolscope-api/\",\n      \"SERVICE_NAME\": \"CapitolScope API\",\n      \"CONTAINER_NAME\": \"capitolscope-api\",\n      \"INTERNAL_PORT\": 8080,\n      \"EXTERNAL_PORT\": 8120,\n      \"EXPECTED_CONTENT\": \"API\",\n      \"CRITICAL\": false,\n      \"TIMEOUT\": 10,\n      \"RETRIES\": 2,\n      \"REPAIR_COMMANDS\": [\n        \"docker restart capitolscope-api\",\n        \"docker restart caddy\"\n      ],\n      \"CONTENT_CHECKS\": [\n        \"API\",\n        \"CapitolScope\"\n      ]\n    },\n    \n    \"schedshare\": {\n      \"PATH\": \"/schedshare/\",\n      \"SERVICE_NAME\": \"SchedShare\",\n      \"CONTAINER_NAME\": \"schedshare\",\n      \"INTERNAL_PORT\": 3000,\n      \"EXTERNAL_PORT\": 8130,\n      \"EXPECTED_CONTENT\": \"SchedShare\",\n      \"CRITICAL\": false,\n      \"TIMEOUT\": 10,\n      \"RETRIES\": 2,\n      \"REPAIR_COMMANDS\": [\n        \"docker restart schedshare\",\n        \"docker restart caddy\"\n      ],\n      \"CONTENT_CHECKS\": [\n        \"SchedShare\",\n        \"Schedule\"\n      ]\n    },\n    \n    \"magicpages\": {\n      \"PATH\": \"/magicpages/\",\n      \"SERVICE_NAME\": \"MagicPages Frontend\",\n      \"CONTAINER_NAME\": \"magicpages-frontend\",\n      \"INTERNAL_PORT\": 3000,\n      \"EXTERNAL_PORT\": 8101,\n      \"EXPECTED_CONTENT\": \"MagicPages\",\n      \"CRITICAL\": false,\n      \"TIMEOUT\": 10,\n      \"RETRIES\": 2,\n      \"REPAIR_COMMANDS\": [\n        \"docker restart magicpages-frontend\",\n        \"docker restart caddy\"\n      ],\n      \"CONTENT_CHECKS\": [\n        \"MagicPages\",\n        \"Content Management\"\n      ]\n    },\n    \n    \"magicpages-api\": {\n      \"PATH\": \"/magicpages-api/\",\n      \"SERVICE_NAME\": \"MagicPages API\",\n      \"CONTAINER_NAME\": \"magicpages-api\",\n      \"INTERNAL_PORT\": 8080,\n      \"EXTERNAL_PORT\": 8100,\n      \"EXPECTED_CONTENT\": \"API\",\n      \"CRITICAL\": false,\n      \"TIMEOUT\": 10,\n      \"RETRIES\": 2,\n      \"REPAIR_COMMANDS\": [\n        \"docker restart magicpages-api\",\n        \"docker restart caddy\"\n      ],\n      \"CONTENT_CHECKS\": [\n        \"API\",\n        \"MagicPages\"\n      ]\n    },\n    \n    \"n8n\": {\n      \"PATH\": \"/n8n/\",\n      \"SERVICE_NAME\": \"n8n\",\n      \"CONTAINER_NAME\": \"n8n\",\n      \"INTERNAL_PORT\": 5678,\n      \"EXTERNAL_PORT\": 5678,\n      \"EXPECTED_CONTENT\": \"n8n\",\n      \"CRITICAL\": true,\n      \"TIMEOUT\": 15,\n      \"RETRIES\": 3,\n      \"REPAIR_COMMANDS\": [\n        \"docker restart n8n\",\n        \"docker restart caddy\"\n      ],\n      \"CONTENT_CHECKS\": [\n        \"n8n\",\n        \"Workflow\"\n      ]\n    },\n    \n    \"nodered\": {\n      \"PATH\": \"/nodered/\",\n      \"SERVICE_NAME\": \"Node-RED\",\n      \"CONTAINER_NAME\": \"nodered\",\n      \"INTERNAL_PORT\": 1880,\n      \"EXTERNAL_PORT\": 1880,\n      \"EXPECTED_CONTENT\": \"Node-RED\",\n      \"CRITICAL\": false,\n      \"TIMEOUT\": 10,\n      \"RETRIES\": 2,\n      \"REPAIR_COMMANDS\": [\n        \"docker restart nodered\",\n        \"docker restart caddy\"\n      ],\n      \"CONTENT_CHECKS\": [\n        \"Node-RED\",\n        \"Flow\"\n      ]\n    },\n    \n    \"notes\": {\n      \"PATH\": \"/notes/\",\n      \"SERVICE_NAME\": \"Obsidian\",\n      \"CONTAINER_NAME\": \"obsidian\",\n      \"INTERNAL_PORT\": 8080,\n      \"EXTERNAL_PORT\": 8060,\n      \"EXPECTED_CONTENT\": \"Obsidian\",\n      \"CRITICAL\": false,\n      \"TIMEOUT\": 10,\n      \"RETRIES\": 2,\n      \"REPAIR_COMMANDS\": [\n        \"docker restart obsidian\",\n        \"docker restart caddy\"\n      ],\n      \"CONTENT_CHECKS\": [\n        \"Obsidian\",\n        \"Notes\"\n      ]\n    },\n    \n    \"minecraft-map\": {\n      \"PATH\": \"/minecraft-map/\",\n      \"SERVICE_NAME\": \"Minecraft Dynmap\",\n      \"CONTAINER_NAME\": \"minecraft-dynmap\",\n      \"INTERNAL_PORT\": 8123,\n      \"EXTERNAL_PORT\": 8123,\n      \"EXPECTED_CONTENT\": \"Dynmap\",\n      \"CRITICAL\": false,\n      \"TIMEOUT\": 15,\n      \"RETRIES\": 2,\n      \"REPAIR_COMMANDS\": [\n        \"docker restart minecraft-dynmap\",\n        \"docker restart caddy\"\n      ],\n      \"CONTENT_CHECKS\": [\n        \"Dynmap\",\n        \"Minecraft\"\n      ]\n    },\n    \n    \"mqtt\": {\n      \"PATH\": \"/mqtt/\",\n      \"SERVICE_NAME\": \"MQTT Explorer\",\n      \"CONTAINER_NAME\": \"mqtt-explorer\",\n      \"INTERNAL_PORT\": 4000,\n      \"EXTERNAL_PORT\": 4000,\n      \"EXPECTED_CONTENT\": \"MQTT\",\n      \"CRITICAL\": false,\n      \"TIMEOUT\": 10,\n      \"RETRIES\": 2,\n      \"REPAIR_COMMANDS\": [\n        \"docker restart mqtt-explorer\",\n        \"docker restart caddy\"\n      ],\n      \"CONTENT_CHECKS\": [\n        \"MQTT\",\n        \"Explorer\"\n      ]\n    },\n    \n    \"meshtastic\": {\n      \"PATH\": \"/meshtastic/\",\n      \"SERVICE_NAME\": \"Meshtastic Web\",\n      \"CONTAINER_NAME\": \"meshtastic-web\",\n      \"INTERNAL_PORT\": 8080,\n      \"EXTERNAL_PORT\": 8080,\n      \"EXPECTED_CONTENT\": \"Meshtastic\",\n      \"CRITICAL\": false,\n      \"TIMEOUT\": 10,\n      \"RETRIES\": 2,\n      \"REPAIR_COMMANDS\": [\n        \"docker restart meshtastic-web\",\n        \"docker restart caddy\"\n      ],\n      \"CONTENT_CHECKS\": [\n        \"Meshtastic\",\n        \"Mesh\"\n      ]\n    },\n    \n    \"grafana-iot\": {\n      \"PATH\": \"/grafana-iot/\",\n      \"SERVICE_NAME\": \"Grafana IoT\",\n      \"CONTAINER_NAME\": \"grafana-iot\",\n      \"INTERNAL_PORT\": 3000,\n      \"EXTERNAL_PORT\": 3002,\n      \"EXPECTED_CONTENT\": \"Grafana\",\n      \"CRITICAL\": false,\n      \"TIMEOUT\": 10,\n      \"RETRIES\": 2,\n      \"REPAIR_COMMANDS\": [\n        \"docker restart grafana-iot\",\n        \"docker restart caddy\"\n      ],\n      \"CONTENT_CHECKS\": [\n        \"Grafana\",\n        \"IoT\"\n      ]\n    },\n    \n    \"influxdb\": {\n      \"PATH\": \"/influxdb/\",\n      \"SERVICE_NAME\": \"InfluxDB\",\n      \"CONTAINER_NAME\": \"influxdb\",\n      \"INTERNAL_PORT\": 8086,\n      \"EXTERNAL_PORT\": 8086,\n      \"EXPECTED_CONTENT\": \"InfluxDB\",\n      \"CRITICAL\": false,\n      \"TIMEOUT\": 10,\n      \"RETRIES\": 2,\n      \"REPAIR_COMMANDS\": [\n        \"docker restart influxdb\",\n        \"docker restart caddy\"\n      ],\n      \"CONTENT_CHECKS\": [\n        \"InfluxDB\",\n        \"Database\"\n      ]\n    },\n    \n    \"dashboard\": {\n      \"PATH\": \"/dashboard/\",\n      \"SERVICE_NAME\": \"Grafana Dashboard\",\n      \"CONTAINER_NAME\": \"grafana\",\n      \"INTERNAL_PORT\": 3000,\n      \"EXTERNAL_PORT\": 3000,\n      \"EXPECTED_CONTENT\": \"Grafana\",\n      \"CRITICAL\": true,\n      \"TIMEOUT\": 10,\n      \"RETRIES\": 3,\n      \"REPAIR_COMMANDS\": [\n        \"docker restart grafana\",\n        \"docker restart caddy\"\n      ],\n      \"CONTENT_CHECKS\": [\n        \"Grafana\",\n        \"Dashboard\"\n      ]\n    },\n    \n    \"uptime\": {\n      \"PATH\": \"/uptime/\",\n      \"SERVICE_NAME\": \"Uptime Kuma\",\n      \"CONTAINER_NAME\": \"uptime-kuma\",\n      \"INTERNAL_PORT\": 3001,\n      \"EXTERNAL_PORT\": 3001,\n      \"EXPECTED_CONTENT\": \"Uptime\",\n      \"CRITICAL\": true,\n      \"TIMEOUT\": 10,\n      \"RETRIES\": 3,\n      \"REPAIR_COMMANDS\": [\n        \"docker restart uptime-kuma\",\n        \"docker restart caddy\"\n      ],\n      \"CONTENT_CHECKS\": [\n        \"Uptime\",\n        \"Kuma\"\n      ]\n    },\n    \n    \"docker\": {\n      \"PATH\": \"/docker/\",\n      \"SERVICE_NAME\": \"Portainer\",\n      \"CONTAINER_NAME\": \"portainer\",\n      \"INTERNAL_PORT\": 9000,\n      \"EXTERNAL_PORT\": 9000,\n      \"EXPECTED_CONTENT\": \"Portainer\",\n      \"CRITICAL\": true,\n      \"TIMEOUT\": 10,\n      \"RETRIES\": 3,\n      \"REPAIR_COMMANDS\": [\n        \"docker restart portainer\",\n        \"docker restart caddy\"\n      ],\n      \"CONTENT_CHECKS\": [\n        \"Portainer\",\n        \"Docker\"\n      ]\n    },\n    \n    \"metrics\": {\n      \"PATH\": \"/metrics/\",\n      \"SERVICE_NAME\": \"Prometheus\",\n      \"CONTAINER_NAME\": \"prometheus\",\n      \"INTERNAL_PORT\": 9090,\n      \"EXTERNAL_PORT\": 9090,\n      \"EXPECTED_CONTENT\": \"Prometheus\",\n      \"CRITICAL\": true,\n      \"TIMEOUT\": 10,\n      \"RETRIES\": 3,\n      \"REPAIR_COMMANDS\": [\n        \"docker restart prometheus\",\n        \"docker restart caddy\"\n      ],\n      \"CONTENT_CHECKS\": [\n        \"Prometheus\",\n        \"Metrics\"\n      ]\n    }\n  },\n  \n  \"INFRASTRUCTURE\": {\n    \"caddy\": {\n      \"CONTAINER_NAME\": \"caddy\",\n      \"INTERNAL_PORT\": 80,\n      \"EXTERNAL_PORT\": 80,\n      \"CRITICAL\": true\n    },\n    \"cloudflared\": {\n      \"SERVICE_NAME\": \"cloudflared\",\n      \"CRITICAL\": true\n    },\n    \"docker\": {\n      \"SERVICE_NAME\": \"docker\",\n      \"CRITICAL\": true\n    }\n  },\n  \n  \"TELEGRAM\": {\n    \"CHAT_ID\": \"your_chat_id\",\n    \"BOT_TOKEN\": \"your_bot_token\"\n  },\n  \n  \"MANAGEMENT_SCRIPTS\": {\n    \"MANAGE_SERVICES\": \"/home/chris/manage-services.sh\",\n    \"START_HOMELAB\": \"/home/chris/start-homelab.sh\"\n  }\n}",
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2832,
+        -336
+      ],
+      "id": "0b3f8d6d-4a7a-48b1-b46b-654b5eeffab8",
+      "name": "JSON Services"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        6944,
+        -288
+      ],
+      "id": "22c0c4cc-4379-4497-ba47-3ab27f5c496c",
+      "name": "Merge3"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "33e266cc-3a8b-4a90-aacf-8e6936cbd0ef",
+              "leftValue": "SERVICE_INDEX",
+              "rightValue": "TARGET_SERVICES",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2656,
+        -160
+      ],
+      "id": "a1c69b88-5d52-409e-b5c1-beac34671ca4",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "81f7424d-8c99-46d4-b791-6ac673a6e53d",
+              "name": "TOTAL_SERVICES",
+              "value": "={{ Object.keys($json.SERVICES).length }}\n",
+              "type": "number"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2992,
+        -336
+      ],
+      "id": "ae9b4e03-851d-4acd-9ff5-260887cab491",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "chatId": "7062419334",
+        "text": "ALL DONE!!",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2832,
+        64
+      ],
+      "id": "4a1334d4-b774-4ba5-be27-623f0d9f1dbf",
+      "name": "Send a text message",
+      "webhookId": "cef158c3-56b5-47fd-8085-92111d94477f",
+      "credentials": {
+        "telegramApi": {
+          "id": "z7E2ywu9KGF1tnrX",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "batchSize": "=3",
+        "options": {
+          "reset": false
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        3408,
+        -608
+      ],
+      "id": "c6f1ffa2-7bb1-4706-b1c0-92db3f3b4650",
+      "name": "Loop Over Items",
+      "notesInFlow": true
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Reset Prompt": {
+      "main": [
+        [
+          {
+            "node": "Patchrick",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Protec": {
+      "main": [
+        [
+          {
+            "node": "Sudo Approval Message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Sudo Approval Message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Danger Approval Message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Danger Approval Message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Danger Approval Message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Danger Approval Message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Danger Approval Message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Danger Approval Message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Danger Approval Message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Danger Approval Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "TEST Cloudflare Access",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "GET n8n IP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Init Service Index1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Patchrick": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Patchrick",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Patchrick",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Visit Website": {
+      "ai_tool": [
+        [
+          {
+            "node": "Patchrick",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Patchrick",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Needs Approval?": {
+      "main": [
+        [
+          {
+            "node": "Protec",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Status?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Homelab Services Constants": {
+      "main": [
+        []
+      ]
+    },
+    "Set Service Config": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Compile Service Config": {
+      "main": [
+        [
+          {
+            "node": "Set Service Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Prompt": {
+      "main": [
+        [
+          {
+            "node": "Patchrick",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Store Output": {
+      "main": [
+        []
+      ]
+    },
+    "SSH Execute Command Remote": {
+      "ai_tool": [
+        [
+          {
+            "node": "Patchrick",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Danger Approval Message": {
+      "main": [
+        [
+          {
+            "node": "Reset Prompt5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sudo Approval Message": {
+      "main": [
+        [
+          {
+            "node": "Reset Prompt5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Status?": {
+      "main": [
+        [
+          {
+            "node": "Success Message",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge2",
+            "type": "main",
+            "index": 1
+          }
+        ],
+        [
+          {
+            "node": "Failure Message",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Success Message": {
+      "main": [
+        [
+          {
+            "node": "Merge2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Failure Message": {
+      "main": [
+        [
+          {
+            "node": "Merge3",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Replace Me": {
+      "main": [
+        [
+          {
+            "node": "Aggregate1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Compile Service Config",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Compile Service Config1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Compile Service Config2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Compile Service Config3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Compile Service Config4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Compile Service Config5",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Compile Service Config6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compile Service Config1": {
+      "main": [
+        [
+          {
+            "node": "Set Service Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compile Service Config2": {
+      "main": [
+        [
+          {
+            "node": "Set Service Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Increment SERVICE_INDEX": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Failure Path": {
+      "main": [
+        [
+          {
+            "node": "Patchrick3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Success Path": {
+      "main": [
+        [
+          {
+            "node": "Replace Me",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reset Prompt3": {
+      "main": [
+        [
+          {
+            "node": "Patchrick3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Protec3": {
+      "main": [
+        [
+          {
+            "node": "Sudo Approval Message1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Sudo Approval Message1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Danger Approval Message1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Danger Approval Message1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Danger Approval Message1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Danger Approval Message1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Danger Approval Message1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Danger Approval Message1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Danger Approval Message1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Danger Approval Message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Patchrick3": {
+      "main": [
+        [
+          {
+            "node": "Store Output1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Patchrick3",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory3": {
+      "ai_memory": [
+        [
+          {
+            "node": "Patchrick3",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Visit Website3": {
+      "ai_tool": [
+        [
+          {
+            "node": "Patchrick3",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser1": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Patchrick3",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Needs Approval?3": {
+      "main": [
+        [
+          {
+            "node": "Protec3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Status?1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SSH Execute Command Remote1": {
+      "ai_tool": [
+        [
+          {
+            "node": "Patchrick3",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Store Output1": {
+      "main": [
+        [
+          {
+            "node": "Needs Approval?3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Success Message1": {
+      "main": [
+        [
+          {
+            "node": "Success Path1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Failure Message1": {
+      "main": [
+        [
+          {
+            "node": "Failure Path1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Danger Approval Message1": {
+      "main": [
+        [
+          {
+            "node": "Reset Prompt3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sudo Approval Message1": {
+      "main": [
+        [
+          {
+            "node": "Reset Prompt3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Status?1": {
+      "main": [
+        [
+          {
+            "node": "Success Message1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Failure Message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reset Prompt4": {
+      "main": [
+        [
+          {
+            "node": "Patchrick4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Protec4": {
+      "main": [
+        [
+          {
+            "node": "Sudo Approval Message2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Sudo Approval Message2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Danger Approval Message2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Danger Approval Message2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Danger Approval Message2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Danger Approval Message2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Danger Approval Message2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Danger Approval Message2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Danger Approval Message2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Danger Approval Message2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Patchrick4": {
+      "main": [
+        [
+          {
+            "node": "Store Output2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model4": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Patchrick4",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory4": {
+      "ai_memory": [
+        [
+          {
+            "node": "Patchrick4",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Visit Website4": {
+      "ai_tool": [
+        [
+          {
+            "node": "Patchrick4",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser3": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Patchrick4",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Needs Approval?4": {
+      "main": [
+        [
+          {
+            "node": "Protec4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Status?2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SSH Execute Command Remote2": {
+      "ai_tool": [
+        [
+          {
+            "node": "Patchrick4",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Store Output2": {
+      "main": [
+        [
+          {
+            "node": "Needs Approval?4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Success Message2": {
+      "main": [
+        [
+          {
+            "node": "Success Path2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Failure Message2": {
+      "main": [
+        [
+          {
+            "node": "Failure Path2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Danger Approval Message2": {
+      "main": [
+        [
+          {
+            "node": "Reset Prompt4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sudo Approval Message2": {
+      "main": [
+        [
+          {
+            "node": "Reset Prompt4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Status?2": {
+      "main": [
+        [
+          {
+            "node": "Success Message2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Failure Message2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reset Prompt5": {
+      "main": [
+        [
+          {
+            "node": "Reset Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Set Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Needs Approval?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge2": {
+      "main": [
+        [
+          {
+            "node": "Success Path",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate1": {
+      "main": [
+        [
+          {
+            "node": "Increment SERVICE_INDEX",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Init Service Index1": {
+      "main": [
+        [
+          {
+            "node": "JSON Services",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "JSON Services": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge3": {
+      "main": [
+        [
+          {
+            "node": "Failure Path",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/Vancouver",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "5c69a2ae-fff8-465b-be43-8c43fcc68aef",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "1863bd21f17ad631330e9a6e8a2fe755f609c1ba51b51ce6d2ed418efba18e82"
+  },
+  "id": "8gdnaZ5f4xEN2Lvz",
+  "tags": []
+}
