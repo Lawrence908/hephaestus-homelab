@@ -1,110 +1,183 @@
 # Hephaestus Homelab - Secure Caddy Configuration
-# All services protected with basic authentication
+# Subdomain-based routing with Cloudflare Access protection
 
 # Global configuration
 {
     admin 127.0.0.1:2019
     auto_https off
     http_port 80
+}
+
+localhost:80 {
+    respond "Hello from Caddy!" 200
+}
+
+chrislawrence.ca:80 {
+    root * /var/www/landing
+    file_server
+}
+
+# www subdomain redirect to main domain
+www.chrislawrence.ca:80 {
+    redir https://chrislawrence.ca{uri} 301
+}
+
+# ============================================================================
+# PUBLIC SUBDOMAINS (No Authentication Required) - TEMPORARILY COMMENTED OUT
+# ============================================================================
+
+# Portfolio subdomain
+portfolio.chrislawrence.ca:80 {
+    reverse_proxy portfolio:5000 {
+        header_up X-Forwarded-Prefix /portfolio
+        header_up Host {host}
+        header_up X-Forwarded-Proto {scheme}
+        header_up X-Forwarded-For {remote}
+        header_up X-Real-IP {remote}
+    }
     
-    # Global logging configuration
     log {
         level INFO
         format json
-        output file /data/logs/caddy.json {
-            roll_size 50mb
-            roll_keep 10
-            roll_keep_for 720h
+        output file /data/logs/portfolio.json {
+            roll_size 15mb
+            roll_keep 8
+            roll_keep_for 168h
         }
     }
 }
 
-# Localhost health endpoint (no auth)
-localhost:80 {
-    respond /health "OK" 200
-}
-
-# Default route - Cloudflare Tunnel entry point
-:80 {
-    # Unauthenticated health endpoint for container healthcheck
-    @health path /health
-    handle @health {
-        respond "OK" 200
+# SchedShare subdomain
+schedshare.chrislawrence.ca:80 {
+    reverse_proxy schedshare:5000 {
+        header_up X-Forwarded-Prefix /schedshare
+        header_up Host {host}
+        header_up X-Forwarded-Proto {scheme}
+        header_up X-Forwarded-For {remote}
+        header_up X-Real-IP {remote}
     }
-
-    # www subdomain redirect to main domain
-    @www host www.chrislawrence.ca
-    handle @www {
-        redir https://chrislawrence.ca{uri} 301
-    }
-
-    # Redirect homepage to portfolio (no auth required)
-    @homepage path /
-    handle @homepage {
-        redir / /portfolio/ 302
-    }
-
-    # Portfolio App (no auth required - public)
-    @portfolio path /portfolio/*
-    handle @portfolio {
-        uri strip_prefix /portfolio
-        reverse_proxy portfolio:5000 {
-            header_up X-Forwarded-Prefix /portfolio
+    
+    log {
+        level INFO
+        format json
+        output file /data/logs/schedshare.json {
+            roll_size 15mb
+            roll_keep 8
+            roll_keep_for 168h
         }
     }
+}
 
-    # SchedShare route moved to main domain section below
-
-    # MagicPages API (Public) - Port 8100
-    @magicpages {
-        path /magicpages-api/*
-    }
-    handle @magicpages {
-        uri strip_prefix /magicpages-api
-        reverse_proxy magicpages-api:8000 {
+# CapitolScope subdomain
+capitolscope.chrislawrence.ca:80 {
+    # API matcher
+    @api path_regexp ^/api/.*
+    
+    # Handle API routes first (more specific)
+    handle @api {
+        reverse_proxy capitolscope:8000 {
             header_up Host {host}
             header_up X-Forwarded-Proto {scheme}
             header_up X-Forwarded-For {remote}
-            header_up X-Real-IP {remote}
+        }
+        header {
+            Access-Control-Allow-Origin "*"
+            Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+            Access-Control-Allow-Headers "Content-Type, Authorization"
         }
     }
-
-    # MagicPages Static Files (CSS, JS, Images)
-    @magicpages_static {
-        path /magicpages-api/static/*
+    
+    # Frontend - serve everything else to Vite dev server
+    # Vite automatically serves files from the public/ directory
+    handle {
+        reverse_proxy capitolscope-frontend:5173 {
+            header_up Host {host}
+            header_up X-Forwarded-Proto {scheme}
+            header_up X-Forwarded-For {remote}
+        }
     }
-    handle @magicpages_static {
-        uri strip_prefix /magicpages-api/static
+    
+    log {
+        level INFO
+        format json
+        output file /data/logs/capitolscope.json {
+            roll_size 15mb
+            roll_keep 8
+            roll_keep_for 168h
+        }
+    }
+}
+
+# MagicPages subdomain
+magicpages.chrislawrence.ca:80 {
+    reverse_proxy magicpages-api:8000 {
+        header_up Host localhost
+        header_up X-Forwarded-Proto {scheme}
+        header_up X-Forwarded-For {remote}
+        header_up X-Real-IP {remote}
+    }
+}
+
+# MagicPages API subdomain
+api.magicpages.chrislawrence.ca:80 {
+    reverse_proxy magicpages-api:8000 {
+        header_up Host localhost
+        header_up X-Forwarded-Proto {scheme}
+        header_up X-Forwarded-For {remote}
+        header_up X-Real-IP {remote}
+    }
+    
+    # Static files
+    handle_path /static/* {
         file_server {
             root /var/www/magicpages/static
         }
     }
-
-    # MagicPages Media Files (User uploads)
-    @magicpages_media {
-        path /magicpages-api/media/*
-    }
-    handle @magicpages_media {
-        uri strip_prefix /magicpages-api/media
+    
+    # Media files
+    handle_path /media/* {
         file_server {
             root /var/www/magicpages/media
         }
     }
+}
 
-    # Direct port access works better for Organizr embedding
-    # Use http://192.168.50.70:PORT/path in Organizr tab URLs
-
-    # Dashboard/Organizr (Protected) - for remote access
-    @dashboard {
-        path /dashboard/*
+# EventSphere subdomain (mongo-events-demo)
+eventsphere.chrislawrence.ca:80 {
+    reverse_proxy mongo-events:5000
+    header {
+        Access-Control-Allow-Origin "*"
+        Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+        Access-Control-Allow-Headers "Content-Type, Authorization"
     }
-    handle @dashboard {
-        reverse_proxy organizr:80 {
-            header_up Host {host}
+    
+    log {
+        level INFO
+        format json
+        output file /data/logs/eventsphere.json {
+            roll_size 15mb
+            roll_keep 8
+            roll_keep_for 168h
         }
     }
+}
 
-    # Infrastructure services (for remote access)
+# ============================================================================
+# PROTECTED SUBDOMAINS (Cloudflare Access Required)
+# ============================================================================
+
+# Development subdomain
+dev.chrislawrence.ca:80 {
+    # Dashboard/Organizr
+    handle_path /dashboard {
+        reverse_proxy organizr:80
+    }
+    
+    handle_path /dashboard/* {
+        reverse_proxy organizr:80
+    }
+    
+    # Infrastructure services
     handle_path /uptime {
         reverse_proxy uptime-kuma:3001 {
             header_down -X-Frame-Options
@@ -156,35 +229,8 @@ localhost:80 {
     handle_path /tools/* {
         reverse_proxy it-tools:80
     }
-
-    # IoT Services (for remote access)
-    handle_path /mqtt/* {
-        reverse_proxy mqtt-explorer:4000 {
-            header_down -X-Frame-Options
-        }
-    }
-
-    handle_path /homeassistant/* {
-        reverse_proxy homeassistant:8123 {
-            header_down -X-Frame-Options
-        }
-    }
-
-    handle_path /nodered/* {
-        reverse_proxy node-red:1880 {
-            header_up Connection {http.request.header.Connection}
-            header_up Upgrade {http.request.header.Upgrade}
-            header_down -X-Frame-Options
-        }
-    }
-
-    handle_path /grafana-iot/* {
-        reverse_proxy grafana-iot:3000 {
-            header_down -X-Frame-Options
-        }
-    }
-
-    # Application Services (for remote access)
+    
+    # Application services
     handle_path /n8n/* {
         reverse_proxy n8n-stack-n8n-1:5678 {
             header_up Connection {http.request.header.Connection}
@@ -201,73 +247,215 @@ localhost:80 {
             header_down -X-Frame-Options
         }
     }
-
-    # Fallback removed - handled by main domain routing
-
-    # Enhanced logging for main domain
+    
+    # Fallback for any unmatched paths
+    handle {
+        respond "Not Found" 404
+    }
+    
     log {
         level INFO
         format json
-        output file /data/logs/main-domain.json {
+        output file /data/logs/dev-chrislawrence-ca.json {
+            roll_size 50mb
+            roll_keep 15
+            roll_keep_for 720h
+        }
+    }
+}
+
+# Monitoring subdomain
+monitor.chrislawrence.ca:80 {
+    # Uptime Kuma
+    handle_path /uptime {
+        reverse_proxy uptime-kuma:3001 {
+            header_down -X-Frame-Options
+        }
+    }
+    
+    handle_path /uptime/* {
+        reverse_proxy uptime-kuma:3001 {
+            header_down -X-Frame-Options
+        }
+    }
+
+    # Grafana
+    handle_path /grafana {
+        reverse_proxy grafana:3000 {
+            header_down -X-Frame-Options
+        }
+    }
+    
+    handle_path /grafana/* {
+        reverse_proxy grafana:3000 {
+            header_down -X-Frame-Options
+        }
+    }
+
+    # Prometheus
+    handle_path /prometheus/* {
+        reverse_proxy prometheus:9090
+    }
+
+    # cAdvisor
+    handle_path /containers/* {
+        reverse_proxy cadvisor:8080
+    }
+
+    # Glances
+    handle_path /system/* {
+        reverse_proxy glances:61208
+    }
+    
+    # Fallback
+    handle {
+        respond "Not Found" 404
+    }
+    
+    log {
+        level INFO
+        format json
+        output file /data/logs/monitor-chrislawrence-ca.json {
             roll_size 25mb
             roll_keep 10
             roll_keep_for 168h
         }
     }
+}
+
+# IoT subdomain
+iot.chrislawrence.ca:80 {
+    # Home Assistant
+    handle_path /homeassistant/* {
+        reverse_proxy homeassistant:8123 {
+            header_down -X-Frame-Options
+        }
+    }
+
+    # MQTT Explorer
+    handle_path /mqtt/* {
+        reverse_proxy mqtt-explorer:4000 {
+            header_down -X-Frame-Options
+        }
+    }
+
+    # Node-RED
+    handle_path /nodered/* {
+        reverse_proxy node-red:1880 {
+            header_up Connection {http.request.header.Connection}
+            header_up Upgrade {http.request.header.Upgrade}
+            header_down -X-Frame-Options
+        }
+    }
+
+    # Grafana IoT
+    handle_path /grafana/* {
+        reverse_proxy grafana-iot:3000 {
+            header_down -X-Frame-Options
+        }
+    }
+
+    # InfluxDB API
+    handle_path /influxdb/* {
+        reverse_proxy influxdb:8086
+    }
     
-    # Error logging for main domain
+    # Fallback
+    handle {
+        respond "Not Found" 404
+    }
+    
     log {
-        level ERROR
+        level INFO
         format json
-        output file /data/logs/main-domain-errors.json {
-            roll_size 5mb
-            roll_keep 15
-            roll_keep_for 72h
+        output file /data/logs/iot-chrislawrence-ca.json {
+            roll_size 25mb
+            roll_keep 10
+            roll_keep_for 168h
         }
     }
 }
 
-# n8n subdomain removed in favor of path routing under chrislawrence.ca
-
-
-
-# Dashboard subdomain (single subdomain)
-dashboard.chrislawrence.ca {
-    reverse_proxy organizr:80
-
-    # Enhanced logging for dashboard
+# Minecraft subdomain
+minecraft.chrislawrence.ca:80 {
+    # Minecraft map (BlueMap)
+    handle_path /map/* {
+        reverse_proxy minecraft:8100 {
+            header_down -X-Frame-Options
+            header_down -Content-Security-Policy
+        }
+    }
+    
+    # Fallback
+    handle {
+        respond "Not Found" 404
+    }
+    
     log {
         level INFO
         format json
-        output file /data/logs/dashboard.json {
+        output file /data/logs/minecraft-chrislawrence-ca.json {
             roll_size 15mb
             roll_keep 8
             roll_keep_for 168h
         }
     }
+}
+
+# AI subdomain
+ai.chrislawrence.ca:80 {
+    # Open WebUI
+    handle_path /webui/* {
+        reverse_proxy ai-openwebui:8080 {
+            header_down -X-Frame-Options
+        }
+    }
     
-    # Error logging for dashboard
+    # ComfyUI
+    handle_path /comfyui/* {
+        reverse_proxy ai-comfyui:8188 {
+            header_down -X-Frame-Options
+        }
+    }
+    
+    # OpenRouter Proxy
+    handle_path /openrouter/* {
+        reverse_proxy ai-openrouter-proxy:8190
+    }
+    
+    # Model Manager
+    handle_path /models/* {
+        reverse_proxy ai-model-manager:8191 {
+            header_down -X-Frame-Options
+        }
+    }
+    
+    # Fallback
+    handle {
+        respond "Not Found" 404
+    }
+    
     log {
-        level ERROR
+        level INFO
         format json
-        output file /data/logs/dashboard-errors.json {
-            roll_size 3mb
+        output file /data/logs/ai-chrislawrence-ca.json {
+            roll_size 25mb
             roll_keep 10
-            roll_keep_for 72h
+            roll_keep_for 168h
         }
     }
 }
 
+# ============================================================================
+# PORT-BASED PROXIES (for Organizr embedding)
+# ============================================================================
+
 # Uptime Kuma proxy for Organizr embedding (port 8083)
 :8083 {
-
     reverse_proxy uptime-kuma:3001 {
-        # Remove X-Frame-Options to allow embedding
         header_down -X-Frame-Options
         header_down -Content-Security-Policy
     }
-
-    # Set permissive headers for embedding
     header {
         -X-Frame-Options
         Content-Security-Policy "frame-ancestors *"
@@ -276,14 +464,10 @@ dashboard.chrislawrence.ca {
 
 # Portainer proxy for Organizr embedding (port 8084)
 :8084 {
-
     reverse_proxy portainer:9000 {
-        # Remove X-Frame-Options to allow embedding
         header_down -X-Frame-Options
         header_down -Content-Security-Policy
     }
-
-    # Set permissive headers for embedding
     header {
         -X-Frame-Options
         Content-Security-Policy "frame-ancestors *"
@@ -292,14 +476,10 @@ dashboard.chrislawrence.ca {
 
 # Grafana proxy for Organizr embedding (port 8085)
 :8085 {
-
     reverse_proxy grafana:3000 {
-        # Remove X-Frame-Options to allow embedding
         header_down -X-Frame-Options
         header_down -Content-Security-Policy
     }
-
-    # Set permissive headers for embedding
     header {
         -X-Frame-Options
         Content-Security-Policy "frame-ancestors *"
@@ -308,14 +488,10 @@ dashboard.chrislawrence.ca {
 
 # Prometheus proxy for Organizr embedding (port 8086)
 :8086 {
-
     reverse_proxy prometheus:9090 {
-        # Remove X-Frame-Options to allow embedding
         header_down -X-Frame-Options
         header_down -Content-Security-Policy
     }
-
-    # Set permissive headers for embedding
     header {
         -X-Frame-Options
         Content-Security-Policy "frame-ancestors *"
@@ -324,14 +500,10 @@ dashboard.chrislawrence.ca {
 
 # cAdvisor proxy for Organizr embedding (port 8087)
 :8087 {
-
     reverse_proxy cadvisor:8080 {
-        # Remove X-Frame-Options to allow embedding
         header_down -X-Frame-Options
         header_down -Content-Security-Policy
     }
-
-    # Set permissive headers for embedding
     header {
         -X-Frame-Options
         Content-Security-Policy "frame-ancestors *"
@@ -340,14 +512,10 @@ dashboard.chrislawrence.ca {
 
 # Glances proxy for Organizr embedding (port 8088)
 :8088 {
-
     reverse_proxy glances:61208 {
-        # Remove X-Frame-Options to allow embedding
         header_down -X-Frame-Options
         header_down -Content-Security-Policy
     }
-
-    # Set permissive headers for embedding
     header {
         -X-Frame-Options
         Content-Security-Policy "frame-ancestors *"
@@ -356,14 +524,10 @@ dashboard.chrislawrence.ca {
 
 # IT-Tools proxy for Organizr embedding (port 8089)
 :8089 {
-
     reverse_proxy it-tools:80 {
-        # Remove X-Frame-Options to allow embedding
         header_down -X-Frame-Options
         header_down -Content-Security-Policy
     }
-
-    # Set permissive headers for embedding
     header {
         -X-Frame-Options
         Content-Security-Policy "frame-ancestors *"
@@ -373,38 +537,26 @@ dashboard.chrislawrence.ca {
 # Obsidian Notes proxy for Organizr embedding (port 8090)
 :8090 {
     reverse_proxy obsidian-notes:3000 {
-        # Enable WebSocket support for the app
         header_up Connection {http.request.header.Connection}
         header_up Upgrade {http.request.header.Upgrade}
-        # Remove X-Frame-Options to allow embedding
         header_down -X-Frame-Options
         header_down -Content-Security-Policy
-        # Force HTTP for embedding compatibility
         header_up X-Forwarded-Proto http
         header_up X-Forwarded-Ssl off
     }
-
-    # Set permissive headers for embedding
     header {
         -X-Frame-Options
         Content-Security-Policy "frame-ancestors *"
     }
 }
 
-# (Removed per-service subdomains in favor of chrislawrence.ca subpaths)
-
 # Magic Pages API proxy for Organizr embedding (port 8091)
 :8091 {
-
     reverse_proxy magicpages-api:8000 {
-        # Set correct host header for Django ALLOWED_HOSTS
         header_up Host localhost
-        # Remove X-Frame-Options to allow embedding
         header_down -X-Frame-Options
         header_down -Content-Security-Policy
     }
-
-    # Set permissive headers for embedding
     header {
         -X-Frame-Options
         Content-Security-Policy "frame-ancestors *"
@@ -414,15 +566,11 @@ dashboard.chrislawrence.ca {
 # n8n proxy for Organizr embedding (port 8092)
 :8092 {
     reverse_proxy n8n-stack-n8n-1:5678 {
-        # Enable WebSocket support for n8n editor
         header_up Connection {http.request.header.Connection}
         header_up Upgrade {http.request.header.Upgrade}
-        # Remove X-Frame-Options to allow embedding
         header_down -X-Frame-Options
         header_down -Content-Security-Policy
     }
-
-    # Set permissive headers for embedding
     header {
         -X-Frame-Options
         Content-Security-Policy "frame-ancestors *"
@@ -431,14 +579,10 @@ dashboard.chrislawrence.ca {
 
 # MQTT Explorer proxy for Organizr embedding (port 8093)
 :8093 {
-
     reverse_proxy mqtt-explorer:4000 {
-        # Remove X-Frame-Options to allow embedding
         header_down -X-Frame-Options
         header_down -Content-Security-Policy
     }
-
-    # Set permissive headers for embedding
     header {
         -X-Frame-Options
         Content-Security-Policy "frame-ancestors *"
@@ -452,12 +596,9 @@ dashboard.chrislawrence.ca {
     }
 
     reverse_proxy homeassistant:8123 {
-        # Remove X-Frame-Options to allow embedding
         header_down -X-Frame-Options
         header_down -Content-Security-Policy
     }
-
-    # Set permissive headers for embedding
     header {
         -X-Frame-Options
         Content-Security-Policy "frame-ancestors *"
@@ -466,17 +607,12 @@ dashboard.chrislawrence.ca {
 
 # Node-RED proxy for Organizr embedding (port 8095)
 :8095 {
-
     reverse_proxy node-red:1880 {
-        # Enable WebSocket support for Node-RED editor
         header_up Connection {http.request.header.Connection}
         header_up Upgrade {http.request.header.Upgrade}
-        # Remove X-Frame-Options to allow embedding
         header_down -X-Frame-Options
         header_down -Content-Security-Policy
     }
-
-    # Set permissive headers for embedding
     header {
         -X-Frame-Options
         Content-Security-Policy "frame-ancestors *"
@@ -485,110 +621,10 @@ dashboard.chrislawrence.ca {
 
 # Grafana IoT proxy for Organizr embedding (port 8096)
 :8096 {
-
     reverse_proxy grafana-iot:3000 {
-        # Remove X-Frame-Options to allow embedding
         header_down -X-Frame-Options
         header_down -Content-Security-Policy
     }
-
-    # Set permissive headers for embedding
-    header {
-        -X-Frame-Options
-        Content-Security-Policy "frame-ancestors *"
-    }
-}
-
-# CapitolScope Backend proxy for Organizr embedding (port 8120)
-:8120 {
-
-    reverse_proxy capitolscope-dev:8000 {
-        # Remove X-Frame-Options to allow embedding
-        header_down -X-Frame-Options
-        header_down -Content-Security-Policy
-    }
-
-    # Set permissive headers for embedding
-    header {
-        -X-Frame-Options
-        Content-Security-Policy "frame-ancestors *"
-    }
-}
-
-# CapitolScope Frontend proxy for Organizr embedding (port 8121)
-:8121 {
-
-    reverse_proxy capitolscope-frontend-dev:5173 {
-        # Remove X-Frame-Options to allow embedding
-        header_down -X-Frame-Options
-        header_down -Content-Security-Policy
-    }
-
-    # Set permissive headers for embedding
-    header {
-        -X-Frame-Options
-        Content-Security-Policy "frame-ancestors *"
-    }
-}
-
-# ============================================================================
-# AI SERVICES PROXY PORTS (816X ports - for Organizr embedding)
-# ============================================================================
-
-# Open WebUI proxy for Organizr embedding (port 8161)
-:8161 {
-    reverse_proxy ai-openwebui:8080 {
-        # Remove X-Frame-Options to allow embedding
-        header_down -X-Frame-Options
-        header_down -Content-Security-Policy
-    }
-
-    # Set permissive headers for embedding
-    header {
-        -X-Frame-Options
-        Content-Security-Policy "frame-ancestors *"
-    }
-}
-
-# ComfyUI proxy for Organizr embedding (port 8162)
-:8162 {
-    reverse_proxy ai-comfyui:8188 {
-        # Remove X-Frame-Options to allow embedding
-        header_down -X-Frame-Options
-        header_down -Content-Security-Policy
-    }
-
-    # Set permissive headers for embedding
-    header {
-        -X-Frame-Options
-        Content-Security-Policy "frame-ancestors *"
-    }
-}
-
-# OpenRouter Proxy for Organizr embedding (port 8163)
-:8163 {
-    reverse_proxy ai-openrouter-proxy:8190 {
-        # Remove X-Frame-Options to allow embedding
-        header_down -X-Frame-Options
-        header_down -Content-Security-Policy
-    }
-
-    # Set permissive headers for embedding
-    header {
-        -X-Frame-Options
-        Content-Security-Policy "frame-ancestors *"
-    }
-}
-
-# Model Manager proxy for Organizr embedding (port 8164)
-:8164 {
-    reverse_proxy ai-model-manager:8191 {
-        # Remove X-Frame-Options to allow embedding
-        header_down -X-Frame-Options
-        header_down -Content-Security-Policy
-    }
-
-    # Set permissive headers for embedding
     header {
         -X-Frame-Options
         Content-Security-Policy "frame-ancestors *"
@@ -598,384 +634,56 @@ dashboard.chrislawrence.ca {
 # daedalOS proxy for Organizr embedding (port 8158)
 :8158 {
     reverse_proxy daedalos:3000 {
-        # Remove X-Frame-Options to allow embedding
         header_down -X-Frame-Options
         header_down -Content-Security-Policy
     }
-
-    # Set permissive headers for embedding
     header {
         -X-Frame-Options
         Content-Security-Policy "frame-ancestors *"
     }
 }
 
-# ============================================================================
-# DEV SUBDOMAIN ROUTING - dev.chrislawrence.ca
-# ============================================================================
-
-# Dev subdomain with all homelab services
-dev.chrislawrence.ca {
-    # Security headers
+# AI Services proxy ports (816X ports - for Organizr embedding)
+:8161 {
+    reverse_proxy ai-openwebui:8080 {
+        header_down -X-Frame-Options
+        header_down -Content-Security-Policy
+    }
     header {
-        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
-        X-Content-Type-Options "nosniff"
-        Referrer-Policy "strict-origin-when-cross-origin"
+        -X-Frame-Options
+        Content-Security-Policy "frame-ancestors *"
     }
+}
 
-    # Redirect homepage to dashboard
-    @homepage path /
-    handle @homepage {
-        redir / /dashboard/ 302
+:8162 {
+    reverse_proxy ai-comfyui:8188 {
+        header_down -X-Frame-Options
+        header_down -Content-Security-Policy
     }
+    header {
+        -X-Frame-Options
+        Content-Security-Policy "frame-ancestors *"
+    }
+}
 
-    # Dashboard/Organizr (Protected) - Cloudflare Access required
-    handle_path /dashboard {
-        reverse_proxy organizr:80
+:8163 {
+    reverse_proxy ai-openrouter-proxy:8190 {
+        header_down -X-Frame-Options
+        header_down -Content-Security-Policy
     }
-    
-    handle_path /dashboard/* {
-        reverse_proxy organizr:80
+    header {
+        -X-Frame-Options
+        Content-Security-Policy "frame-ancestors *"
     }
+}
 
-    # Infrastructure services (Protected) - Cloudflare Access required
-    handle_path /uptime {
-        reverse_proxy uptime-kuma:3001 {
-            header_down -X-Frame-Options
-        }
-        header {
-            -X-Frame-Options
-            Content-Security-Policy "frame-ancestors 'self'"
-        }
+:8164 {
+    reverse_proxy ai-model-manager:8191 {
+        header_down -X-Frame-Options
+        header_down -Content-Security-Policy
     }
-    
-    handle_path /uptime/* {
-        reverse_proxy uptime-kuma:3001 {
-            header_down -X-Frame-Options
-        }
-        header {
-            -X-Frame-Options
-            Content-Security-Policy "frame-ancestors 'self'"
-        }
-    }
-
-    handle_path /docker {
-        reverse_proxy portainer:9000 {
-            header_down -X-Frame-Options
-        }
-    }
-    
-    handle_path /docker/* {
-        reverse_proxy portainer:9000 {
-            header_down -X-Frame-Options
-        }
-    }
-
-    handle_path /metrics {
-        reverse_proxy grafana:3000 {
-            header_down -X-Frame-Options
-        }
-    }
-    
-    handle_path /metrics/* {
-        reverse_proxy grafana:3000 {
-            header_down -X-Frame-Options
-        }
-    }
-
-    handle_path /prometheus/* {
-        reverse_proxy prometheus:9090
-    }
-
-    handle_path /containers/* {
-        reverse_proxy cadvisor:8080
-    }
-
-    handle_path /system/* {
-        reverse_proxy glances:61208
-    }
-
-    handle_path /tools/* {
-        reverse_proxy it-tools:80
-    }
-
-    # ========================================================================
-    # APPLICATION ROUTES (81XX ports - ACTIVE)
-    # ========================================================================
-    
-    # Portfolio App (Public) - Port 8110
-    handle_path /portfolio/* {
-        reverse_proxy portfolio:5000 {
-            header_up X-Forwarded-Prefix /portfolio
-            header_up Host {host}
-            header_up X-Forwarded-Proto {scheme}
-            header_up X-Forwarded-For {remote}
-            header_up X-Real-IP {remote}
-        }
-    }
-
-    # Minecraft BlueMap (Public) - Port 8159 (embeddable)
-    handle_path /minecraft-map/* {
-        reverse_proxy minecraft:8100 {
-            # Remove frame-blocking headers from BlueMap
-            header_down -X-Frame-Options
-            header_down -Content-Security-Policy
-        }
-        # Allow embedding in Organizr
-        header {
-            -X-Frame-Options
-            Content-Security-Policy "frame-ancestors 'self' dev.chrislawrence.ca"
-        }
-    }
-
-    # Magic Pages API (Public) - Port 8100
-    handle_path /magicpages-api/* {
-        reverse_proxy magicpages-api:8000 {
-            # Set correct host header for Django ALLOWED_HOSTS
-            header_up Host localhost
-        }
-        header {
-            Access-Control-Allow-Origin "*"
-            Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
-            Access-Control-Allow-Headers "Content-Type, Authorization, X-API-Key"
-        }
-    }
-
-    # Magic Pages Frontend (Public) - Port 8101
-    handle_path /magicpages/* {
-        reverse_proxy magicpages-frontend:80
-    }
-
-    # daedalOS Browser OS (Public) - Port 8158
-    handle_path /os/* {
-        reverse_proxy daedalos:3000 {
-            header_down -X-Frame-Options
-            header_down -Content-Security-Policy
-        }
-        header {
-            -X-Frame-Options
-            Content-Security-Policy "frame-ancestors 'self'"
-        }
-    }
-
-    # CapitolScope Backend API (Public) - Port 8120
-    handle_path /capitolscope/api/* {
-        reverse_proxy capitolscope:8000
-        header {
-            Access-Control-Allow-Origin "*"
-            Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
-            Access-Control-Allow-Headers "Content-Type, Authorization"
-        }
-    }
-
-    # CapitolScope Frontend (Public) - Port 8121
-    handle_path /capitolscope/ {
-        reverse_proxy capitolscope-frontend:5173
-        header {
-            Access-Control-Allow-Origin "*"
-            Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
-            Access-Control-Allow-Headers "Content-Type, Authorization"
-        }
-    }
-
-    # Mongo Events Demo (Public) - Port 8140
-    handle_path /events/* {
-        reverse_proxy mongo-events:5000
-        header {
-            Access-Control-Allow-Origin "*"
-            Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
-            Access-Control-Allow-Headers "Content-Type, Authorization"
-        }
-    }
-
-    # SchedShare (Public) - Port 8130
-    handle_path /schedshare {
-        redir /schedshare /schedshare/home 302
-    }
-    
-    handle_path /schedshare/* {
-        reverse_proxy schedshare:5000 {
-            header_up X-Forwarded-Prefix /schedshare
-            header_up Host {host}
-            header_up X-Forwarded-Proto {scheme}
-            header_up X-Forwarded-For {remote}
-            header_up X-Real-IP {remote}
-        }
-    }
-
-    # EventSphere (alias for events) - Port 8140
-    handle_path /eventsphere/* {
-        reverse_proxy mongo-events:5000
-        header {
-            Access-Control-Allow-Origin "*"
-            Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
-            Access-Control-Allow-Headers "Content-Type, Authorization"
-        }
-    }
-
-    # n8n Workflow Automation (Protected) - Port 8092
-    handle_path /n8n/* {
-        reverse_proxy n8n-stack-n8n-1:5678 {
-            # Enable WebSocket support for n8n editor
-            header_up Connection {http.request.header.Connection}
-            header_up Upgrade {http.request.header.Upgrade}
-            header_down -X-Frame-Options
-        }
-        header {
-            -X-Frame-Options
-            Content-Security-Policy "frame-ancestors 'self'"
-        }
-    }
-
-    # Obsidian Notes (Protected) - Port 8060
-    handle_path /notes/* {
-        reverse_proxy obsidian-notes:3000 {
-            # Pass authentication headers
-            header_up Authorization "Basic b2JzaWRpYW46b2JzaWRpYW4xMjM="
-            # Enable WebSocket support
-            header_up Connection {http.request.header.Connection}
-            header_up Upgrade {http.request.header.Upgrade}
-            header_down -X-Frame-Options
-        }
-        header {
-            -X-Frame-Options
-            Content-Security-Policy "frame-ancestors 'self'"
-        }
-    }
-
-    # ========================================================================
-    # AI INFERENCE SERVICES (816X ports)
-    # ========================================================================
-    
-    # Open WebUI (Protected) - Port 8161
-    handle_path /ai/* {
-        reverse_proxy ai-openwebui:8080 {
-            header_down -X-Frame-Options
-        }
-        header {
-            -X-Frame-Options
-            Content-Security-Policy "frame-ancestors 'self'"
-        }
-    }
-    
-    # ComfyUI (Protected) - Port 8162
-    handle_path /comfyui/* {
-        reverse_proxy ai-comfyui:8188 {
-            header_down -X-Frame-Options
-        }
-        header {
-            -X-Frame-Options
-            Content-Security-Policy "frame-ancestors 'self'"
-        }
-    }
-    
-    # OpenRouter Proxy (Protected) - Port 8163
-    handle_path /openrouter/* {
-        reverse_proxy ai-openrouter-proxy:8190
-    }
-    
-    # Model Manager (Protected) - Port 8164
-    handle_path /models/* {
-        reverse_proxy ai-model-manager:8191 {
-            header_down -X-Frame-Options
-        }
-        header {
-            -X-Frame-Options
-            Content-Security-Policy "frame-ancestors 'self'"
-        }
-    }
-
-    # ========================================================================
-    # IOT & COMMUNICATION SERVICES (815X ports)
-    # ========================================================================
-    
-    # MQTT Explorer (Public) - Port 8152
-    handle_path /mqtt/* {
-        reverse_proxy mqtt-explorer:4000 {
-            header_down -X-Frame-Options
-        }
-        header {
-            -X-Frame-Options
-            Content-Security-Policy "frame-ancestors 'self'"
-        }
-    }
-
-    # Home Assistant (Public) - Port 8154
-    handle_path /homeassistant/* {
-        reverse_proxy homeassistant:8123 {
-            header_down -X-Frame-Options
-        }
-        header {
-            -X-Frame-Options
-            Content-Security-Policy "frame-ancestors 'self'"
-        }
-    }
-
-    # Node-RED IoT Automation (Protected) - Port 8155
-    handle_path /nodered/* {
-        reverse_proxy node-red:1880 {
-            # Enable WebSocket support for Node-RED editor
-            header_up Connection {http.request.header.Connection}
-            header_up Upgrade {http.request.header.Upgrade}
-            header_down -X-Frame-Options
-        }
-        header {
-            -X-Frame-Options
-            Content-Security-Policy "frame-ancestors 'self'"
-        }
-    }
-
-    # Grafana IoT Dashboard (Protected) - Port 8156
-    handle_path /grafana-iot/* {
-        reverse_proxy grafana-iot:3000 {
-            header_down -X-Frame-Options
-        }
-        header {
-            -X-Frame-Options
-            Content-Security-Policy "frame-ancestors 'self'"
-        }
-    }
-
-    # InfluxDB API (Protected) - Port 8157
-    handle_path /influxdb/* {
-        reverse_proxy influxdb:8086
-    }
-
-    # Fallback for any unmatched paths - return 404
-    handle {
-        respond "Not Found" 404
-    }
-    
-    # Comprehensive logging for dev subdomain
-    log {
-        level INFO
-        format json
-        output file /data/logs/dev-chrislawrence-ca.json {
-            roll_size 50mb
-            roll_keep 15
-            roll_keep_for 720h
-        }
-    }
-    
-    # Error logging for dev subdomain
-    log {
-        level ERROR
-        format json
-        output file /data/logs/dev-chrislawrence-ca-errors.json {
-            roll_size 10mb
-            roll_keep 25
-            roll_keep_for 168h
-        }
-    }
-    
-    # Access logging for dev subdomain
-    log {
-        level INFO
-        format json
-        output file /data/logs/dev-chrislawrence-ca-access.log {
-            roll_size 100mb
-            roll_keep 5
-            roll_keep_for 168h
-        }
+    header {
+        -X-Frame-Options
+        Content-Security-Policy "frame-ancestors *"
     }
 }

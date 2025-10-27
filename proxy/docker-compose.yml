@@ -41,6 +41,7 @@ services:
       - ./logs:/data/logs
       - ./logs/analysis:/data/logs/analysis
       - ./logs/filtered:/data/logs/filtered
+      - ./landing:/var/www/landing:ro
       - /home/chris/apps/MagicPages/staticfiles:/var/www/magicpages/static:ro
       - /home/chris/apps/MagicPages/media:/var/www/magicpages/media:ro
     environment:

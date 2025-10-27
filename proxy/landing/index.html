@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chris Lawrence - Developer & Engineer</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Light mode (default) */
+        :root {
+            --primary-gray: #1a1a1a;
+            --secondary-gray: #2d2d2d;
+            --tertiary-gray: #404040;
+            --light-gray: #6b7280;
+            --border-gray: #e5e7eb;
+            --background-gray: #f9fafb;
+            --white: #ffffff;
+            --accent-blue: #3b82f6;
+        }
+
+        html {
+            color-scheme: light;
+        }
+
+        /* Dark mode styles */
+        [data-bs-theme="dark"] {
+            --primary-gray: #ffffff;
+            --secondary-gray: #e5e7eb;
+            --tertiary-gray: #d1d5db;
+            --light-gray: #9ca3af;
+            --border-gray: #374151;
+            --background-gray: #111827;
+            --white: #1f2937;
+            --accent-blue: #60a5fa;
+        }
+
+        [data-bs-theme="dark"] html {
+            color-scheme: dark;
+        }
+
+        /* Auto-detect system preference for initial load */
+        @media (prefers-color-scheme: dark) {
+            :root:not([data-bs-theme]) {
+                --primary-gray: #ffffff;
+                --secondary-gray: #e5e7eb;
+                --tertiary-gray: #d1d5db;
+                --light-gray: #9ca3af;
+                --border-gray: #374151;
+                --background-gray: #111827;
+                --white: #1f2937;
+                --accent-blue: #60a5fa;
+            }
+
+            :root:not([data-bs-theme]) html {
+                color-scheme: dark;
+            }
+        }
+
+        * {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--white);
+            color: var(--primary-gray);
+            line-height: 1.6;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, var(--white) 0%, var(--background-gray) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid var(--border-gray);
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--primary-gray);
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            font-weight: 400;
+            color: var(--light-gray);
+            margin-bottom: 2rem;
+            max-width: 600px;
+        }
+
+        .btn-primary-custom {
+            background-color: var(--primary-gray);
+            border: 1px solid var(--primary-gray);
+            color: var(--white);
+            font-weight: 500;
+            padding: 12px 24px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary-custom:hover {
+            background-color: var(--secondary-gray);
+            border-color: var(--secondary-gray);
+            color: var(--white);
+            transform: translateY(-1px);
+        }
+
+        .btn-outline-custom {
+            background-color: transparent;
+            border: 1px solid var(--border-gray);
+            color: var(--primary-gray);
+            font-weight: 500;
+            padding: 12px 24px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-outline-custom:hover {
+            background-color: var(--background-gray);
+            border-color: var(--tertiary-gray);
+            color: var(--primary-gray);
+        }
+
+        .card-custom {
+            background-color: var(--white);
+            border: 1px solid var(--border-gray);
+            border-radius: 12px;
+            transition: all 0.2s ease;
+            height: 100%;
+        }
+
+        .card-custom:hover {
+            border-color: var(--tertiary-gray);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            background-color: var(--background-gray);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--primary-gray);
+            margin-bottom: 0.75rem;
+        }
+
+        .card-text {
+            color: var(--light-gray);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-gray);
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.125rem;
+            color: var(--light-gray);
+            margin-bottom: 3rem;
+        }
+
+        .skill-item {
+            text-align: center;
+            padding: 1.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .skill-item:hover {
+            background-color: var(--background-gray);
+        }
+
+        .skill-icon {
+            font-size: 2rem;
+            color: var(--tertiary-gray);
+            margin-bottom: 0.75rem;
+        }
+
+        .skill-text {
+            font-weight: 500;
+            color: var(--primary-gray);
+            font-size: 0.9rem;
+        }
+
+        .hero-icon {
+            width: 120px;
+            height: 120px;
+            background-color: var(--background-gray);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+        }
+
+        .hero-icon i {
+            font-size: 3rem;
+            color: var(--tertiary-gray);
+        }
+
+        @media (max-width: 768px) { /* Tablet */
+            .hero-title {
+                font-size: 2.5rem;
+                margin-bottom: 1rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.125rem;
+                margin-bottom: 2.5rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .hero-section {
+                padding: 3rem 0 2rem 0;
+                min-height: auto;
+            }
+
+            .hero-section .container {
+                padding: 0 1rem;
+            }
+
+            .hero-section .col-lg-6:first-child {
+                margin-bottom: 2rem;
+                padding-top: 1rem;
+            }
+
+            .hero-section .row {
+                text-align: center;
+            }
+
+            .hero-section .col-lg-6:first-child {
+                margin-bottom: 2rem;
+            }
+
+            .hero-section .d-flex {
+                flex-direction: column;
+                gap: 1rem !important;
+                align-items: center;
+            }
+
+            .btn-primary-custom,
+            .btn-outline-custom {
+                width: 100%;
+                max-width: 280px;
+                justify-content: center;
+            }
+
+            .hero-icon {
+                width: 100px;
+                height: 100px;
+            }
+
+            .hero-icon i {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 480px) { /* Mobile */
+            .hero-title {
+                font-size: 2rem;
+                line-height: 1.2;
+            }
+            
+            .hero-subtitle {
+                font-size: 1rem;
+                line-height: 1.5;
+                margin-bottom: 2rem;
+            }
+
+            .hero-section {
+                padding: 3.5rem 0 1.5rem 0;
+            }
+
+            .hero-section .col-lg-6:first-child {
+                padding-top: 1.5rem;
+            }
+
+            .btn-primary-custom,
+            .btn-outline-custom {
+                padding: 14px 20px;
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Dark Mode Toggle -->
+    <div class="position-fixed top-0 end-0 p-3" style="z-index: 1000;">
+        <button id="themeToggle" class="btn btn-outline-secondary border-0" style="background-color: var(--background-gray); color: var(--primary-gray); border-radius: 50%; width: 48px; height: 48px;">
+            <i id="themeIcon" class="bi bi-moon-fill"></i>
+        </button>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h1 class="hero-title">
+                        Hi, I'm <span style="color: var(--accent-blue);">Chris Lawrence</span>
+                    </h1>
+                    <p class="hero-subtitle">
+                        Software developer building production-ready platforms that combine machine learning and cloud infrastructure. 
+                        I take ideas from prototype to production while keeping scalability, performance, and reliability in focus.
+                    </p>
+                    <div class="d-flex gap-3 flex-wrap">
+                        <a href="https://portfolio.chrislawrence.ca" class="btn-primary-custom">
+                            <i class="bi bi-person-workspace"></i>
+                            View Portfolio
+                        </a>
+                        <a href="mailto:chris@chrislawrence.ca" class="btn-outline-custom">
+                            <i class="bi bi-envelope"></i>
+                            Contact Me
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-6 text-center">
+                    <div class="hero-icon">
+                        <i class="bi bi-code-slash"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section class="py-5" style="background-color: var(--background-gray);">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center mb-5">
+                    <h2 class="section-title">My Projects</h2>
+                    <p class="section-subtitle">Explore my latest work and ongoing projects</p>
+                </div>
+            </div>
+            <div class="row g-4">
+                <!-- Portfolio Card -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card card-custom">
+                        <div class="card-body p-4">
+                            <div class="card-icon">
+                                <i class="bi bi-person-workspace" style="color: var(--accent-blue);"></i>
+                            </div>
+                            <h5 class="card-title">Portfolio</h5>
+                            <p class="card-text">My personal portfolio showcasing my skills, projects, and experience.</p>
+                            <a href="https://portfolio.chrislawrence.ca" class="btn-primary-custom" style="font-size: 0.9rem; padding: 8px 16px;">
+                                <i class="bi bi-arrow-right"></i>
+                                Visit Portfolio
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SchedShare Card -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card card-custom">
+                        <div class="card-body p-4">
+                            <div class="card-icon">
+                                <i class="bi bi-calendar3" style="color: var(--tertiary-gray);"></i>
+                            </div>
+                            <h5 class="card-title">SchedShare</h5>
+                            <p class="card-text">Schedule sharing application for coordinating events and meetings.</p>
+                            <a href="https://schedshare.chrislawrence.ca" class="btn-primary-custom" style="font-size: 0.9rem; padding: 8px 16px;">
+                                <i class="bi bi-arrow-right"></i>
+                                Try SchedShare
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CapitolScope Card -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card card-custom">
+                        <div class="card-body p-4">
+                            <div class="card-icon">
+                                <i class="bi bi-building" style="color: var(--tertiary-gray);"></i>
+                            </div>
+                            <h5 class="card-title">CapitolScope</h5>
+                            <p class="card-text">Political data analysis platform for tracking legislative activity.</p>
+                            <a href="https://capitolscope.chrislawrence.ca" class="btn-primary-custom" style="font-size: 0.9rem; padding: 8px 16px;">
+                                <i class="bi bi-arrow-right"></i>
+                                Explore CapitolScope
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EventSphere Card -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card card-custom">
+                        <div class="card-body p-4">
+                            <div class="card-icon">
+                                <i class="bi bi-calendar-event" style="color: var(--tertiary-gray);"></i>
+                            </div>
+                            <h5 class="card-title">EventSphere</h5>
+                            <p class="card-text">Event management and tracking system with MongoDB integration.</p>
+                            <a href="https://eventsphere.chrislawrence.ca" class="btn-primary-custom" style="font-size: 0.9rem; padding: 8px 16px;">
+                                <i class="bi bi-arrow-right"></i>
+                                Check EventSphere
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section class="py-5" style="background-color: var(--white);">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center mb-5">
+                    <h2 class="section-title">Technologies & Skills</h2>
+                    <p class="section-subtitle">Technologies I work with and continue to learn</p>
+                </div>
+            </div>
+            <div class="row g-3">
+                <div class="col-6 col-md-3 col-lg-2">
+                    <div class="skill-item">
+                        <i class="bi bi-code-slash skill-icon"></i>
+                        <p class="skill-text">Full-Stack</p>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3 col-lg-2">
+                    <div class="skill-item">
+                        <i class="bi bi-cloud skill-icon"></i>
+                        <p class="skill-text">DevOps</p>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3 col-lg-2">
+                    <div class="skill-item">
+                        <i class="bi bi-database skill-icon"></i>
+                        <p class="skill-text">Databases</p>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3 col-lg-2">
+                    <div class="skill-item">
+                        <i class="bi bi-shield-check skill-icon"></i>
+                        <p class="skill-text">Security</p>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3 col-lg-2">
+                    <div class="skill-item">
+                        <i class="bi bi-graph-up skill-icon"></i>
+                        <p class="skill-text">Monitoring</p>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3 col-lg-2">
+                    <div class="skill-item">
+                        <i class="bi bi-gear skill-icon"></i>
+                        <p class="skill-text">Automation</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-4" style="background-color: var(--background-gray); border-top: 1px solid var(--border-gray);">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <div class="d-flex align-items-center gap-3">
+                        <img src="Portrait3.png" alt="Chris Lawrence" class="rounded-circle" style="width: 48px; height: 48px; object-fit: cover;">
+                        <p class="mb-0" style="color: var(--light-gray);">&copy; 2025 Chris Lawrence. All rights reserved.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <div class="d-flex justify-content-md-end gap-3">
+                        <a href="mailto:chris@chrislawrence.ca" style="color: var(--tertiary-gray); text-decoration: none;">
+                            <i class="bi bi-envelope fs-5"></i>
+                        </a>
+                        <a href="https://github.com/lawrence908" style="color: var(--tertiary-gray); text-decoration: none;">
+                            <i class="bi bi-github fs-5"></i>
+                        </a>
+                        <a href="https://linkedin.com/in/chris-lawrence-cd" style="color: var(--tertiary-gray); text-decoration: none;">
+                            <i class="bi bi-linkedin fs-5"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Dark mode toggle functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const themeToggle = document.getElementById('themeToggle');
+            const themeIcon = document.getElementById('themeIcon');
+            const htmlElement = document.documentElement;
+            
+            // Check for saved theme preference, otherwise auto-detect system preference
+            const savedTheme = localStorage.getItem('theme');
+            const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const initialTheme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
+            
+            console.log('Saved theme:', savedTheme);
+            console.log('System prefers dark:', systemPrefersDark);
+            console.log('Initial theme:', initialTheme);
+            
+            htmlElement.setAttribute('data-bs-theme', initialTheme);
+            updateThemeIcon(initialTheme);
+            
+            // Listen for changes in system theme preference (only if no manual preference saved)
+            if (!savedTheme) {
+                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+                    const newTheme = e.matches ? 'dark' : 'light';
+                    htmlElement.setAttribute('data-bs-theme', newTheme);
+                    updateThemeIcon(newTheme);
+                });
+            }
+            
+            themeToggle.addEventListener('click', function() {
+                const currentTheme = htmlElement.getAttribute('data-bs-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                
+                htmlElement.setAttribute('data-bs-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                updateThemeIcon(newTheme);
+            });
+            
+            function updateThemeIcon(theme) {
+                if (theme === 'dark') {
+                    themeIcon.className = 'bi bi-sun-fill';
+                } else {
+                    themeIcon.className = 'bi bi-moon-fill';
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+
