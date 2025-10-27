@@ -76,20 +76,21 @@ networks:
 
 ### Key Service Ports
 
-| Service | Port | Network Access |
-|---------|------|----------------|
-| Caddy Proxy | 80, 443 | External + Internal |
-| Grafana | 3000 | Internal + Proxy |
-| Prometheus | 9090 | Internal + Proxy |
-| Portainer | 9000 | Internal + Proxy |
-| Uptime Kuma | 3001 | Internal + Proxy |
-| daedalOS | 8158 | Internal + Proxy |
-| CapitolScope API | 8120 | Internal + Proxy |
-| CapitolScope Frontend | 8121 | Internal + Proxy |
-| MagicPages API | 8100 | Internal + Proxy |
-| n8n | 5678 | Internal + Proxy |
-| Obsidian | 8060 | Internal + Proxy |
-| Minecraft | 25565 | External + Internal |
+| Service | Port | Network Access | Public URL | Access Type |
+|---------|------|----------------|------------|-------------|
+| Caddy Proxy | 80, 443 | External + Internal | `https://chrislawrence.ca` | Public |
+| Landing Page | 80 | Internal | `https://chrislawrence.ca` | Public |
+| Portfolio | 5000 | Internal | `https://portfolio.chrislawrence.ca` | Public |
+| SchedShare | 5000 | Internal | `https://schedshare.chrislawrence.ca` | Public |
+| CapitolScope Frontend | 5173 | Internal | `https://capitolscope.chrislawrence.ca` | Public |
+| CapitolScope Backend | 8000 | Internal | `https://capitolscope.chrislawrence.ca` | Public |
+| MagicPages API | 8000 | Internal | `https://magicpages.chrislawrence.ca` | Public |
+| EventSphere | 5000 | Internal | `https://eventsphere.chrislawrence.ca` | Public |
+| Dev Environment | Various | Internal | `https://dev.chrislawrence.ca` | Protected (Cloudflare Access) |
+| Monitor | Various | Internal | `https://monitor.chrislawrence.ca` | Protected (Cloudflare Access) |
+| IoT Services | Various | Internal | `https://iot.chrislawrence.ca` | Protected (Cloudflare Access) |
+| Minecraft | 25565 | External + Internal | `https://minecraft.chrislawrence.ca` | Protected (Cloudflare Access) |
+| AI Services | Various | Internal | `https://ai.chrislawrence.ca` | Protected (Cloudflare Access) |
 
 ## Internal Service Networks
 
@@ -129,16 +130,18 @@ networks:
 
 ### Access Patterns
 
-1. **External Access**: Services exposed through Caddy proxy (HTTPS)
-2. **Internal Access**: Direct container-to-container communication
-3. **Development Access**: Local port mapping for development
+1. **Public Access**: Services exposed through Cloudflare Tunnel with subdomain routing
+2. **Protected Access**: Services requiring Cloudflare Access authentication
+3. **Internal Access**: Direct container-to-container communication
+4. **Development Access**: Local port mapping for development
 
 ### Security Considerations
 
-- **No Direct External Access**: Most services only accessible through Caddy proxy
+- **No Direct External Access**: Most services only accessible through Cloudflare Tunnel
 - **Internal Communication**: Services can communicate freely within the network
 - **Isolation**: Database and cache services use internal networks
-- **TLS Termination**: All external traffic encrypted via Caddy
+- **TLS Termination**: All external traffic encrypted via Cloudflare Tunnel
+- **Access Control**: Protected services require Cloudflare Access authentication
 
 ## Adding New Services
 
@@ -199,9 +202,26 @@ docker network logs homelab-web
 
 ```bash
 # Verify all services can reach each other
-docker exec -it caddy ping grafana
-docker exec -it grafana ping prometheus
-docker exec -it capitolscope ping magicpages-api
+docker exec -it caddy ping portfolio
+docker exec -it caddy ping schedshare
+docker exec -it caddy ping capitolscope-frontend
+docker exec -it caddy ping magicpages-api
+docker exec -it caddy ping mongo-events
+
+# Test public access
+curl -I https://chrislawrence.ca
+curl -I https://portfolio.chrislawrence.ca
+curl -I https://schedshare.chrislawrence.ca
+curl -I https://capitolscope.chrislawrence.ca
+curl -I https://magicpages.chrislawrence.ca
+curl -I https://eventsphere.chrislawrence.ca
+
+# Test protected access (should redirect to Cloudflare Access)
+curl -I https://dev.chrislawrence.ca
+curl -I https://monitor.chrislawrence.ca
+curl -I https://iot.chrislawrence.ca
+curl -I https://minecraft.chrislawrence.ca
+curl -I https://ai.chrislawrence.ca
 ```
 
 ## Deployment Order

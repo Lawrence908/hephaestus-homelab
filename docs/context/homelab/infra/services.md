@@ -32,23 +32,19 @@ Core services that provide the foundation for the homelab:
 ### Application Services
 Custom applications and services:
 
-#### Web Applications
-- **Portfolio**: Personal portfolio website
-- **daedalOS**: Browser-based desktop environment
-- **CapitolScope**: Political data analysis platform
-- **SchedShare**: Schedule sharing application
-- **MagicPages**: Content management system
+#### Public Web Applications
+- **Portfolio**: Personal portfolio website (`https://portfolio.chrislawrence.ca`)
+- **SchedShare**: Schedule sharing application (`https://schedshare.chrislawrence.ca`)
+- **CapitolScope**: Political data analysis platform (`https://capitolscope.chrislawrence.ca`)
+- **MagicPages**: Content management system (`https://magicpages.chrislawrence.ca`)
+- **EventSphere**: Event management system (`https://eventsphere.chrislawrence.ca`)
 
-#### APIs & Backend Services
-- **MagicPages API**: Content management API
-- **CapitolScope API**: Political data API
-
-#### Specialized Services
-- **Minecraft Server**: Game server with Dynmap
-- **MQTT Explorer**: IoT device management
-- **Meshtastic Web**: Mesh networking interface
-- **Grafana IoT**: IoT-specific monitoring
-- **InfluxDB**: Time-series database
+#### Protected Services
+- **Dev Environment**: Development tools (`https://dev.chrislawrence.ca`)
+- **Monitor**: System monitoring (`https://monitor.chrislawrence.ca`)
+- **IoT Services**: IoT device management (`https://iot.chrislawrence.ca`)
+- **Minecraft**: Game server (`https://minecraft.chrislawrence.ca`)
+- **AI Services**: AI inference (`https://ai.chrislawrence.ca`)
 
 ## Service Definitions
 
@@ -198,9 +194,10 @@ services:
 - **Ports**: Internal ports only (no external exposure)
 
 ### External Communication
-- **Public Access**: Through Caddy proxy via Cloudflare Tunnel
+- **Public Access**: Through Cloudflare Tunnel with subdomain routing
+- **Protected Access**: Through Cloudflare Access authentication
 - **Local Access**: Direct port mapping for development
-- **Admin Access**: Through Organizr dashboard
+- **Security**: "Default deny with explicit allow" model
 
 ## Service Dependencies
 
@@ -214,9 +211,9 @@ services:
 ```
 Cloudflare Tunnel → Caddy → Applications
                 ↓
-            Prometheus → Grafana
+            Cloudflare Access (Protected Services)
                 ↓
-            Uptime Kuma
+            Monitoring & Logging
 ```
 
 ## Service Management
@@ -323,9 +320,9 @@ docker run --rm -v caddy_data:/data -v /backup:/backup alpine tar czf /backup/ca
 - **Port Exposure**: Minimal external port exposure
 
 ### Authentication
-- **Cloudflare Access**: Primary authentication for admin services
-- **Caddy Basic Auth**: Secondary authentication layer
-- **Service Auth**: Individual service authentication
+- **Cloudflare Access**: Primary authentication for protected services
+- **Public Services**: No authentication required
+- **Service Auth**: Individual service authentication where needed
 
 ### Data Protection
 - **Volume Encryption**: Docker volumes can be encrypted

@@ -6,105 +6,78 @@ This document outlines the application services running in the Hephaestus Homela
 
 ## Application Categories
 
-### Web Applications
-Public-facing web applications and services:
+### Public Web Applications
+Public-facing web applications accessible without authentication:
 
 #### Portfolio
 - **Purpose**: Personal portfolio website
 - **Technology**: Flask/Python
-- **Port**: 8110
-- **Public URL**: `https://chrislawrence.ca/portfolio`
-- **Status**: Active
-
-#### CapitolScope
-- **Purpose**: Political data analysis platform
-- **Technology**: React/Node.js
-- **Ports**: 8120 (API), 8121 (Frontend)
-- **Public URLs**: 
-  - `https://chrislawrence.ca/capitolscope` (Frontend)
-  - `https://chrislawrence.ca/capitolscope-api` (API)
-- **Status**: Active
+- **Port**: 5000
+- **Public URL**: `https://portfolio.chrislawrence.ca`
+- **Status**: ✅ Active
 
 #### SchedShare
 - **Purpose**: Schedule sharing application
-- **Technology**: React/Node.js
-- **Port**: 8130
-- **Public URL**: `https://chrislawrence.ca/schedshare`
-- **Status**: Active
+- **Technology**: Flask/Python
+- **Port**: 5000
+- **Public URL**: `https://schedshare.chrislawrence.ca`
+- **Status**: ✅ Active
+
+#### CapitolScope
+- **Purpose**: Political data analysis platform
+- **Technology**: React/Node.js (Frontend), Python (Backend)
+- **Ports**: 8000 (Backend), 5173 (Frontend)
+- **Public URL**: `https://capitolscope.chrislawrence.ca`
+- **Status**: ✅ Active
 
 #### MagicPages
 - **Purpose**: Content management system
 - **Technology**: Django/Python
-- **Ports**: 8100 (API), 8101 (Frontend)
+- **Port**: 8000
 - **Public URLs**:
-  - `https://chrislawrence.ca/magicpages` (Frontend)
-  - `https://chrislawrence.ca/magicpages-api` (API)
-- **Status**: Active
+  - `https://magicpages.chrislawrence.ca` (Main interface)
+  - `https://api.magicpages.chrislawrence.ca` (API endpoint)
+- **Status**: ✅ Active
 
-### Automation & Workflow Services
-Services for automation and workflow management:
+#### EventSphere
+- **Purpose**: Event management system
+- **Technology**: Python/Flask
+- **Port**: 5000
+- **Public URL**: `https://eventsphere.chrislawrence.ca`
+- **Status**: ✅ Active
 
-#### n8n
-- **Purpose**: Workflow automation platform
-- **Technology**: Node.js
-- **Port**: 5678
-- **Public URL**: `https://chrislawrence.ca/n8n`
-- **Status**: Active
+### Protected Services
+Services requiring Cloudflare Access authentication:
 
-#### Node-RED
-- **Purpose**: IoT and automation flows
-- **Technology**: Node.js
-- **Port**: 1880
-- **Public URL**: `https://chrislawrence.ca/nodered`
-- **Status**: Active
+#### Development Environment
+- **Purpose**: Development tools and environments
+- **Public URL**: `https://dev.chrislawrence.ca`
+- **Access Policy**: Admin/Public/Friends
+- **Status**: ✅ Active
 
-### Knowledge Management
-Services for knowledge management and documentation:
+#### Monitoring Dashboard
+- **Purpose**: System monitoring and metrics
+- **Public URL**: `https://monitor.chrislawrence.ca`
+- **Access Policy**: Admin/Public/Friends
+- **Status**: ✅ Active
 
-#### Obsidian
-- **Purpose**: Note-taking and knowledge management
-- **Technology**: Web-based
-- **Port**: 8060
-- **Public URL**: `https://chrislawrence.ca/notes`
-- **Status**: Active
-
-### IoT & Specialized Services
-Services for IoT, gaming, and specialized functionality:
+#### IoT Services
+- **Purpose**: IoT device management and monitoring
+- **Public URL**: `https://iot.chrislawrence.ca`
+- **Access Policy**: Admin/Public/Friends
+- **Status**: ✅ Active
 
 #### Minecraft Server
-- **Purpose**: Game server with Dynmap
-- **Technology**: Java
-- **Port**: 25565
-- **Public URL**: `https://chrislawrence.ca/minecraft-map`
-- **Status**: Active
+- **Purpose**: Game server with management interface
+- **Public URL**: `https://minecraft.chrislawrence.ca`
+- **Access Policy**: Admin/Public/Friends
+- **Status**: ✅ Active
 
-#### MQTT Explorer
-- **Purpose**: IoT device management
-- **Technology**: Web-based
-- **Port**: 4000
-- **Public URL**: `https://chrislawrence.ca/mqtt`
-- **Status**: Active
-
-#### Meshtastic Web
-- **Purpose**: Mesh networking interface
-- **Technology**: Web-based
-- **Port**: 8080
-- **Public URL**: `https://chrislawrence.ca/meshtastic`
-- **Status**: Active
-
-#### Grafana IoT
-- **Purpose**: IoT-specific monitoring
-- **Technology**: Grafana
-- **Port**: 3002
-- **Public URL**: `https://chrislawrence.ca/grafana-iot`
-- **Status**: Active
-
-#### InfluxDB
-- **Purpose**: Time-series database
-- **Technology**: InfluxDB
-- **Port**: 8086
-- **Public URL**: `https://chrislawrence.ca/influxdb`
-- **Status**: Active
+#### AI Services
+- **Purpose**: AI inference and model management
+- **Public URL**: `https://ai.chrislawrence.ca`
+- **Access Policy**: Admin/Public/Friends
+- **Status**: ✅ Active
 
 ## Application Architecture
 
@@ -188,20 +161,80 @@ Many applications use dedicated database services:
 
 ### Caddy Configuration
 ```caddy
-# Application routing
-chrislawrence.ca/your-app {
-    reverse_proxy app-frontend:3000
-    basicauth {
-        admin $2a$10$hashed_password
+# Public applications (no authentication)
+portfolio.chrislawrence.ca:80 {
+    reverse_proxy portfolio:5000 {
+        header_up Host {host}
+        header_up X-Forwarded-Proto {scheme}
+        header_up X-Forwarded-For {remote}
+        header_up X-Real-IP {remote}
     }
 }
 
-# API routing
-chrislawrence.ca/your-app-api {
-    reverse_proxy app-api:8080
-    basicauth {
-        admin $2a$10$hashed_password
+schedshare.chrislawrence.ca:80 {
+    reverse_proxy schedshare:5000 {
+        header_up Host {host}
+        header_up X-Forwarded-Proto {scheme}
+        header_up X-Forwarded-For {remote}
+        header_up X-Real-IP {remote}
     }
+}
+
+capitolscope.chrislawrence.ca:80 {
+    reverse_proxy capitolscope-frontend:5173 {
+        header_up Host {host}
+        header_up X-Forwarded-Proto {scheme}
+        header_up X-Forwarded-For {remote}
+        header_up X-Real-IP {remote}
+    }
+}
+
+magicpages.chrislawrence.ca:80 {
+    reverse_proxy magicpages-api:8000 {
+        header_up Host localhost
+        header_up X-Forwarded-Proto {scheme}
+        header_up X-Forwarded-For {remote}
+        header_up X-Real-IP {remote}
+    }
+}
+
+api.magicpages.chrislawrence.ca:80 {
+    reverse_proxy magicpages-api:8000 {
+        header_up Host localhost
+        header_up X-Forwarded-Proto {scheme}
+        header_up X-Forwarded-For {remote}
+        header_up X-Real-IP {remote}
+    }
+}
+
+eventsphere.chrislawrence.ca:80 {
+    reverse_proxy mongo-events:5000 {
+        header_up Host {host}
+        header_up X-Forwarded-Proto {scheme}
+        header_up X-Forwarded-For {remote}
+        header_up X-Real-IP {remote}
+    }
+}
+
+# Protected applications (Cloudflare Access handles authentication)
+dev.chrislawrence.ca:80 {
+    reverse_proxy dev-services:8080
+}
+
+monitor.chrislawrence.ca:80 {
+    reverse_proxy monitoring-stack:3000
+}
+
+iot.chrislawrence.ca:80 {
+    reverse_proxy iot-services:8080
+}
+
+minecraft.chrislawrence.ca:80 {
+    reverse_proxy minecraft-server:8080
+}
+
+ai.chrislawrence.ca:80 {
+    reverse_proxy ai-services:8080
 }
 ```
 
@@ -248,11 +281,21 @@ docker compose -f docker-compose-homelab.yml logs -f app-service
 
 ### Health Checks
 ```bash
-# Check application health
-curl http://localhost:81XX/health
+# Test public applications
+curl -I https://chrislawrence.ca
+curl -I https://portfolio.chrislawrence.ca
+curl -I https://schedshare.chrislawrence.ca
+curl -I https://capitolscope.chrislawrence.ca
+curl -I https://magicpages.chrislawrence.ca
+curl -I https://api.magicpages.chrislawrence.ca
+curl -I https://eventsphere.chrislawrence.ca
 
-# Check application metrics
-curl http://localhost:81XX/metrics
+# Test protected applications (should redirect to Cloudflare Access)
+curl -I https://dev.chrislawrence.ca
+curl -I https://monitor.chrislawrence.ca
+curl -I https://iot.chrislawrence.ca
+curl -I https://minecraft.chrislawrence.ca
+curl -I https://ai.chrislawrence.ca
 ```
 
 ### Application Metrics

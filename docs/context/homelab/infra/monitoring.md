@@ -10,12 +10,12 @@ This document outlines the comprehensive monitoring setup for the Hephaestus Hom
 
 | Tool | Purpose | Access | Status |
 |------|---------|--------|--------|
-| **Uptime Kuma** | Website/service uptime monitoring | `https://chrislawrence.ca/uptime` | ✅ Active |
-| **Grafana** | Metrics visualization & dashboards | `https://chrislawrence.ca/metrics` | ✅ Active |
-| **Prometheus** | Metrics collection & storage | `https://chrislawrence.ca/prometheus` | ✅ Active |
-| **cAdvisor** | Container resource usage | `https://chrislawrence.ca/containers` | ✅ Active |
+| **Uptime Kuma** | Website/service uptime monitoring | `https://monitor.chrislawrence.ca` | ✅ Active |
+| **Grafana** | Metrics visualization & dashboards | `https://monitor.chrislawrence.ca` | ✅ Active |
+| **Prometheus** | Metrics collection & storage | `https://monitor.chrislawrence.ca` | ✅ Active |
+| **cAdvisor** | Container resource usage | `https://monitor.chrislawrence.ca` | ✅ Active |
 | **Node Exporter** | Host system metrics | Internal only | ✅ Active |
-| **Glances** | Real-time system monitor | `https://chrislawrence.ca/system` | ✅ Active |
+| **Glances** | Real-time system monitor | `https://monitor.chrislawrence.ca` | ✅ Active |
 
 ### Data Flow Architecture
 
@@ -28,7 +28,7 @@ This document outlines the comprehensive monitoring setup for the Hephaestus Hom
 ## Uptime Kuma Configuration
 
 ### Initial Setup
-1. **Access Uptime Kuma**: `https://chrislawrence.ca/uptime`
+1. **Access Monitoring**: `https://monitor.chrislawrence.ca` (Cloudflare Access required)
 2. **Create Admin Account**: First visitor sets up admin account
 3. **Configure Monitors**: Add service monitors
 
@@ -37,14 +37,13 @@ This document outlines the comprehensive monitoring setup for the Hephaestus Hom
 #### HTTP/HTTPS Monitors
 | Name | Monitor Type | URL | Interval |
 |------|-------------|-----|----------|
-| Portfolio | HTTP(s) | `https://chrislawrence.ca/portfolio` | 60s |
-| daedalOS | HTTP(s) | `https://chrislawrence.ca/os` | 60s |
-| CapitolScope | HTTP(s) | `https://chrislawrence.ca/capitolscope` | 60s |
-| SchedShare | HTTP(s) | `https://chrislawrence.ca/schedshare` | 60s |
-| MagicPages API | HTTP(s) | `https://chrislawrence.ca/magicpages-api` | 60s |
-| MagicPages Frontend | HTTP(s) | `https://chrislawrence.ca/magicpages` | 60s |
-| Portainer | HTTP(s) | `https://chrislawrence.ca/docker` | 120s |
-| Grafana | HTTP(s) | `https://chrislawrence.ca/metrics` | 120s |
+| Landing Page | HTTP(s) | `https://chrislawrence.ca` | 60s |
+| Portfolio | HTTP(s) | `https://portfolio.chrislawrence.ca` | 60s |
+| SchedShare | HTTP(s) | `https://schedshare.chrislawrence.ca` | 60s |
+| CapitolScope | HTTP(s) | `https://capitolscope.chrislawrence.ca` | 60s |
+| MagicPages | HTTP(s) | `https://magicpages.chrislawrence.ca` | 60s |
+| MagicPages API | HTTP(s) | `https://api.magicpages.chrislawrence.ca` | 60s |
+| EventSphere | HTTP(s) | `https://eventsphere.chrislawrence.ca` | 60s |
 
 #### Docker Container Monitors
 | Container | Monitor Type | Configuration |
@@ -94,7 +93,7 @@ Create public status page:
 ## Grafana Configuration
 
 ### Initial Setup
-1. **Access Grafana**: `https://chrislawrence.ca/metrics`
+1. **Access Grafana**: `https://monitor.chrislawrence.ca` (Cloudflare Access required)
 2. **Login**: Username `admin`, password from `.env`
 3. **Change Password**: Click profile icon → Change Password
 
@@ -209,7 +208,7 @@ metrics = PrometheusMetrics(app)
 ## System Monitoring
 
 ### Glances Real-time Monitoring
-- **Access**: `https://chrislawrence.ca/system`
+- **Access**: `https://monitor.chrislawrence.ca` (Cloudflare Access required)
 - **Features**:
   - CPU, memory, disk, network in real-time
   - Per-process resource usage
@@ -432,16 +431,16 @@ docker compose ps
 docker stats
 
 # View Grafana
-https://chrislawrence.ca/metrics
+https://monitor.chrislawrence.ca
 
 # View Uptime Kuma
-https://chrislawrence.ca/uptime
+https://monitor.chrislawrence.ca
 
 # Check Prometheus targets
 http://192.168.50.70:9090/targets
 
 # Real-time system monitoring
-https://chrislawrence.ca/system
+https://monitor.chrislawrence.ca
 
 # View logs
 docker compose logs -f

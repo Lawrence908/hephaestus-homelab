@@ -7,10 +7,10 @@ This document outlines the deployment procedures, service management, and operat
 ## Deployment Architecture
 
 ### Implementation Summary
-1. **808X Proxy Ports** (8085-8089) for Organizr iframe embedding
-2. **chrislawrence.ca Subpath Routing** for public access
-3. **81XX App Port Structure** (staged for future deployment)
-4. **Cloudflare Tunnel Configuration** for public routing
+1. **Subdomain Routing** - Each service has its own subdomain (e.g., `portfolio.chrislawrence.ca`)
+2. **Cloudflare Access Integration** - Protected subdomains use Cloudflare Access for authentication
+3. **Public vs Protected Services** - Clear separation between public and admin-only services
+4. **Cloudflare Tunnel Configuration** - Secure public access via tunnel `de5fbdaa-4497-4a7e-828f-7dba6d7b0c90`
 
 ## Service Ports & Routing
 
@@ -25,20 +25,22 @@ This document outlines the deployment procedures, service management, and operat
 
 ### Key Service Ports
 
-| Service | Port | Network Access | Public URL |
-|---------|------|----------------|------------|
-| Caddy Proxy | 80, 443 | External + Internal | `https://chrislawrence.ca` |
-| Grafana | 3000 | Internal + Proxy | `https://chrislawrence.ca/metrics` |
-| Prometheus | 9090 | Internal + Proxy | `https://chrislawrence.ca/prometheus` |
-| Portainer | 9000 | Internal + Proxy | `https://chrislawrence.ca/docker` |
-| Uptime Kuma | 3001 | Internal + Proxy | `https://chrislawrence.ca/uptime` |
-| daedalOS | 8158 | Internal + Proxy | `https://chrislawrence.ca/os` |
-| CapitolScope API | 8120 | Internal + Proxy | `https://chrislawrence.ca/capitolscope` |
-| CapitolScope Frontend | 8121 | Internal + Proxy | `https://chrislawrence.ca/capitolscope` |
-| MagicPages API | 8100 | Internal + Proxy | `https://chrislawrence.ca/magicpages-api` |
-| n8n | 5678 | Internal + Proxy | `https://chrislawrence.ca/n8n` |
-| Obsidian | 8060 | Internal + Proxy | `https://chrislawrence.ca/notes` |
-| Minecraft | 25565 | External + Internal | Direct access |
+| Service | Port | Network Access | Public URL | Access Type |
+|---------|------|----------------|------------|-------------|
+| Caddy Proxy | 80, 443 | External + Internal | `https://chrislawrence.ca` | Public |
+| Landing Page | 80 | Internal | `https://chrislawrence.ca` | Public |
+| Portfolio | 5000 | Internal | `https://portfolio.chrislawrence.ca` | Public |
+| SchedShare | 5000 | Internal | `https://schedshare.chrislawrence.ca` | Public |
+| CapitolScope Frontend | 5173 | Internal | `https://capitolscope.chrislawrence.ca` | Public |
+| CapitolScope Backend | 8000 | Internal | `https://capitolscope.chrislawrence.ca` | Public |
+| MagicPages API | 8000 | Internal | `https://magicpages.chrislawrence.ca` | Public |
+| MagicPages API | 8000 | Internal | `https://api.magicpages.chrislawrence.ca` | Public |
+| EventSphere | 5000 | Internal | `https://eventsphere.chrislawrence.ca` | Public |
+| Dev Environment | Various | Internal | `https://dev.chrislawrence.ca` | Protected (Cloudflare Access) |
+| Monitor | Various | Internal | `https://monitor.chrislawrence.ca` | Protected (Cloudflare Access) |
+| IoT Services | Various | Internal | `https://iot.chrislawrence.ca` | Protected (Cloudflare Access) |
+| Minecraft | 25565 | External + Internal | `https://minecraft.chrislawrence.ca` | Protected (Cloudflare Access) |
+| AI Services | Various | Internal | `https://ai.chrislawrence.ca` | Protected (Cloudflare Access) |
 
 ### Organizr Proxy Ports (Iframe Embedding)
 
@@ -80,14 +82,15 @@ docker compose -f docker-compose-infrastructure.yml ps
 # Backup current config
 cp ~/.cloudflared/config.yml ~/.cloudflared/config.yml.backup
 
-# Update tunnel configuration (MANUAL STEP - contains secrets)
-# Copy from cloudflare-tunnel-config-template.yml
+# Update tunnel configuration with new tunnel ID
+# Tunnel ID: de5fbdaa-4497-4a7e-828f-7dba6d7b0c90
+# Token: eyJhIjoiOWU2MjZkY2FmZmIxZDE0YmNmZDc0YzM3NGQ5MDRjZmUiLCJ0IjoiZGU1ZmJkYWEtNDQ5Ny00YTdlLTgyOGYtN2RiYTZkN2IwYzkwIiwicyI6Ik9HUmpZVEJrTm1JdFltUTVaQzAwTkRFM0xUa3laR1V0WW1VME5qSXlNV1V6TTJJdyJ9
 
 # Restart Cloudflare Tunnel
-sudo systemctl restart cloudflared
+docker compose -f proxy/docker-compose.yml restart cloudflared
 
 # Check tunnel status
-sudo systemctl status cloudflared
+docker compose -f proxy/docker-compose.yml logs cloudflared
 ```
 
 ### Phase 3: Application Deployment
@@ -156,10 +159,19 @@ curl -I http://192.168.50.70:8087 -u admin:admin123  # cAdvisor proxy
 curl -I http://192.168.50.70:8158  # daedalOS proxy
 
 # Test public access
-curl -I https://chrislawrence.ca/dashboard -u admin:admin123
-curl -I https://chrislawrence.ca/uptime -u admin:admin123
-curl -I https://chrislawrence.ca/docker -u admin:admin123
-curl -I https://chrislawrence.ca/os  # daedalOS
+curl -I https://chrislawrence.ca
+curl -I https://portfolio.chrislawrence.ca
+curl -I https://schedshare.chrislawrence.ca
+curl -I https://capitolscope.chrislawrence.ca
+curl -I https://magicpages.chrislawrence.ca
+curl -I https://eventsphere.chrislawrence.ca
+
+# Test protected access (should redirect to Cloudflare Access)
+curl -I https://dev.chrislawrence.ca
+curl -I https://monitor.chrislawrence.ca
+curl -I https://iot.chrislawrence.ca
+curl -I https://minecraft.chrislawrence.ca
+curl -I https://ai.chrislawrence.ca
 ```
 
 ### Organizr Integration Tests

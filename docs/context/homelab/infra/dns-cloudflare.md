@@ -7,26 +7,28 @@ This document outlines the DNS and Cloudflare tunnel configuration for the Hepha
 ## Current Configuration
 
 ### Tunnel Details
-- **Tunnel ID**: `3a9f1023-0d6c-49ff-900d-32403e4309f8`
-- **Tunnel Name**: `hephaestus-tunnel`
+- **Tunnel ID**: `de5fbdaa-4497-4a7e-828f-7dba6d7b0c90`
+- **Tunnel Name**: `hephaestus`
 - **Main Domain**: `chrislawrence.ca`
-- **Strategy**: Subpath routing through main domain
+- **Strategy**: Subdomain routing with Cloudflare Access protection
 
-### Current DNS Records (as of 2025-01-17)
-Based on Cloudflare DNS management interface:
+### Current DNS Records (as of 2025-01-27)
+All DNS records are managed through Cloudflare Zero Trust Published Application Routes:
 
-#### CNAME Records (11 records)
-- `api.capitol...` → `ghs.googlehos...` (Proxied, Auto TTL) ⚠️ Warning
-- `autodiscover` → `autodiscover.o...` (Proxied, Auto TTL)
-- `capitolscope` → `ghs.googlehos...` (Proxied, Auto TTL)
-- `chrislawre...` → `3a9f1023-0d6...` (Proxied, Auto TTL) ✅ Main domain
-- `_domainco...` → `_domainconne...` (Proxied, Auto TTL)
-- `email` → `email.secures...` (Proxied, Auto TTL)
-- `list` → `3a9f1023-0d6...` (Proxied, Auto TTL)
-- `lyncdiscover` → `webdir.online.l...` (Proxied, Auto TTL)
-- `msoid` → `clientconfig.mi...` (Proxied, Auto TTL)
-- `sip` → `sipdir.online.ly...` (Proxied, Auto TTL)
-- `www` → `chrislawrence....` (Proxied, Auto TTL) ⚠️ **NEEDS FIXING**
+#### Published Application Routes (13 routes)
+- `chrislawrence.ca` → `http://caddy:80` (Public)
+- `www.chrislawrence.ca` → `http://caddy:80` (Public)
+- `portfolio.chrislawrence.ca` → `http://caddy:80` (Public)
+- `schedshare.chrislawrence.ca` → `http://caddy:80` (Public)
+- `capitolscope.chrislawrence.ca` → `http://caddy:80` (Public)
+- `magicpages.chrislawrence.ca` → `http://caddy:80` (Public)
+- `api.magicpages.chrislawrence.ca` → `http://caddy:80` (Public)
+- `eventsphere.chrislawrence.ca` → `http://caddy:80` (Public)
+- `dev.chrislawrence.ca` → `http://caddy:80` (Protected - Cloudflare Access)
+- `monitor.chrislawrence.ca` → `http://caddy:80` (Protected - Cloudflare Access)
+- `iot.chrislawrence.ca` → `http://caddy:80` (Protected - Cloudflare Access)
+- `minecraft.chrislawrence.ca` → `http://caddy:80` (Protected - Cloudflare Access)
+- `ai.chrislawrence.ca` → `http://caddy:80` (Protected - Cloudflare Access)
 
 #### MX Records (3 records) - Email routing
 - `route3.mx....` (Priority 38, DNS only)
@@ -97,45 +99,63 @@ magicpages.chrislawrence.ca
 ### Local Config File: `~/.cloudflared/config.yml`
 
 ```yaml
-tunnel: 3a9f1023-0d6c-49ff-900d-32403e4309f8
-token: eyJhIjoiOWU2MjZkY2FmZmIxZDE0YmNmZDc0YzM3NGQ5MDRjZmUiLCJzIjoiTnpaak9UZGpPR1V0TldJMU1pMDBZamt6TFRnNE5ERXROMlZrTkROalpUaGlaakUxIiwidCI6IjNhOWYxMDIzLTBkNmMtNDlmZi05MDBkLTMyNDAzZTQzMDlmOCJ9
+tunnel: de5fbdaa-4497-4a7e-828f-7dba6d7b0c90
+token: eyJhIjoiOWU2MjZkY2FmZmIxZDE0YmNmZDc0YzM3NGQ5MDRjZmUiLCJ0IjoiZGU1ZmJkYWEtNDQ5Ny00YTdlLTgyOGYtN2RiYTZkN2IwYzkwIiwicyI6Ik9HUmpZVEJrTm1JdFltUTVaQzAwTkRFM0xUa3laR1V0WW1VME5qSXlNV1V6TTJJdyJ9
 
 ingress:
-  # Main domain with subpath routing
+  # Main domain - Landing page
   - hostname: chrislawrence.ca
-    service: http://localhost:80
+    service: http://caddy:80
 
-  # Individual service subdomains (for direct access)
-  - hostname: hephaestus.chrislawrence.ca
-    service: http://localhost:80
-  - hostname: portainer.hephaestus.chrislawrence.ca
-    service: http://localhost:80
-  - hostname: grafana.hephaestus.chrislawrence.ca
-    service: http://localhost:80
-  - hostname: uptime.hephaestus.chrislawrence.ca
-    service: http://localhost:80
-  - hostname: prometheus.hephaestus.chrislawrence.ca
-    service: http://localhost:80
-  - hostname: cadvisor.hephaestus.chrislawrence.ca
-    service: http://localhost:80
-  - hostname: glances.hephaestus.chrislawrence.ca
-    service: http://localhost:80
-  - hostname: dashboard.hephaestus.chrislawrence.ca
-    service: http://localhost:80
-  - hostname: organizr.hephaestus.chrislawrence.ca
-    service: http://localhost:80
+  # www subdomain - redirect to main domain
+  - hostname: www.chrislawrence.ca
+    service: http://caddy:80
 
-  # Public application domains (when ready)
+  # PUBLIC SUBDOMAINS (No Authentication Required)
+  # Portfolio subdomain
   - hostname: portfolio.chrislawrence.ca
-    service: http://localhost:80
-  - hostname: capitolscope.chrislawrence.ca
-    service: http://localhost:80
+    service: http://caddy:80
+
+  # SchedShare subdomain
   - hostname: schedshare.chrislawrence.ca
-    service: http://localhost:80
-  - hostname: api.magicpages.chrislawrence.ca
-    service: http://localhost:80
+    service: http://caddy:80
+
+  # CapitolScope subdomain
+  - hostname: capitolscope.chrislawrence.ca
+    service: http://caddy:80
+
+  # MagicPages subdomain
   - hostname: magicpages.chrislawrence.ca
-    service: http://localhost:80
+    service: http://caddy:80
+
+  # MagicPages API subdomain
+  - hostname: api.magicpages.chrislawrence.ca
+    service: http://caddy:80
+
+  # EventSphere subdomain
+  - hostname: eventsphere.chrislawrence.ca
+    service: http://caddy:80
+
+  # PROTECTED SUBDOMAINS (Cloudflare Access Required)
+  # Dev environment subdomain
+  - hostname: dev.chrislawrence.ca
+    service: http://caddy:80
+
+  # Monitor subdomain
+  - hostname: monitor.chrislawrence.ca
+    service: http://caddy:80
+
+  # IoT subdomain
+  - hostname: iot.chrislawrence.ca
+    service: http://caddy:80
+
+  # Minecraft subdomain
+  - hostname: minecraft.chrislawrence.ca
+    service: http://caddy:80
+
+  # AI subdomain
+  - hostname: ai.chrislawrence.ca
+    service: http://caddy:80
 
   # Catch-all for 404s
   - service: http_status:404
@@ -143,38 +163,37 @@ ingress:
 
 ## Public Access URLs
 
-### Infrastructure Services (Protected)
-- `https://chrislawrence.ca/dashboard` → Organizr (Main entry point)
-- `https://chrislawrence.ca/uptime` → Uptime Kuma
-- `https://chrislawrence.ca/docker` → Portainer
-- `https://chrislawrence.ca/metrics` → Grafana
-- `https://chrislawrence.ca/prometheus` → Prometheus
-- `https://chrislawrence.ca/containers` → cAdvisor
-- `https://chrislawrence.ca/system` → Glances
-- `https://chrislawrence.ca/tools` → IT-Tools
+### Public Services (No Authentication Required)
+- `https://chrislawrence.ca` → Landing page
+- `https://portfolio.chrislawrence.ca` → Portfolio website
+- `https://schedshare.chrislawrence.ca` → Schedule sharing application
+- `https://capitolscope.chrislawrence.ca` → Political data platform
+- `https://magicpages.chrislawrence.ca` → Content management system
+- `https://api.magicpages.chrislawrence.ca` → MagicPages API
+- `https://eventsphere.chrislawrence.ca` → Event management system
 
-### Public Services (Future)
-- `https://chrislawrence.ca/portfolio` → Portfolio App
-- `https://chrislawrence.ca/capitolscope` → CapitolScope
-- `https://chrislawrence.ca/schedshare` → SchedShare
-- `https://chrislawrence.ca/magicpages` → Magic Pages Frontend
-- `https://chrislawrence.ca/magicpages-api` → Magic Pages API
+### Protected Services (Cloudflare Access Required)
+- `https://dev.chrislawrence.ca` → Development environment
+- `https://monitor.chrislawrence.ca` → Monitoring dashboard
+- `https://iot.chrislawrence.ca` → IoT device management
+- `https://minecraft.chrislawrence.ca` → Minecraft server
+- `https://ai.chrislawrence.ca` → AI services
 
 ## Service Management
 
 ### Tunnel Commands
 ```bash
 # Check tunnel status
-sudo systemctl status cloudflared
+docker compose -f proxy/docker-compose.yml ps cloudflared
 
 # Restart tunnel
-sudo systemctl restart cloudflared
+docker compose -f proxy/docker-compose.yml restart cloudflared
 
 # View tunnel logs
-sudo journalctl -u cloudflared -f
+docker compose -f proxy/docker-compose.yml logs cloudflared
 
 # Test tunnel connectivity
-cloudflared tunnel info 3a9f1023-0d6c-49ff-900d-32403e4309f8
+cloudflared tunnel info de5fbdaa-4497-4a7e-828f-7dba6d7b0c90
 ```
 
 ### DNS Management
@@ -185,7 +204,18 @@ nslookup chrislawrence.ca
 
 # Test public access
 curl -I https://chrislawrence.ca
-curl -I https://chrislawrence.ca/dashboard
+curl -I https://portfolio.chrislawrence.ca
+curl -I https://schedshare.chrislawrence.ca
+curl -I https://capitolscope.chrislawrence.ca
+curl -I https://magicpages.chrislawrence.ca
+curl -I https://eventsphere.chrislawrence.ca
+
+# Test protected access (should redirect to Cloudflare Access)
+curl -I https://dev.chrislawrence.ca
+curl -I https://monitor.chrislawrence.ca
+curl -I https://iot.chrislawrence.ca
+curl -I https://minecraft.chrislawrence.ca
+curl -I https://ai.chrislawrence.ca
 ```
 
 ## DNS Records to Remove
