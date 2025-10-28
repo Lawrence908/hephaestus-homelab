@@ -53,7 +53,7 @@ declare -A URLS=(
     ["schedshare"]="https://schedshare.chrislawrence.ca"
     ["capitolscope"]="https://capitolscope.chrislawrence.ca"
     ["mongo-events"]="https://eventsphere.chrislawrence.ca"
-    ["magicpages"]="https://api.magicpages.chrislawrence.ca"
+    ["magicpages"]="https://magicpages-api.chrislawrence.ca"
     ["obsidian"]="https://dev.chrislawrence.ca/notes"
 )
 
