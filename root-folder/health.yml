@@ -1,1 +1,22 @@
-/home/chris/health.yml
+# Example per-service overrides (not strictly used yet by scripts)
+# service:
+#   type: http|tcp|cmd
+#   url: http://container:port/path
+#   port: 1234
+#   cmd: ["sh", "-c", "some check"]
+
+n8n:
+  type: http
+  url: http://n8n:5678/
+
+grafana:
+  type: http
+  url: http://grafana:3000/login
+
+prometheus:
+  type: http
+  url: http://prometheus:9090/-/healthy
+
+redis:
+  type: tcp
+  port: 6379
