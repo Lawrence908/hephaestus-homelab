@@ -1,4 +1,4 @@
-# ⚒️ Hephaestus Homelab
+# Hephaestus Homelab
 
 **Dell OptiPlex 7040 Ubuntu Server 24.04 - Docker-based Homelab Platform**
 
@@ -6,24 +6,24 @@
 
 ---
 
-## 📋 Overview
+## Overview
 
 Hephaestus is a production-ready Docker-based homelab platform designed to replace traditional NAS setups. It provides a complete infrastructure stack for hosting multiple applications, monitoring system health, and managing services through a unified interface.
 
-### 🎯 Key Features
+### Key Features
 
-- **🌐 Reverse Proxy**: Caddy with automatic HTTPS
-- **🔒 Zero-Trust Access**: Cloudflare Tunnel (no port forwarding required)
-- **📊 Comprehensive Monitoring**: Grafana + Prometheus + cAdvisor + Glances
-- **⏱️ Uptime Monitoring**: Uptime Kuma with status pages
-- **🐳 Container Management**: Portainer with web UI
-- **🔄 Automatic Updates**: Watchtower with label-based control
-- **🔐 Security**: UFW firewall, Fail2Ban, SSH hardening
-- **💾 Automated Backups**: Daily backup scripts with retention
+- **Reverse Proxy**: Caddy with automatic HTTPS
+- **Zero-Trust Access**: Cloudflare Tunnel (no port forwarding required)
+- **Comprehensive Monitoring**: Grafana + Prometheus + cAdvisor + Glances
+- **Uptime Monitoring**: Uptime Kuma with status pages
+- **Container Management**: Portainer with web UI
+- **Automatic Updates**: Watchtower with label-based control
+- **Security**: UFW firewall, Fail2Ban, SSH hardening
+- **Automated Backups**: Daily backup scripts with retention
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 ```
 Internet
@@ -58,7 +58,7 @@ Static IP: 192.168.50.70
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 
@@ -68,16 +68,7 @@ Static IP: 192.168.50.70
 - Static IP configured (192.168.50.70)
 - Domain name with Cloudflare DNS
 
-### 1. Clone Repository
-
-```bash
-mkdir -p ~/github ~/apps
-cd ~/github
-git clone https://github.com/yourusername/hephaestus-homelab.git
-cd hephaestus-homelab
-```
-
-### 2. Configure Environment
+### 1. Configure Environment
 
 ```bash
 # Copy environment template
@@ -94,24 +85,13 @@ nano .env
 - Database passwords
 - Application secrets
 
-### 3. Create Docker Network
+### 2. Create Docker Network
 
 ```bash
 docker network create web
 ```
 
-### 4. Clone Application Repositories
-
-```bash
-cd ~/apps
-git clone https://github.com/yourusername/magic-pages-api.git
-git clone https://github.com/yourusername/capitolscope.git
-git clone https://github.com/yourusername/schedshare.git
-git clone https://github.com/yourusername/portfolio.git
-git clone https://github.com/yourusername/magic-pages-frontend.git
-```
-
-### 5. Start Services
+### 3. Start Services
 
 ```bash
 cd ~/github/hephaestus-homelab
@@ -126,13 +106,23 @@ docker compose ps
 docker compose logs -f
 ```
 
-### 6. Access Services
+### 4. Access Services
 
-**Public (via Cloudflare Tunnel)**:
-- Uptime Kuma: `https://uptime.yourdomain.com`
-- Portainer: `https://portainer.yourdomain.com`
-- Grafana: `https://grafana.yourdomain.com`
-- Applications: `https://[subdomain].yourdomain.com`
+**Public Services (via Cloudflare Tunnel)**:
+- Landing Page: `https://chrislawrence.ca`
+- Portfolio: `https://portfolio.chrislawrence.ca`
+- SchedShare: `https://schedshare.chrislawrence.ca`
+- CapitolScope: `https://capitolscope.chrislawrence.ca`
+- MagicPages: `https://magicpages.chrislawrence.ca`
+- MagicPages API: `https://api.magicpages.chrislawrence.ca`
+- EventSphere: `https://eventsphere.chrislawrence.ca`
+
+**Protected Services (Cloudflare Access Required)**:
+- Dev Environment: `https://dev.chrislawrence.ca`
+- Monitor: `https://monitor.chrislawrence.ca`
+- IoT Services: `https://iot.chrislawrence.ca`
+- Minecraft: `https://minecraft.chrislawrence.ca`
+- AI Services: `https://ai.chrislawrence.ca`
 
 **LAN Only**:
 - Portainer: `http://192.168.50.70:9000`
@@ -141,7 +131,7 @@ docker compose logs -f
 
 ---
 
-## 📚 Documentation
+## Documentation
 
 Comprehensive guides are available in the [`docs/`](./docs) directory:
 
@@ -154,7 +144,7 @@ Comprehensive guides are available in the [`docs/`](./docs) directory:
 
 ---
 
-## 🐳 Services
+## Services
 
 ### Infrastructure
 
@@ -178,17 +168,18 @@ Comprehensive guides are available in the [`docs/`](./docs) directory:
 
 ### Applications
 
-| Service | Stack | Purpose | Port(s) |
-|---------|-------|---------|---------|
-| **Magic Pages API** | Django + Gunicorn | WordPress migration backend | 8001 |
-| **CapitolScope** | FastAPI + Postgres | Congressional trading tracker | 8002 |
-| **SchedShare** | Flask | Schedule parsing app | 8003 |
-| **Portfolio** | Flask | Personal portfolio site | 8004 |
-| **Magic Pages Frontend** | Nginx (static) | Static WordPress clone | 8005 |
+| Service | Stack | Purpose | Port(s) | Public URL |
+|---------|-------|---------|----------|------------|
+| **Portfolio** | Flask | Personal portfolio site | 5000 | `https://portfolio.chrislawrence.ca` |
+| **SchedShare** | Flask | Schedule parsing app | 5000 | `https://schedshare.chrislawrence.ca` |
+| **CapitolScope** | React + Python | Political data analysis | 5173 | `https://capitolscope.chrislawrence.ca` |
+| **MagicPages** | Django | Content management system | 8000 | `https://magicpages.chrislawrence.ca` |
+| **MagicPages API** | Django | API endpoint | 8000 | `https://api.magicpages.chrislawrence.ca` |
+| **EventSphere** | Flask | Event management system | 5000 | `https://eventsphere.chrislawrence.ca` |
 
 ---
 
-## 🔧 Management
+## Management
 
 ### Common Commands
 
@@ -247,29 +238,30 @@ crontab -e
 
 ---
 
-## 🔒 Security
+## Security
 
 ### Implemented Security Measures
 
-✅ **Network Security**
+**Network Security**
 - No ports forwarded on router (80/443 closed)
 - All public traffic through Cloudflare Tunnel
 - UFW firewall with default deny
 - Docker network isolation
 
-✅ **Access Control**
+**Access Control**
 - SSH key-only authentication
 - Password authentication disabled
 - Fail2Ban monitoring SSH attempts
 - Cloudflare WAF and DDoS protection
+- Cloudflare Access for protected services
 
-✅ **Container Security**
+**Container Security**
 - Non-root containers where possible
 - Read-only configuration mounts
 - Watchtower label-based updates only
 - Security options enabled (no-new-privileges)
 
-✅ **Data Protection**
+**Data Protection**
 - Automated encrypted backups
 - Sensitive data in `.env` (not committed)
 - SSL/TLS via Cloudflare (Full strict mode)
@@ -279,7 +271,7 @@ See [SECURITY.md](./docs/SECURITY.md) for detailed configuration.
 
 ---
 
-## 📊 Monitoring & Alerts
+## Monitoring & Alerts
 
 ### Health Checks
 
@@ -312,7 +304,7 @@ See [MONITORING.md](./docs/MONITORING.md) for setup instructions.
 
 ---
 
-## 🗂️ Project Structure
+## Project Structure
 
 ```
 hephaestus-homelab/
@@ -355,7 +347,7 @@ hephaestus-homelab/
 
 ---
 
-## 🔄 Workflow
+## Workflow
 
 ### Daily Operations
 
@@ -380,7 +372,7 @@ hephaestus-homelab/
 
 ---
 
-## 🚧 Troubleshooting
+## Troubleshooting
 
 ### Container Won't Start
 
@@ -426,7 +418,7 @@ docker compose restart cloudflared
 
 ---
 
-## 🎯 Future Enhancements
+## Future Enhancements
 
 ### Planned Additions
 
@@ -447,61 +439,15 @@ See planning docs in [`prompts/`](./prompts) for architecture evolution.
 
 ---
 
-## 🤝 Contributing
+<!-- Contributing section intentionally removed as this repository is tailored to a personal homelab setup. -->
 
-This is a personal homelab project, but suggestions and improvements are welcome!
-
-### Reporting Issues
-
-- Check existing documentation first
-- Include relevant logs: `docker compose logs [service]`
-- Describe your environment and configuration
-
-### Making Changes
-
-1. Fork the repository
-2. Create a feature branch
-3. Test changes thoroughly
-4. Submit a pull request with clear description
-
----
-
-## 📜 License
+## License
 
 This project is licensed under the MIT License - see LICENSE file for details.
 
 ---
 
-## 🙏 Acknowledgments
-
-- **Caddy** for making HTTPS simple
-- **Cloudflare** for amazing free tier and tunnel
-- **Uptime Kuma** for beautiful monitoring UI
-- **Grafana/Prometheus** for powerful observability
-- **Docker** community for excellent container ecosystem
-
----
-
-## 📞 Support & Resources
-
-### Official Documentation
-
-- [Docker Documentation](https://docs.docker.com/)
-- [Caddy Documentation](https://caddyserver.com/docs/)
-- [Cloudflare Tunnel Docs](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/)
-- [Uptime Kuma Wiki](https://github.com/louislam/uptime-kuma/wiki)
-- [Grafana Documentation](https://grafana.com/docs/)
-
-### Community
-
-- Docker Community Forums
-- /r/homelab on Reddit
-- /r/selfhosted on Reddit
-- HomelabOS Discord
-
----
-
-## 🏁 Getting Started Checklist
+## Getting Started Checklist
 
 Follow this checklist to get Hephaestus up and running:
 
@@ -519,9 +465,7 @@ Follow this checklist to get Hephaestus up and running:
 - [ ] UFW firewall enabled
 
 ### Configuration
-- [ ] Repository cloned to `~/github/hephaestus-homelab`
 - [ ] `.env` file created and configured
-- [ ] Application repos cloned to `~/apps/`
 - [ ] Docker network `web` created
 
 ### Cloudflare
@@ -552,6 +496,6 @@ Follow this checklist to get Hephaestus up and running:
 ---
 
 <p align="center">
-  <strong>Built with 🔥 by the Forge of Hephaestus</strong>
+  <strong>Built by the Forge of Hephaestus</strong>
 </p>
 
