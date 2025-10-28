@@ -31,11 +31,11 @@ error() {
 
 # Application definitions
 declare -A APPS=(
-    ["portfolio"]="/home/chris/apps/chrislawrence-portfolio"
-    ["schedshare"]="/home/chris/apps/CourseSchedule2Calendar"
-    ["capitolscope"]="/home/chris/apps/CapitolScope"
-    ["mongo-events"]="/home/chris/apps/mongo-events-demo"
-    ["magicpages"]="/home/chris/apps/MagicPages"
+    ["portfolio"]="/home/chris/apps/portfolio"
+    ["schedshare"]="/home/chris/apps/schedshare"
+    ["capitolscope"]="/home/chris/apps/capitolscope"
+    ["mongo-events"]="/home/chris/apps/eventsphere"
+    ["magicpages"]="/home/chris/apps/magicpages"
     ["obsidian"]="/home/chris/apps/obsidian"
 )
 
@@ -49,19 +49,19 @@ declare -A PORTS=(
 )
 
 declare -A URLS=(
-    ["portfolio"]="https://chrislawrence.ca/portfolio"
-    ["schedshare"]="https://chrislawrence.ca/schedshare"
-    ["capitolscope"]="https://chrislawrence.ca/capitolscope"
-    ["mongo-events"]="https://chrislawrence.ca/events"
-    ["magicpages"]="https://chrislawrence.ca/magicpages-api"
-    ["obsidian"]="https://chrislawrence.ca/notes"
+    ["portfolio"]="https://portfolio.chrislawrence.ca"
+    ["schedshare"]="https://schedshare.chrislawrence.ca"
+    ["capitolscope"]="https://capitolscope.chrislawrence.ca"
+    ["mongo-events"]="https://eventsphere.chrislawrence.ca"
+    ["magicpages"]="https://api.magicpages.chrislawrence.ca"
+    ["obsidian"]="https://dev.chrislawrence.ca/notes"
 )
 
 # Function to check if infrastructure is running
 check_infrastructure() {
     log "Checking infrastructure services..."
     
-    cd /home/chris/github/hephaestus-homelab
+    cd /home/chris/github/hephaestus-infra
     
     if ! docker compose -f docker-compose-infrastructure.yml ps | grep -q "Up"; then
         error "Infrastructure services are not running!"
@@ -159,7 +159,7 @@ show_status() {
 # Function to restart Caddy
 restart_caddy() {
     log "Restarting Caddy to reload configuration..."
-    cd /home/chris/github/hephaestus-homelab
+    cd /home/chris/github/hephaestus-infra
     docker compose -f docker-compose-infrastructure.yml restart caddy
     sleep 5
     success "Caddy restarted"
@@ -168,7 +168,7 @@ restart_caddy() {
 # Function to restart Cloudflare tunnel
 restart_tunnel() {
     log "Restarting Cloudflare tunnel..."
-    cd /home/chris/github/hephaestus-homelab
+    cd /home/chris/github/hephaestus-infra
     docker compose -f docker-compose-infrastructure.yml restart cloudflared
     sleep 5
     success "Cloudflare tunnel restarted"

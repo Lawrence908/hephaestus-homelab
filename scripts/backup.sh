@@ -7,7 +7,7 @@
 # Run manually or via cron job
 #
 # Usage: ./scripts/backup.sh
-# Cron:  0 2 * * * /home/chris/github/hephaestus-homelab/scripts/backup.sh
+# Cron:  0 2 * * * /home/chris/github/hephaestus-infra/scripts/backup.sh
 ################################################################################
 
 set -euo pipefail

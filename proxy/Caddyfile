@@ -115,8 +115,9 @@ capitolscope.chrislawrence.ca:80 {
 # MagicPages subdomain
 magicpages.chrislawrence.ca:80 {
     reverse_proxy magicpages-api:8000 {
-        header_up Host localhost
-        header_up X-Forwarded-Proto {scheme}
+        header_up Host {host}
+        header_up X-Forwarded-Host {host}
+        header_up X-Forwarded-Proto https
         header_up X-Forwarded-For {remote}
         header_up X-Real-IP {remote}
     }
@@ -125,8 +126,9 @@ magicpages.chrislawrence.ca:80 {
 # MagicPages API subdomain
 api.magicpages.chrislawrence.ca:80 {
     reverse_proxy magicpages-api:8000 {
-        header_up Host localhost
-        header_up X-Forwarded-Proto {scheme}
+        header_up Host {host}
+        header_up X-Forwarded-Host {host}
+        header_up X-Forwarded-Proto https
         header_up X-Forwarded-For {remote}
         header_up X-Real-IP {remote}
     }
@@ -166,6 +168,23 @@ eventsphere.chrislawrence.ca:80 {
     }
 }
 
+# BlueMap dedicated subdomain
+map.minecraft.chrislawrence.ca:80 {
+    reverse_proxy minecraft:8100 {
+        header_down -X-Frame-Options
+        header_down -Content-Security-Policy
+    }
+    log {
+        level INFO
+        format json
+        output file /data/logs/minecraft-map.json {
+            roll_size 15mb
+            roll_keep 8
+            roll_keep_for 168h
+        }
+    }
+}
+
 # ============================================================================
 # PROTECTED SUBDOMAINS (Cloudflare Access Required)
 # ============================================================================
@@ -174,7 +193,7 @@ eventsphere.chrislawrence.ca:80 {
 dev.chrislawrence.ca:80 {
     # Dashboard/Organizr
     handle_path /dashboard {
-        reverse_proxy organizr:80
+        redir / 301
     }
     
     handle_path /dashboard/* {
@@ -252,9 +271,9 @@ dev.chrislawrence.ca:80 {
         }
     }
     
-    # Fallback for any unmatched paths
+    # Fallback for any unmatched paths -> send to Organizr
     handle {
-        respond "Not Found" 404
+        reverse_proxy organizr:80
     }
     
     log {

@@ -1,5 +1,5 @@
 #!/bin/bash
-cd /home/chris/github/hephaestus-homelab
+cd /home/chris/github/hephaestus-infra
 
 echo "=== Hephaestus Health Check ==="
 echo "Date: $(date)"
