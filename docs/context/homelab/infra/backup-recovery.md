@@ -35,7 +35,7 @@ This document outlines comprehensive backup and recovery procedures for the Heph
 
 ### **Automated Backup Script**
 
-Create `/home/chris/github/hephaestus-homelab/scripts/backup.sh`:
+Create `/home/chris/github/hephaestus-infra/scripts/backup.sh`:
 
 ```bash
 #!/bin/bash
@@ -82,15 +82,15 @@ echo "Backing up configuration files..."
 mkdir -p "${BACKUP_PATH}/config"
 
 # Docker Compose files
-cp -r /home/chris/github/hephaestus-homelab/*.yml "${BACKUP_PATH}/config/"
-cp -r /home/chris/github/hephaestus-homelab/proxy/ "${BACKUP_PATH}/config/"
-cp -r /home/chris/github/hephaestus-homelab/grafana-stack/ "${BACKUP_PATH}/config/"
+cp -r /home/chris/github/hephaestus-infra/*.yml "${BACKUP_PATH}/config/"
+cp -r /home/chris/github/hephaestus-infra/proxy/ "${BACKUP_PATH}/config/"
+cp -r /home/chris/github/hephaestus-infra/grafana-stack/ "${BACKUP_PATH}/config/"
 
 # Environment files
-cp /home/chris/github/hephaestus-homelab/.env "${BACKUP_PATH}/config/"
+cp /home/chris/github/hephaestus-infra/.env "${BACKUP_PATH}/config/"
 
 # Caddy configuration
-cp /home/chris/github/hephaestus-homelab/proxy/Caddyfile "${BACKUP_PATH}/config/"
+cp /home/chris/github/hephaestus-infra/proxy/Caddyfile "${BACKUP_PATH}/config/"
 
 # Cloudflare tunnel configuration
 cp ~/.cloudflared/config.yml "${BACKUP_PATH}/config/"
@@ -159,7 +159,7 @@ echo "Size: $(du -sh "${BACKUP_DIR}/${BACKUP_NAME}.tar.gz" | cut -f1)"
 
 ### **Make Script Executable**
 ```bash
-chmod +x /home/chris/github/hephaestus-homelab/scripts/backup.sh
+chmod +x /home/chris/github/hephaestus-infra/scripts/backup.sh
 ```
 
 ### **Automated Backup Schedule**
@@ -170,13 +170,13 @@ chmod +x /home/chris/github/hephaestus-homelab/scripts/backup.sh
 crontab -e
 
 # Add this line for daily backups at 2 AM
-0 2 * * * /home/chris/github/hephaestus-homelab/scripts/backup.sh >> /home/chris/backups/backup.log 2>&1
+0 2 * * * /home/chris/github/hephaestus-infra/scripts/backup.sh >> /home/chris/backups/backup.log 2>&1
 ```
 
 #### **Weekly Backups (Full System)**
 ```bash
 # Add to crontab for weekly full backups
-0 3 * * 0 /home/chris/github/hephaestus-homelab/scripts/backup.sh --full >> /home/chris/backups/backup.log 2>&1
+0 3 * * 0 /home/chris/github/hephaestus-infra/scripts/backup.sh --full >> /home/chris/backups/backup.log 2>&1
 ```
 
 ## 🔄 **Recovery Procedures**
@@ -229,12 +229,12 @@ docker compose -f docker-compose-infrastructure.yml start [service]
 #### **Restore Configuration Files**
 ```bash
 # Restore Docker Compose files
-cp -r /home/chris/backups/config/*.yml /home/chris/github/hephaestus-homelab/
-cp -r /home/chris/backups/config/proxy/ /home/chris/github/hephaestus-homelab/
-cp -r /home/chris/backups/config/grafana-stack/ /home/chris/github/hephaestus-homelab/
+cp -r /home/chris/backups/config/*.yml /home/chris/github/hephaestus-infra/
+cp -r /home/chris/backups/config/proxy/ /home/chris/github/hephaestus-infra/
+cp -r /home/chris/backups/config/grafana-stack/ /home/chris/github/hephaestus-infra/
 
 # Restore environment file
-cp /home/chris/backups/config/.env /home/chris/github/hephaestus-homelab/
+cp /home/chris/backups/config/.env /home/chris/github/hephaestus-infra/
 
 # Restore Cloudflare configuration
 cp /home/chris/backups/config/config.yml ~/.cloudflared/
@@ -274,7 +274,7 @@ cd /home/chris/backups
 tar xzf hephaestus_backup_YYYYMMDD_HHMMSS.tar.gz
 
 # Restore configuration
-cp -r hephaestus_backup_YYYYMMDD_HHMMSS/config/* /home/chris/github/hephaestus-homelab/
+cp -r hephaestus_backup_YYYYMMDD_HHMMSS/config/* /home/chris/github/hephaestus-infra/
 
 # Restore applications
 cp -r hephaestus_backup_YYYYMMDD_HHMMSS/applications/* /home/chris/apps/

@@ -177,8 +177,8 @@ sudo systemctl restart docker
 
 ```bash
 cd ~/github
-git clone https://github.com/yourusername/hephaestus-homelab.git
-cd hephaestus-homelab
+git clone https://github.com/yourusername/hephaestus-infra.git
+cd hephaestus-infra
 ```
 
 ### 2. Clone Application Repositories
@@ -198,7 +198,7 @@ git clone https://github.com/yourusername/magic-pages-frontend.git
 ### 3. Configure Environment Variables
 
 ```bash
-cd ~/github/hephaestus-homelab
+cd ~/github/hephaestus-infra
 cp .env.example .env
 vim .env
 ```
@@ -231,7 +231,7 @@ docker network create homelab-web
 ### 1. Start Infrastructure Services First
 
 ```bash
-cd ~/github/hephaestus-homelab
+cd ~/github/hephaestus-infra
 
 # Start proxy and monitoring stack
 docker compose -f docker-compose-infrastructure.yml up -d caddy cloudflared portainer watchtower
@@ -312,12 +312,12 @@ See [SECURITY.md](./security.md) for:
 
 ```bash
 # Test backup script
-cd ~/github/hephaestus-homelab
+cd ~/github/hephaestus-infra
 ./scripts/backup.sh
 
 # Setup cron job
 crontab -e
-# Add: 0 2 * * * /home/chris/github/hephaestus-homelab/scripts/backup.sh
+# Add: 0 2 * * * /home/chris/github/hephaestus-infra/scripts/backup.sh
 ```
 
 ## Troubleshooting
@@ -382,7 +382,7 @@ sudo lsof -i :443
 ### Phase 3: Repository Setup
 - [ ] Create `~/github` directory
 - [ ] Create `~/apps` directory
-- [ ] Clone `hephaestus-homelab` repository
+- [ ] Clone `hephaestus-infra` repository
 - [ ] Clone application repositories
 - [ ] Copy `.env.example` to `.env`
 - [ ] Configure domain (`chrislawrence.ca`)

@@ -123,7 +123,7 @@ curl -X GET http://localhost:2375/containers/{container_id}/logs
       "name": "Run Backup Script",
       "type": "n8n-nodes-base.executeCommand",
       "parameters": {
-        "command": "/home/chris/github/hephaestus-homelab/scripts/backup.sh"
+        "command": "/home/chris/github/hephaestus-infra/scripts/backup.sh"
       }
     },
     {
@@ -152,7 +152,7 @@ curl -X GET http://localhost:2375/containers/{container_id}/logs
 #### **Daily Maintenance Script**
 ```bash
 #!/bin/bash
-# /home/chris/github/hephaestus-homelab/scripts/daily-maintenance.sh
+# /home/chris/github/hephaestus-infra/scripts/daily-maintenance.sh
 
 set -e
 
@@ -203,7 +203,7 @@ echo "=== Daily Maintenance Complete ==="
 #### **Weekly Maintenance Script**
 ```bash
 #!/bin/bash
-# /home/chris/github/hephaestus-homelab/scripts/weekly-maintenance.sh
+# /home/chris/github/hephaestus-infra/scripts/weekly-maintenance.sh
 
 set -e
 
@@ -244,7 +244,7 @@ echo "=== Weekly Maintenance Complete ==="
 #### **Service Health Check**
 ```bash
 #!/bin/bash
-# /home/chris/github/hephaestus-homelab/scripts/health-check.sh
+# /home/chris/github/hephaestus-infra/scripts/health-check.sh
 
 set -e
 
@@ -321,13 +321,13 @@ curl -X POST "https://chrislawrence.ca/n8n/webhook/maintenance-data" \
 crontab -e
 
 # Daily maintenance at 3 AM
-0 3 * * * /home/chris/github/hephaestus-homelab/scripts/daily-maintenance.sh >> /home/chris/maintenance.log 2>&1
+0 3 * * * /home/chris/github/hephaestus-infra/scripts/daily-maintenance.sh >> /home/chris/maintenance.log 2>&1
 
 # Weekly maintenance at 4 AM on Sunday
-0 4 * * 0 /home/chris/github/hephaestus-homelab/scripts/weekly-maintenance.sh >> /home/chris/maintenance.log 2>&1
+0 4 * * 0 /home/chris/github/hephaestus-infra/scripts/weekly-maintenance.sh >> /home/chris/maintenance.log 2>&1
 
 # Health check every 6 hours
-0 */6 * * * /home/chris/github/hephaestus-homelab/scripts/health-check.sh >> /home/chris/health.log 2>&1
+0 */6 * * * /home/chris/github/hephaestus-infra/scripts/health-check.sh >> /home/chris/health.log 2>&1
 ```
 
 ## 📊 **Automation Monitoring**
@@ -470,13 +470,13 @@ docker compose -f docker-compose-infrastructure.yml exec n8n n8n execute --id WO
 #### **Script Execution Failures**
 ```bash
 # Check script permissions
-ls -la /home/chris/github/hephaestus-homelab/scripts/
+ls -la /home/chris/github/hephaestus-infra/scripts/
 
 # Make scripts executable
-chmod +x /home/chris/github/hephaestus-homelab/scripts/*.sh
+chmod +x /home/chris/github/hephaestus-infra/scripts/*.sh
 
 # Test script execution
-bash -x /home/chris/github/hephaestus-homelab/scripts/daily-maintenance.sh
+bash -x /home/chris/github/hephaestus-infra/scripts/daily-maintenance.sh
 ```
 
 #### **Cron Job Issues**

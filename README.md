@@ -94,7 +94,7 @@ docker network create web
 ### 3. Start Services
 
 ```bash
-cd ~/github/hephaestus-homelab
+cd ~/github/hephaestus-infra
 
 # Start infrastructure services
 docker compose up -d
@@ -226,14 +226,14 @@ docker compose pull && docker compose up -d
 crontab -e
 
 # Add daily backup at 2 AM
-0 2 * * * /home/chris/github/hephaestus-homelab/scripts/backup.sh
+0 2 * * * /home/chris/github/hephaestus-infra/scripts/backup.sh
 ```
 
 ### Setup Weekly Updates
 
 ```bash
 # Add weekly update at 3 AM Sunday
-0 3 * * 0 /home/chris/github/hephaestus-homelab/scripts/update.sh --auto
+0 3 * * 0 /home/chris/github/hephaestus-infra/scripts/update.sh --auto
 ```
 
 ---
@@ -307,7 +307,7 @@ See [MONITORING.md](./docs/MONITORING.md) for setup instructions.
 ## Project Structure
 
 ```
-hephaestus-homelab/
+hephaestus-infra/
 ├── docker-compose.yml           # Main orchestration file
 ├── .env.example                 # Environment variable template
 ├── .gitignore                   # Git ignore rules

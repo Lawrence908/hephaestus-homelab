@@ -165,7 +165,7 @@ Dashboard: https://dashboard.hephaestus.chrislawrence.ca
 ### Essential Commands
 ```bash
 # Navigate to project
-cd ~/github/hephaestus-homelab
+cd ~/github/hephaestus-infra
 
 # Start all services
 docker compose up -d
@@ -233,7 +233,7 @@ ORGANIZR_API_KEY=m6anohg2zwu3emo13e4r
 ## Directory Structure
 
 ```
-~/github/hephaestus-homelab/
+~/github/hephaestus-infra/
 ├── docker-compose-infrastructure.yml
 ├── .env
 ├── proxy/

@@ -325,7 +325,7 @@ If services are down, execute this sequence:
 - **Caddy Proxy**: `caddy` (port 80)
 - **Tunnel ID**: `3a9f1023-0d6c-49ff-900d-32403e4309f8`
 - **Local Server**: `192.168.50.70`
-- **Docker Compose**: `/home/chris/github/hephaestus-homelab/`
+- **Docker Compose**: `/home/chris/github/hephaestus-infra/`
 - **Management Scripts**: `/home/chris/manage-services.sh`, `/home/chris/start-homelab.sh`
 
 ## 🔍 **Service Architecture Flow**

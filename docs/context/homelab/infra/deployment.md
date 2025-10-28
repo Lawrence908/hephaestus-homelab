@@ -61,7 +61,7 @@ This document outlines the deployment procedures, service management, and operat
 
 ```bash
 # Navigate to homelab directory
-cd ~/github/hephaestus-homelab
+cd ~/github/hephaestus-infra
 
 # Deploy main infrastructure stack
 docker compose -f docker-compose-infrastructure.yml up -d
@@ -109,9 +109,9 @@ docker compose -f docker-compose-homelab.yml up -d
 ### Docker Compose Files
 
 #### Infrastructure Files (Network Creators)
-- **Main Infrastructure**: `/home/chris/github/hephaestus-homelab/docker-compose-infrastructure.yml`
-- **Proxy Stack**: `/home/chris/github/hephaestus-homelab/proxy/docker-compose.yml`
-- **Monitoring Stack**: `/home/chris/github/hephaestus-homelab/grafana-stack/docker-compose.yml`
+- **Main Infrastructure**: `/home/chris/github/hephaestus-infra/docker-compose-infrastructure.yml`
+- **Proxy Stack**: `/home/chris/github/hephaestus-infra/proxy/docker-compose.yml`
+- **Monitoring Stack**: `/home/chris/github/hephaestus-infra/grafana-stack/docker-compose.yml`
 
 #### Application Files (Network Users)
 - **Pattern**: `/home/chris/apps/*/docker-compose-homelab.yml`

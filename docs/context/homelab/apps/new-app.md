@@ -24,7 +24,7 @@
    Service: http://localhost:80
    ```
 
-2. **Add to Caddyfile** (`github/hephaestus-homelab/proxy/Caddyfile`):
+2. **Add to Caddyfile** (`github/hephaestus-infra/proxy/Caddyfile`):
    ```caddy
    # MyApp subdomain
    myapp.chrislawrence.ca:80 {

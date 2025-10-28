@@ -143,7 +143,7 @@ curl -s https://dev.chrislawrence.ca/portfolio/ | grep -q "Chris Lawrence" && ec
 #### **4.3 Nuclear Option (5 minutes)**
 ```bash
 # Complete infrastructure restart
-cd /home/chris/github/hephaestus-homelab/proxy
+cd /home/chris/github/hephaestus-infra/proxy
 docker compose down
 sleep 10
 docker compose up -d
@@ -263,7 +263,7 @@ If website is down, execute this sequence:
 - **Tunnel ID**: `3a9f1023-0d6c-49ff-900d-32403e4309f8`
 - **Local Server**: `192.168.50.70`
 - **Public URL**: `https://dev.chrislawrence.ca/portfolio/`
-- **Docker Compose**: `/home/chris/github/hephaestus-homelab/proxy/`
+- **Docker Compose**: `/home/chris/github/hephaestus-infra/proxy/`
 
 ## 🔍 **Tunnel Architecture Flow**
 

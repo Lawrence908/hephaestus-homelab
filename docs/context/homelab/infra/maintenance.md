@@ -103,7 +103,7 @@ docker compose -f docker-compose-homelab.yml exec [service] python manage.py mig
 #### **Environment Variable Updates**
 ```bash
 # Update environment variables
-vim /home/chris/github/hephaestus-homelab/.env
+vim /home/chris/github/hephaestus-infra/.env
 
 # Restart services to apply changes
 docker compose -f docker-compose-infrastructure.yml restart
@@ -112,7 +112,7 @@ docker compose -f docker-compose-infrastructure.yml restart
 #### **Caddy Configuration Updates**
 ```bash
 # Update Caddyfile
-vim /home/chris/github/hephaestus-homelab/proxy/Caddyfile
+vim /home/chris/github/hephaestus-infra/proxy/Caddyfile
 
 # Validate configuration
 docker compose -f docker-compose-infrastructure.yml exec caddy caddy validate --config /etc/caddy/Caddyfile
@@ -480,13 +480,13 @@ echo "=== Maintenance Complete ==="
 crontab -e
 
 # Add this line for daily maintenance at 3 AM
-0 3 * * * /home/chris/github/hephaestus-homelab/scripts/maintenance.sh >> /home/chris/maintenance.log 2>&1
+0 3 * * * /home/chris/github/hephaestus-infra/scripts/maintenance.sh >> /home/chris/maintenance.log 2>&1
 ```
 
 #### **Weekly Maintenance**
 ```bash
 # Add to crontab for weekly maintenance
-0 4 * * 0 /home/chris/github/hephaestus-homelab/scripts/maintenance.sh --weekly >> /home/chris/maintenance.log 2>&1
+0 4 * * 0 /home/chris/github/hephaestus-infra/scripts/maintenance.sh --weekly >> /home/chris/maintenance.log 2>&1
 ```
 
 ## 🔄 **Update Procedures**
@@ -518,8 +518,8 @@ crontab -e
 #### **Configuration Rollback**
 ```bash
 # Restore from backup
-cp /home/chris/backups/config/Caddyfile /home/chris/github/hephaestus-homelab/proxy/
-cp /home/chris/backups/config/.env /home/chris/github/hephaestus-homelab/
+cp /home/chris/backups/config/Caddyfile /home/chris/github/hephaestus-infra/proxy/
+cp /home/chris/backups/config/.env /home/chris/github/hephaestus-infra/
 
 # Restart services
 docker compose -f docker-compose-infrastructure.yml restart

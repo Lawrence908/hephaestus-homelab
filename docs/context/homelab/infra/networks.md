@@ -30,17 +30,17 @@ networks:
 These files **create** the `homelab-web` network:
 
 #### 1. Main Infrastructure Stack
-- **File**: `/home/chris/github/hephaestus-homelab/docker-compose-infrastructure.yml`
+- **File**: `/home/chris/github/hephaestus-infra/docker-compose-infrastructure.yml`
 - **Purpose**: Core infrastructure services (Caddy, Portainer, Uptime Kuma, etc.)
 - **Network**: Creates `homelab-web` network
 
 #### 2. Proxy Stack
-- **File**: `/home/chris/github/hephaestus-homelab/proxy/docker-compose.yml`
+- **File**: `/home/chris/github/hephaestus-infra/proxy/docker-compose.yml`
 - **Purpose**: Caddy reverse proxy and Cloudflare tunnel
 - **Network**: References external `homelab-web` network
 
 #### 3. Monitoring Stack
-- **File**: `/home/chris/github/hephaestus-homelab/grafana-stack/docker-compose.yml`
+- **File**: `/home/chris/github/hephaestus-infra/grafana-stack/docker-compose.yml`
 - **Purpose**: Grafana, Prometheus, monitoring tools
 - **Network**: References external `homelab-web` network
 
@@ -162,7 +162,7 @@ networks:
        networks:
          - web
    ```
-4. **Configure Caddy proxy** in `/home/chris/github/hephaestus-homelab/proxy/Caddyfile`
+4. **Configure Caddy proxy** in `/home/chris/github/hephaestus-infra/proxy/Caddyfile`
 
 ### For Infrastructure Services
 
