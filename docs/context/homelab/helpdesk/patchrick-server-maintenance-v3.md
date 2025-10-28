@@ -23,12 +23,12 @@ Services are considered operational only if:
 ```bash
 # Quick public URL tests with timing
 curl -I -w "Time: %{time_total}s\n" https://chrislawrence.ca/
-curl -I -w "Time: %{time_total}s\n" https://chrislawrence.ca/portfolio/
-curl -I -w "Time: %{time_total}s\n" https://chrislawrence.ca/schedshare/
-curl -I -w "Time: %{time_total}s\n" https://chrislawrence.ca/dashboard/
-curl -I -w "Time: %{time_total}s\n" https://chrislawrence.ca/uptime/
-curl -I -w "Time: %{time_total}s\n" https://chrislawrence.ca/docker/
-curl -I -w "Time: %{time_total}s\n" https://chrislawrence.ca/metrics/
+curl -I -w "Time: %{time_total}s\n" https://portfolio.chrislawrence.ca/
+curl -I -w "Time: %{time_total}s\n" https://schedshare.chrislawrence.ca/
+curl -I -w "Time: %{time_total}s\n" https://dev.chrislawrence.ca/dashboard/
+curl -I -w "Time: %{time_total}s\n" https://dev.chrislawrence.ca/uptime/
+curl -I -w "Time: %{time_total}s\n" https://dev.chrislawrence.ca/docker/
+curl -I -w "Time: %{time_total}s\n" https://dev.chrislawrence.ca/metrics/
 
 # Local connectivity tests
 curl -I http://localhost:80/ -H "Host: chrislawrence.ca"
@@ -134,7 +134,7 @@ echo "Testing connection matrix..."
 
 # Internet → Tunnel → Caddy
 curl -I https://chrislawrence.ca/ -w "Tunnel→Caddy: %{time_total}s\n"
-curl -I https://chrislawrence.ca/portfolio/ -w "Tunnel→Portfolio: %{time_total}s\n"
+curl -I https://portfolio.chrislawrence.ca/ -w "Tunnel→Portfolio: %{time_total}s\n"
 
 # Local → Caddy → Applications
 curl -I http://localhost:80/ -H "Host: chrislawrence.ca" -w "Local→Caddy: %{time_total}s\n"
@@ -170,7 +170,7 @@ sudo systemctl restart cloudflared
 sleep 15
 
 # Verify fix
-curl -I https://chrislawrence.ca/portfolio/
+curl -I https://portfolio.chrislawrence.ca/
 ```
 
 #### **4.3 Deep Repair Protocol (2 minutes)**
@@ -188,7 +188,7 @@ docker network ls | grep homelab
 docker network inspect homelab-web
 
 # Full verification
-curl -s https://chrislawrence.ca/portfolio/ | grep -q "Chris Lawrence" && echo "✅ REPAIRED" || echo "❌ STILL DOWN"
+curl -s https://portfolio.chrislawrence.ca/ | grep -q "Chris Lawrence" && echo "✅ REPAIRED" || echo "❌ STILL DOWN"
 ```
 
 #### **4.4 Nuclear Option (5 minutes)**
@@ -202,7 +202,7 @@ sudo systemctl restart cloudflared
 sleep 30
 
 # Full end-to-end test
-curl -I https://chrislawrence.ca/portfolio/
+curl -I https://portfolio.chrislawrence.ca/
 ```
 
 ### **Phase 5: Comprehensive Status Reporting**
@@ -217,9 +217,9 @@ echo ""
 # Public accessibility
 echo "🌐 PUBLIC ACCESS:"
 curl -s -o /dev/null -w "Status: %{http_code}, Time: %{time_total}s, Size: %{size_download} bytes\n" https://chrislawrence.ca/
-curl -s -o /dev/null -w "Portfolio: %{http_code}, Time: %{time_total}s\n" https://chrislawrence.ca/portfolio/
-curl -s -o /dev/null -w "SchedShare: %{http_code}, Time: %{time_total}s\n" https://chrislawrence.ca/schedshare/
-curl -s -o /dev/null -w "Dashboard: %{http_code}, Time: %{time_total}s\n" https://chrislawrence.ca/dashboard/
+curl -s -o /dev/null -w "Portfolio: %{http_code}, Time: %{time_total}s\n" https://portfolio.chrislawrence.ca/
+curl -s -o /dev/null -w "SchedShare: %{http_code}, Time: %{time_total}s\n" https://schedshare.chrislawrence.ca/
+curl -s -o /dev/null -w "Dashboard: %{http_code}, Time: %{time_total}s\n" https://dev.chrislawrence.ca/dashboard/
 
 # Local accessibility  
 echo "🏠 LOCAL ACCESS:"
@@ -272,8 +272,8 @@ done
 ```bash
 # Test all critical endpoints
 curl -s -o /dev/null -w "%{http_code}" https://chrislawrence.ca/ && echo "✅ Main site UP" || echo "❌ Main site DOWN"
-curl -s -o /dev/null -w "%{http_code}" https://chrislawrence.ca/portfolio/ && echo "✅ Portfolio UP" || echo "❌ Portfolio DOWN"
-curl -s -o /dev/null -w "%{http_code}" https://chrislawrence.ca/dashboard/ && echo "✅ Dashboard UP" || echo "❌ Dashboard DOWN"
+curl -s -o /dev/null -w "%{http_code}" https://portfolio.chrislawrence.ca/ && echo "✅ Portfolio UP" || echo "❌ Portfolio DOWN"
+curl -s -o /dev/null -w "%{http_code}" https://dev.chrislawrence.ca/dashboard/ && echo "✅ Dashboard UP" || echo "❌ Dashboard DOWN"
 ```
 
 ### **Detailed Health Check (30 seconds)**
@@ -281,7 +281,7 @@ curl -s -o /dev/null -w "%{http_code}" https://chrislawrence.ca/dashboard/ && ec
 # Full diagnostic in one command
 echo "=== COMPREHENSIVE HEALTH CHECK ==="
 curl -I https://chrislawrence.ca/ -w "Response: %{http_code}, Time: %{time_total}s\n" 2>/dev/null || echo "❌ Main site connection failed"
-curl -I https://chrislawrence.ca/portfolio/ -w "Portfolio: %{http_code}, Time: %{time_total}s\n" 2>/dev/null || echo "❌ Portfolio connection failed"
+curl -I https://portfolio.chrislawrence.ca/ -w "Portfolio: %{http_code}, Time: %{time_total}s\n" 2>/dev/null || echo "❌ Portfolio connection failed"
 docker ps | grep portfolio | awk '{print "Portfolio Container: " $7}' || echo "❌ Portfolio container not running"
 sudo systemctl is-active cloudflared && echo "✅ Tunnel active" || echo "❌ Tunnel inactive"
 ```
@@ -290,7 +290,7 @@ sudo systemctl is-active cloudflared && echo "✅ Tunnel active" || echo "❌ Tu
 ```bash
 # Verify actual content is served
 curl -s https://chrislawrence.ca/ | grep -q "chrislawrence" && echo "✅ Main site content verified" || echo "❌ Main site content missing"
-curl -s https://chrislawrence.ca/portfolio/ | grep -q "Chris Lawrence" && echo "✅ Portfolio content verified" || echo "❌ Portfolio content missing"
+curl -s https://portfolio.chrislawrence.ca/ | grep -q "Chris Lawrence" && echo "✅ Portfolio content verified" || echo "❌ Portfolio content missing"
 ```
 
 ## 🔄 **Emergency Repair Protocol**
@@ -300,7 +300,7 @@ If services are down, execute this sequence:
 1. **Immediate Assessment** (10s):
    ```bash
    curl -I https://chrislawrence.ca/
-   curl -I https://chrislawrence.ca/portfolio/
+   curl -I https://portfolio.chrislawrence.ca/
    docker ps | grep portfolio
    sudo systemctl status cloudflared
    ```
@@ -313,7 +313,7 @@ If services are down, execute this sequence:
 
 3. **Verification** (10s):
    ```bash
-   curl -I https://chrislawrence.ca/portfolio/
+   curl -I https://portfolio.chrislawrence.ca/
    ```
 
 4. **If Still Down** - Escalate to deep diagnostics and manual intervention
@@ -399,42 +399,42 @@ You MUST always respond with a JSON object in this exact format:
             "message": "Main site is operational"
         },
         {
-            "service": "https://chrislawrence.ca/portfolio/",
+            "service": "https://portfolio.chrislawrence.ca/",
             "status": "up", 
             "http_code": 200,
             "response_time": 0.456,
             "message": "Portfolio is operational"
         },
         {
-            "service": "https://chrislawrence.ca/schedshare/",
+            "service": "https://schedshare.chrislawrence.ca/",
             "status": "down",
             "http_code": 503,
             "response_time": 5.000,
             "message": "SchedShare service unavailable - container not running"
         },
         {
-            "service": "https://chrislawrence.ca/dashboard/",
+            "service": "https://dev.chrislawrence.ca/dashboard/",
             "status": "up",
             "http_code": 200,
             "response_time": 0.345,
             "message": "Dashboard is operational"
         },
         {
-            "service": "https://chrislawrence.ca/uptime/",
+            "service": "https://dev.chrislawrence.ca/uptime/",
             "status": "up",
             "http_code": 200,
             "response_time": 0.123,
             "message": "Uptime Kuma is operational"
         },
         {
-            "service": "https://chrislawrence.ca/docker/",
+            "service": "https://dev.chrislawrence.ca/docker/",
             "status": "up",
             "http_code": 200,
             "response_time": 0.234,
             "message": "Portainer is operational"
         },
         {
-            "service": "https://chrislawrence.ca/metrics/",
+            "service": "https://dev.chrislawrence.ca/metrics/",
             "status": "up",
             "http_code": 200,
             "response_time": 0.567,

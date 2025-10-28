@@ -4,8 +4,10 @@
 
 ### Dell OptiPlex 7040
 - **CPU**: Intel Core i5/i7 (6th Gen)
-- **RAM**: 16GB+ DDR4 recommended
-- **Storage**: SSD for OS + applications
+- **RAM**: 32GB DDR4 (4x8GB sticks)
+- **Storage**: 
+  - OS: Existing SSD (~128GB)
+  - Applications/Data: 2TB Lexar SSD
 - **Network**: Gigabit Ethernet
 - **Hostname**: Hephaestus
 - **OS**: Ubuntu Server 24.04 LTS

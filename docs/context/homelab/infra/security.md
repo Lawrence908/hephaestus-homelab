@@ -71,10 +71,10 @@ Session Duration: 24 hours
 - **Pre-clearance**: `Enabled` (optional)
 
 ### Protected Public Services
-- `/portfolio/*` - Portfolio app
-- `/schedshare/*` - SchedShare app
-- `/capitolscope/*` - CapitolScope app
-- `/magicpages/*` - Magic Pages frontend
+- `portfolio.chrislawrence.ca` - Portfolio app
+- `schedshare.chrislawrence.ca` - SchedShare app
+- `capitolscope.chrislawrence.ca` - CapitolScope app
+- `magicpages.chrislawrence.ca` - Magic Pages frontend
 
 ## WAF Rules Configuration
 
@@ -97,12 +97,12 @@ Session Duration: 24 hours
 
 #### Bot Protection
 ```
-(cf.bot_management.score lt 30 and http.request.uri.path contains "/portfolio")
+(cf.bot_management.score lt 30 and http.host eq "portfolio.chrislawrence.ca")
 ```
 
 #### Turnstile Protection
 ```
-(http.request.uri.path contains "/portfolio" or http.request.uri.path contains "/schedshare" or http.request.uri.path contains "/capitolscope")
+(http.host eq "portfolio.chrislawrence.ca" or http.host eq "schedshare.chrislawrence.ca" or http.host eq "capitolscope.chrislawrence.ca")
 Action: Managed Challenge
 ```
 
@@ -178,21 +178,21 @@ Configure alerts for:
 ### Test Public Services (No Auth Required)
 ```bash
 # Should work without authentication
-curl -I https://chrislawrence.ca/portfolio/
-curl -I https://chrislawrence.ca/schedshare/
-curl -I https://chrislawrence.ca/capitolscope/
+curl -I https://portfolio.chrislawrence.ca/
+curl -I https://schedshare.chrislawrence.ca/
+curl -I https://capitolscope.chrislawrence.ca/
 ```
 
 ### Test Protected Services (Auth Required)
 ```bash
 # Should redirect to Cloudflare Access login
-curl -I https://chrislawrence.ca/dashboard/
-curl -I https://chrislawrence.ca/docker/
-curl -I https://chrislawrence.ca/uptime/
+curl -I https://dev.chrislawrence.ca/dashboard/
+curl -I https://dev.chrislawrence.ca/docker/
+curl -I https://dev.chrislawrence.ca/uptime/
 ```
 
 ### Test CAPTCHA Protection
-1. Visit `https://chrislawrence.ca/portfolio/` in browser
+1. Visit `https://portfolio.chrislawrence.ca/` in browser
 2. Should see Turnstile CAPTCHA if configured
 3. Complete CAPTCHA to access
 

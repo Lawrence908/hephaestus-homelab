@@ -21,6 +21,21 @@ Complete tracking document for all homelab services with local, proxy, and publi
 - **IoT Services**: `https://iot.chrislawrence.ca` ✅
 - **Minecraft**: `https://minecraft.chrislawrence.ca` ✅
 - **AI Services**: `https://ai.chrislawrence.ca` ✅
+- **Dashboard**: `https://dev.chrislawrence.ca/dashboard` ✅
+- **Docker**: `https://dev.chrislawrence.ca/docker` ✅
+- **Uptime**: `https://dev.chrislawrence.ca/uptime` ✅
+- **Metrics**: `https://dev.chrislawrence.ca/metrics` ✅
+- **Prometheus**: `https://dev.chrislawrence.ca/prometheus` ✅
+- **Containers**: `https://dev.chrislawrence.ca/containers` ✅
+- **System**: `https://dev.chrislawrence.ca/system` ✅
+- **Tools**: `https://dev.chrislawrence.ca/tools` ✅
+- **n8n**: `https://dev.chrislawrence.ca/n8n` ✅
+- **Notes**: `https://dev.chrislawrence.ca/notes` ✅
+- **MQTT**: `https://dev.chrislawrence.ca/mqtt` ✅
+- **Meshtastic**: `https://dev.chrislawrence.ca/meshtastic` ✅
+- **Node-RED**: `https://dev.chrislawrence.ca/nodered` ✅
+- **Grafana IoT**: `https://dev.chrislawrence.ca/grafana-iot` ✅
+- **InfluxDB**: `https://dev.chrislawrence.ca/influxdb` ✅
 
 ### 🎉 Cloudflare Tunnel Status
 - **Tunnel ID**: `de5fbdaa-4497-4a7e-828f-7dba6d7b0c90`
@@ -51,6 +66,21 @@ Complete tracking document for all homelab services with local, proxy, and publi
 | **IoT Services** | `https://iot.chrislawrence.ca` | ✅ Working | Admin/Public/Friends | IoT device management |
 | **Minecraft** | `https://minecraft.chrislawrence.ca` | ✅ Working | Admin/Public/Friends | Game server |
 | **AI Services** | `https://ai.chrislawrence.ca` | ✅ Working | Admin/Public/Friends | AI inference services |
+| **Dashboard** | `https://dev.chrislawrence.ca/dashboard` | ✅ Working | Admin/Public/Friends | Organizr dashboard |
+| **Docker** | `https://dev.chrislawrence.ca/docker` | ✅ Working | Admin/Public/Friends | Portainer |
+| **Uptime** | `https://dev.chrislawrence.ca/uptime` | ✅ Working | Admin/Public/Friends | Uptime Kuma |
+| **Metrics** | `https://dev.chrislawrence.ca/metrics` | ✅ Working | Admin/Public/Friends | Grafana |
+| **Prometheus** | `https://dev.chrislawrence.ca/prometheus` | ✅ Working | Admin/Public/Friends | Prometheus |
+| **Containers** | `https://dev.chrislawrence.ca/containers` | ✅ Working | Admin/Public/Friends | cAdvisor |
+| **System** | `https://dev.chrislawrence.ca/system` | ✅ Working | Admin/Public/Friends | Glances |
+| **Tools** | `https://dev.chrislawrence.ca/tools` | ✅ Working | Admin/Public/Friends | IT-Tools |
+| **n8n** | `https://dev.chrislawrence.ca/n8n` | ✅ Working | Admin/Public/Friends | n8n automation |
+| **Notes** | `https://dev.chrislawrence.ca/notes` | ✅ Working | Admin/Public/Friends | Obsidian |
+| **MQTT** | `https://dev.chrislawrence.ca/mqtt` | ✅ Working | Admin/Public/Friends | MQTT Explorer |
+| **Meshtastic** | `https://dev.chrislawrence.ca/meshtastic` | ✅ Working | Admin/Public/Friends | Meshtastic Web |
+| **Node-RED** | `https://dev.chrislawrence.ca/nodered` | ✅ Working | Admin/Public/Friends | Node-RED |
+| **Grafana IoT** | `https://dev.chrislawrence.ca/grafana-iot` | ✅ Working | Admin/Public/Friends | Grafana IoT |
+| **InfluxDB** | `https://dev.chrislawrence.ca/influxdb` | ✅ Working | Admin/Public/Friends | InfluxDB |
 
 ## 🎯 Quick Reference URLs
 
@@ -69,6 +99,21 @@ Complete tracking document for all homelab services with local, proxy, and publi
 - **IoT Services**: `https://iot.chrislawrence.ca`
 - **Minecraft**: `https://minecraft.chrislawrence.ca`
 - **AI Services**: `https://ai.chrislawrence.ca`
+- **Dashboard**: `https://dev.chrislawrence.ca/dashboard`
+- **Docker**: `https://dev.chrislawrence.ca/docker`
+- **Uptime**: `https://dev.chrislawrence.ca/uptime`
+- **Metrics**: `https://dev.chrislawrence.ca/metrics`
+- **Prometheus**: `https://dev.chrislawrence.ca/prometheus`
+- **Containers**: `https://dev.chrislawrence.ca/containers`
+- **System**: `https://dev.chrislawrence.ca/system`
+- **Tools**: `https://dev.chrislawrence.ca/tools`
+- **n8n**: `https://dev.chrislawrence.ca/n8n`
+- **Notes**: `https://dev.chrislawrence.ca/notes`
+- **MQTT**: `https://dev.chrislawrence.ca/mqtt`
+- **Meshtastic**: `https://dev.chrislawrence.ca/meshtastic`
+- **Node-RED**: `https://dev.chrislawrence.ca/nodered`
+- **Grafana IoT**: `https://dev.chrislawrence.ca/grafana-iot`
+- **InfluxDB**: `https://dev.chrislawrence.ca/influxdb`
 
 ## 🎉 Success Summary
 
@@ -129,6 +174,23 @@ curl -I https://monitor.chrislawrence.ca
 curl -I https://iot.chrislawrence.ca
 curl -I https://minecraft.chrislawrence.ca
 curl -I https://ai.chrislawrence.ca
+
+# Test admin services under dev subdomain
+curl -I https://dev.chrislawrence.ca/dashboard
+curl -I https://dev.chrislawrence.ca/docker
+curl -I https://dev.chrislawrence.ca/uptime
+curl -I https://dev.chrislawrence.ca/metrics
+curl -I https://dev.chrislawrence.ca/prometheus
+curl -I https://dev.chrislawrence.ca/containers
+curl -I https://dev.chrislawrence.ca/system
+curl -I https://dev.chrislawrence.ca/tools
+curl -I https://dev.chrislawrence.ca/n8n
+curl -I https://dev.chrislawrence.ca/notes
+curl -I https://dev.chrislawrence.ca/mqtt
+curl -I https://dev.chrislawrence.ca/meshtastic
+curl -I https://dev.chrislawrence.ca/nodered
+curl -I https://dev.chrislawrence.ca/grafana-iot
+curl -I https://dev.chrislawrence.ca/influxdb
 ```
 
 ### Tunnel Status

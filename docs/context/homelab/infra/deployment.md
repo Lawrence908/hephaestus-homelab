@@ -7,7 +7,7 @@ This document outlines the deployment procedures, service management, and operat
 ## Deployment Architecture
 
 ### Implementation Summary
-1. **Subdomain Routing** - Each service has its own subdomain (e.g., `portfolio.chrislawrence.ca`)
+1. **Subdomain Routing** - Each service has its own subdomain (e.g., `portfolio.chrislawrence.ca`, `schedshare.chrislawrence.ca`)
 2. **Cloudflare Access Integration** - Protected subdomains use Cloudflare Access for authentication
 3. **Public vs Protected Services** - Clear separation between public and admin-only services
 4. **Cloudflare Tunnel Configuration** - Secure public access via tunnel `de5fbdaa-4497-4a7e-828f-7dba6d7b0c90`
@@ -260,11 +260,11 @@ curl -I http://192.168.50.70:808X -u admin:admin123 | grep -i content-security
 ## Future Application Deployment
 
 ### Staged Application Ports
-- **Magic Pages API**: Port 8100 → `https://chrislawrence.ca/magicpages-api`
-- **Magic Pages Frontend**: Port 8101 → `https://chrislawrence.ca/magicpages`
-- **Portfolio App**: Port 8110 → `https://chrislawrence.ca/portfolio`
-- **CapitolScope**: Port 8120 → `https://chrislawrence.ca/capitolscope`
-- **SchedShare**: Port 8130 → `https://chrislawrence.ca/schedshare`
+- **Magic Pages API**: Port 8100 → `https://api.magicpages.chrislawrence.ca`
+- **Magic Pages Frontend**: Port 8101 → `https://magicpages.chrislawrence.ca`
+- **Portfolio App**: Port 8110 → `https://portfolio.chrislawrence.ca`
+- **CapitolScope**: Port 8120 → `https://capitolscope.chrislawrence.ca`
+- **SchedShare**: Port 8130 → `https://schedshare.chrislawrence.ca`
 
 ### Deployment Steps for New Applications
 1. Uncomment relevant sections in Caddyfile

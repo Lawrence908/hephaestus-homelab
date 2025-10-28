@@ -45,6 +45,21 @@ Custom applications and services:
 - **IoT Services**: IoT device management (`https://iot.chrislawrence.ca`)
 - **Minecraft**: Game server (`https://minecraft.chrislawrence.ca`)
 - **AI Services**: AI inference (`https://ai.chrislawrence.ca`)
+- **Dashboard**: Organizr dashboard (`https://dev.chrislawrence.ca/dashboard`)
+- **Docker**: Portainer (`https://dev.chrislawrence.ca/docker`)
+- **Uptime**: Uptime Kuma (`https://dev.chrislawrence.ca/uptime`)
+- **Metrics**: Grafana (`https://dev.chrislawrence.ca/metrics`)
+- **Prometheus**: Prometheus (`https://dev.chrislawrence.ca/prometheus`)
+- **Containers**: cAdvisor (`https://dev.chrislawrence.ca/containers`)
+- **System**: Glances (`https://dev.chrislawrence.ca/system`)
+- **Tools**: IT-Tools (`https://dev.chrislawrence.ca/tools`)
+- **n8n**: n8n automation (`https://dev.chrislawrence.ca/n8n`)
+- **Notes**: Obsidian (`https://dev.chrislawrence.ca/notes`)
+- **MQTT**: MQTT Explorer (`https://dev.chrislawrence.ca/mqtt`)
+- **Meshtastic**: Meshtastic Web (`https://dev.chrislawrence.ca/meshtastic`)
+- **Node-RED**: Node-RED (`https://dev.chrislawrence.ca/nodered`)
+- **Grafana IoT**: Grafana IoT (`https://dev.chrislawrence.ca/grafana-iot`)
+- **InfluxDB**: InfluxDB (`https://dev.chrislawrence.ca/influxdb`)
 
 ## Service Definitions
 
