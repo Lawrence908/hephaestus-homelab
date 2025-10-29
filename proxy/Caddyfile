@@ -112,38 +112,22 @@ capitolscope.chrislawrence.ca:80 {
     }
 }
 
-# MagicPages subdomain
+# MagicPages Frontend subdomain
 magicpages.chrislawrence.ca:80 {
-    reverse_proxy magicpages-api:8000 {
+    reverse_proxy magicpages-frontend:80 {
         header_up Host {host}
-        header_up X-Forwarded-Host {host}
-        header_up X-Forwarded-Proto https
-        header_up X-Forwarded-For {remote}
-        header_up X-Real-IP {remote}
-    }
-}
-
-# MagicPages API subdomain (old multi-level)
-api.magicpages.chrislawrence.ca:80 {
-    reverse_proxy magicpages-api:8000 {
-        header_up Host {host}
-        header_up X-Forwarded-Host {host}
-        header_up X-Forwarded-Proto https
+        header_up X-Forwarded-Proto {scheme}
         header_up X-Forwarded-For {remote}
         header_up X-Real-IP {remote}
     }
     
-    # Static files
-    handle_path /static/* {
-        file_server {
-            root /var/www/magicpages/static
-        }
-    }
-    
-    # Media files
-    handle_path /media/* {
-        file_server {
-            root /var/www/magicpages/media
+    log {
+        level INFO
+        format json
+        output file /data/logs/magicpages-frontend.json {
+            roll_size 15mb
+            roll_keep 8
+            roll_keep_for 168h
         }
     }
 }
@@ -172,23 +156,6 @@ eventsphere.chrislawrence.ca:80 {
         level INFO
         format json
         output file /data/logs/eventsphere.json {
-            roll_size 15mb
-            roll_keep 8
-            roll_keep_for 168h
-        }
-    }
-}
-
-# BlueMap dedicated subdomain (old multi-level)
-map.minecraft.chrislawrence.ca:80 {
-    reverse_proxy minecraft:8100 {
-        header_down -X-Frame-Options
-        header_down -Content-Security-Policy
-    }
-    log {
-        level INFO
-        format json
-        output file /data/logs/minecraft-map.json {
             roll_size 15mb
             roll_keep 8
             roll_keep_for 168h
