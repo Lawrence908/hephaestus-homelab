@@ -6,7 +6,7 @@ services:
     
     # Network configuration - expose port for remote access
     ports:
-      - "3000:3000"  # MCP Gateway HTTP port
+      - "3100:3100"  # MCP Gateway HTTP port
     
     # Mount Docker socket for container management
     volumes:
@@ -20,7 +20,7 @@ services:
     
     # Health check
     healthcheck:
-      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3000/health"]
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3100/health"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -35,14 +35,15 @@ services:
           exit 1;
         fi
         
-        # Run the gateway with network access
-        docker mcp gateway run --port 3000 --enable-all-servers
+        # Run the gateway in stdio mode (HTTP transport not yet supported in v0.24.0)
+        # Using stdio mode and will need HTTP wrapper or use Docker Desktop integration
+        docker mcp gateway run --enable-all-servers
       "
     
     networks:
-      - homelab
+      - homelab-web
 
 networks:
-  homelab:
+  homelab-web:
     external: true
 
