@@ -284,7 +284,7 @@ dev.chrislawrence.ca:80 {
     
     # Fallback for any unmatched paths -> send to Dashy (main dashboard)
     handle {
-        reverse_proxy dashy:80
+        reverse_proxy dashy:8080
     }
     
     log {
