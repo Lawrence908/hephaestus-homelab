@@ -12,70 +12,128 @@ Public-facing web applications accessible without authentication:
 #### Portfolio
 - **Purpose**: Personal portfolio website
 - **Technology**: Flask/Python
-- **Port**: 5000
+- **Internal Port**: 5000
+- **External Port**: 8110
+- **Container**: `chrislawrence-portfolio-portfolio`
 - **Public URL**: `https://portfolio.chrislawrence.ca`
+- **Local URL**: `http://192.168.50.70:8110`
+- **Tailscale URL**: `http://hephaestus.tailaa3ef2.ts.net:8110`
 - **Status**: ✅ Active
 
 #### SchedShare
 - **Purpose**: Schedule sharing application
 - **Technology**: Flask/Python
-- **Port**: 5000
+- **Internal Port**: 3000
+- **External Port**: 8130
+- **Container**: `schedshare`
 - **Public URL**: `https://schedshare.chrislawrence.ca`
+- **Local URL**: `http://192.168.50.70:8130`
+- **Tailscale URL**: `http://hephaestus.tailaa3ef2.ts.net:8130`
 - **Status**: ✅ Active
 
 #### CapitolScope
 - **Purpose**: Political data analysis platform
 - **Technology**: React/Node.js (Frontend), Python (Backend)
-- **Ports**: 8000 (Backend), 5173 (Frontend)
+- **Frontend Port**: 8121 (Internal: 3000)
+- **Backend Port**: 8120 (Internal: 8080)
+- **Containers**: `capitolscope-frontend`, `capitolscope-api`
 - **Public URL**: `https://capitolscope.chrislawrence.ca`
+- **Local URLs**: 
+  - Frontend: `http://192.168.50.70:8121`
+  - API: `http://192.168.50.70:8120`
+- **Tailscale URLs**:
+  - Frontend: `http://hephaestus.tailaa3ef2.ts.net:8121`
+  - API: `http://hephaestus.tailaa3ef2.ts.net:8120`
 - **Status**: ✅ Active
 
 #### MagicPages
 - **Purpose**: Content management system
 - **Technology**: Django/Python
-- **Port**: 8000
+- **Frontend Port**: 8101 (Internal: 3000)
+- **API Port**: 8100 (Internal: 8080)
+- **Containers**: `magicpages-frontend`, `magicpages-api`
 - **Public URLs**:
   - `https://magicpages.chrislawrence.ca` (Main interface)
-  - `https://api.magicpages.chrislawrence.ca` (API endpoint)
+  - `https://magicpages-api.chrislawrence.ca` (API endpoint)
+- **Local URLs**:
+  - Frontend: `http://192.168.50.70:8101`
+  - API: `http://192.168.50.70:8100`
+- **Tailscale URLs**:
+  - Frontend: `http://hephaestus.tailaa3ef2.ts.net:8101`
+  - API: `http://hephaestus.tailaa3ef2.ts.net:8100`
 - **Status**: ✅ Active
 
 #### EventSphere
 - **Purpose**: Event management system
 - **Technology**: Python/Flask
-- **Port**: 5000
+- **Internal Port**: 3000
+- **External Port**: 8140
+- **Container**: `eventsphere`
 - **Public URL**: `https://eventsphere.chrislawrence.ca`
+- **Local URL**: `http://192.168.50.70:8140`
+- **Tailscale URL**: `http://hephaestus.tailaa3ef2.ts.net:8140`
 - **Status**: ✅ Active
 
 ### Protected Services
 Services requiring Cloudflare Access authentication:
 
-#### Development Environment
-- **Purpose**: Development tools and environments
+#### Development Environment (Dashy)
+- **Purpose**: Development tools and environments dashboard
 - **Public URL**: `https://dev.chrislawrence.ca`
+- **Local URL**: `http://192.168.50.70:8082`
+- **Tailscale URL**: `http://hephaestus.tailaa3ef2.ts.net:8082`
+- **Container**: `dashy`
+- **Port**: 8082
 - **Access Policy**: Admin/Public/Friends
 - **Status**: ✅ Active
 
 #### Monitoring Dashboard
 - **Purpose**: System monitoring and metrics
 - **Public URL**: `https://monitor.chrislawrence.ca`
+- **Services**: Grafana, Prometheus, Uptime Kuma
 - **Access Policy**: Admin/Public/Friends
 - **Status**: ✅ Active
 
 #### IoT Services
 - **Purpose**: IoT device management and monitoring
 - **Public URL**: `https://iot.chrislawrence.ca`
+- **Services**: 
+  - Home Assistant (Port 8154)
+  - MQTT Explorer (Port 8152)
+  - Node-RED (Port 8155)
+  - Grafana IoT (Port 3002)
+  - InfluxDB (Port 8157)
 - **Access Policy**: Admin/Public/Friends
 - **Status**: ✅ Active
 
 #### Minecraft Server
 - **Purpose**: Game server with management interface
-- **Public URL**: `https://minecraft.chrislawrence.ca`
+- **Public URL**: `https://minecraft-map.chrislawrence.ca`
+- **Local URL**: `http://192.168.50.70:8159`
+- **Tailscale URL**: `http://hephaestus.tailaa3ef2.ts.net:8159`
+- **Container**: `minecraft-dynmap`
+- **Port**: 8159 (Internal: 8123)
 - **Access Policy**: Admin/Public/Friends
 - **Status**: ✅ Active
 
 #### AI Services
 - **Purpose**: AI inference and model management
 - **Public URL**: `https://ai.chrislawrence.ca`
+- **Services**:
+  - Open WebUI (Port 8189)
+  - ComfyUI (Port 8188)
+  - OpenRouter Proxy (Port 8190)
+  - Model Manager (Port 8191)
+- **Access Policy**: Admin/Public/Friends
+- **Status**: ✅ Active
+
+#### n8n Automation
+- **Purpose**: Workflow automation and integration
+- **Public URL**: `https://n8n.chrislawrence.ca`
+- **Local URL**: `http://192.168.50.70:5678`
+- **Tailscale URL**: `http://hephaestus.tailaa3ef2.ts.net:5678`
+- **Container**: `n8n`
+- **Port**: 5678
 - **Access Policy**: Admin/Public/Friends
 - **Status**: ✅ Active
 
@@ -122,21 +180,27 @@ Many applications use dedicated database services:
 
 #### PostgreSQL
 - **Purpose**: Primary database for applications
-- **Port**: 5432
-- **Access**: Internal only
+- **Internal Port**: 5432
+- **Access**: Internal only (homelab-web network)
 - **Applications**: MagicPages, CapitolScope
+- **Status**: ✅ Active
 
 #### Redis
 - **Purpose**: Caching and session storage
-- **Port**: 6379
-- **Access**: Internal only
+- **Internal Port**: 6379
+- **Access**: Internal only (homelab-web network)
 - **Applications**: All web applications
+- **Status**: ✅ Active
 
 #### InfluxDB
 - **Purpose**: Time-series data storage
-- **Port**: 8086
-- **Access**: Internal only
+- **Internal Port**: 8086
+- **External Port**: 8157
+- **Access**: Internal + Protected public access
+- **Public URL**: `https://iot.chrislawrence.ca/influxdb`
+- **Local URL**: `http://192.168.50.70:8157`
 - **Applications**: IoT monitoring, metrics
+- **Status**: ✅ Active
 
 ## Application Deployment
 

@@ -30,7 +30,8 @@ Application services and custom applications:
 - **Domain**: `chrislawrence.ca`
 - **Tunnel ID**: `3a9f1023-0d6c-49ff-900d-32403e4309f8`
 - **Network**: `homelab-web`
-- **Server IP**: `192.168.50.70`
+- **Local IP**: `192.168.50.70`
+- **Tailscale Host**: `hephaestus.tailaa3ef2.ts.net`
 
 ### Key Services
 - **Caddy**: Reverse proxy and SSL termination
@@ -40,10 +41,12 @@ Application services and custom applications:
 - **Uptime Kuma**: Service monitoring
 
 ### Public URLs
-- **Dashboard**: `https://chrislawrence.ca/dashboard`
-- **Docker**: `https://chrislawrence.ca/docker`
-- **Metrics**: `https://chrislawrence.ca/metrics`
-- **Uptime**: `https://chrislawrence.ca/uptime`
+- **Dev Dashboard**: `https://dev.chrislawrence.ca`
+- **Docker**: `https://dev.chrislawrence.ca/docker`
+- **Metrics**: `https://dev.chrislawrence.ca/metrics`
+- **Uptime**: `https://uptime.chrislawrence.ca`
+- **Portfolio**: `https://portfolio.chrislawrence.ca`
+- **n8n**: `https://n8n.chrislawrence.ca`
 
 ## Service Ports
 
@@ -55,27 +58,42 @@ Application services and custom applications:
 | Prometheus | 9090 | Metrics collection |
 | Portainer | 9000 | Container management |
 | Uptime Kuma | 3001 | Service monitoring |
+| Dashy | 8082 | Dashboard |
+| Organizr | 8086 | Unified dashboard |
+| IT-Tools | 8081 | Network utilities |
+| Glances | 61208 | System monitoring |
+| cAdvisor | 8080 | Container metrics |
+| Node Exporter | 9100 | Host metrics |
 
 ### Application Ports
 | Service | Port | Purpose |
 |---------|------|---------|
-| MagicPages API | 8100 | Content management API |
-| MagicPages Frontend | 8101 | Content management UI |
 | Portfolio | 8110 | Personal portfolio |
 | CapitolScope API | 8120 | Political data API |
 | CapitolScope Frontend | 8121 | Political data UI |
 | SchedShare | 8130 | Schedule sharing |
+| EventSphere | 8140 | Event management |
+| MagicPages API | 8100 | Content management API |
+| MagicPages Frontend | 8101 | Content management UI |
 
-### Proxy Ports (Organizr)
+### Development & Automation Ports
 | Service | Port | Purpose |
 |---------|------|---------|
-| Uptime Kuma | 8083 | Service monitoring |
-| Portainer | 8084 | Container management |
-| Grafana | 8085 | Metrics visualization |
-| Prometheus | 8086 | Metrics collection |
-| cAdvisor | 8087 | Container metrics |
-| Glances | 8088 | System monitoring |
-| IT-Tools | 8089 | Network utilities |
+| n8n | 5678 | Workflow automation |
+| Obsidian | 8060 | Note-taking |
+
+### Specialized Services Ports
+| Service | Port | Purpose |
+|---------|------|---------|
+| Home Assistant | 8154 | IoT device management |
+| MQTT Explorer | 8152 | MQTT monitoring |
+| Node-RED | 8155 | Automation flows |
+| InfluxDB | 8157 | Time-series database |
+| Minecraft Map | 8159 | Game server map |
+| Open WebUI | 8189 | AI interface |
+| ComfyUI | 8188 | AI image generation |
+| OpenRouter Proxy | 8190 | AI API proxy |
+| Model Manager | 8191 | AI model management |
 
 ## Common Commands
 
