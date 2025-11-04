@@ -1,5 +1,7 @@
 {
     "DOMAIN": "dev.chrislawrence.ca",
+    "LOCAL_IP": "192.168.50.70",
+    "TAILSCALE_HOST": "hephaestus.tailaa3ef2.ts.net",
     "TUNNEL_ID": "3a9f1023-0d6c-49ff-900d-32403e4309f8",
     "NETWORK": "homelab-web",
     "CADDY_CONTAINER": "caddy",
@@ -23,7 +25,8 @@
         "CONTENT_CHECKS": [
           "chrislawrence",
           "Chris Lawrence"
-        ]
+        ],
+        "PUBLIC_URL": "https://dev.chrislawrence.ca"
       },
       
       "portfolio": {
@@ -45,7 +48,10 @@
           "Chris Lawrence",
           "Portfolio",
           "Software Developer"
-        ]
+        ],
+        "PUBLIC_URL": "https://portfolio.chrislawrence.ca",
+        "LOCAL_URL": "http://192.168.50.70:8110",
+        "TAILSCALE_URL": "http://hephaestus.tailaa3ef2.ts.net:8110"
       },
       
       "capitolscope": {
@@ -65,7 +71,10 @@
         "CONTENT_CHECKS": [
           "CapitolScope",
           "Political Data"
-        ]
+        ],
+        "PUBLIC_URL": "https://capitolscope.chrislawrence.ca",
+        "LOCAL_URL": "http://192.168.50.70:8121",
+        "TAILSCALE_URL": "http://hephaestus.tailaa3ef2.ts.net:8121"
       },
       
       "capitolscope-api": {
@@ -85,7 +94,9 @@
         "CONTENT_CHECKS": [
           "API",
           "CapitolScope"
-        ]
+        ],
+        "LOCAL_URL": "http://192.168.50.70:8120",
+        "TAILSCALE_URL": "http://hephaestus.tailaa3ef2.ts.net:8120"
       },
       
       "schedshare": {
@@ -105,7 +116,10 @@
         "CONTENT_CHECKS": [
           "SchedShare",
           "Schedule"
-        ]
+        ],
+        "PUBLIC_URL": "https://schedshare.chrislawrence.ca",
+        "LOCAL_URL": "http://192.168.50.70:8130",
+        "TAILSCALE_URL": "http://hephaestus.tailaa3ef2.ts.net:8130"
       },
       
       "magicpages": {
@@ -125,7 +139,10 @@
         "CONTENT_CHECKS": [
           "MagicPages",
           "Content Management"
-        ]
+        ],
+        "PUBLIC_URL": "https://magicpages.chrislawrence.ca",
+        "LOCAL_URL": "http://192.168.50.70:8101",
+        "TAILSCALE_URL": "http://hephaestus.tailaa3ef2.ts.net:8101"
       },
       
       "magicpages-api": {
@@ -145,7 +162,33 @@
         "CONTENT_CHECKS": [
           "API",
           "MagicPages"
-        ]
+        ],
+        "PUBLIC_URL": "https://magicpages-api.chrislawrence.ca",
+        "LOCAL_URL": "http://192.168.50.70:8100",
+        "TAILSCALE_URL": "http://hephaestus.tailaa3ef2.ts.net:8100"
+      },
+      
+      "eventsphere": {
+        "PATH": "/eventsphere/",
+        "SERVICE_NAME": "EventSphere",
+        "CONTAINER_NAME": "eventsphere",
+        "INTERNAL_PORT": 3000,
+        "EXTERNAL_PORT": 8140,
+        "EXPECTED_CONTENT": "EventSphere",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart eventsphere",
+          "docker restart caddy"
+        ],
+        "CONTENT_CHECKS": [
+          "EventSphere",
+          "Events"
+        ],
+        "PUBLIC_URL": "https://eventsphere.chrislawrence.ca",
+        "LOCAL_URL": "http://192.168.50.70:8140",
+        "TAILSCALE_URL": "http://hephaestus.tailaa3ef2.ts.net:8140"
       },
       
       "n8n": {
@@ -165,7 +208,10 @@
         "CONTENT_CHECKS": [
           "n8n",
           "Workflow"
-        ]
+        ],
+        "PUBLIC_URL": "https://n8n.chrislawrence.ca",
+        "LOCAL_URL": "http://192.168.50.70:5678",
+        "TAILSCALE_URL": "http://hephaestus.tailaa3ef2.ts.net:5678"
       },
       
       "nodered": {
@@ -173,7 +219,7 @@
         "SERVICE_NAME": "Node-RED",
         "CONTAINER_NAME": "nodered",
         "INTERNAL_PORT": 1880,
-        "EXTERNAL_PORT": 1880,
+        "EXTERNAL_PORT": 8155,
         "EXPECTED_CONTENT": "Node-RED",
         "CRITICAL": false,
         "TIMEOUT": 10,
@@ -185,7 +231,10 @@
         "CONTENT_CHECKS": [
           "Node-RED",
           "Flow"
-        ]
+        ],
+        "PUBLIC_URL": "https://iot.chrislawrence.ca/nodered",
+        "LOCAL_URL": "http://192.168.50.70:8155",
+        "TAILSCALE_URL": "http://hephaestus.tailaa3ef2.ts.net:8155"
       },
       
       "notes": {
@@ -205,7 +254,10 @@
         "CONTENT_CHECKS": [
           "Obsidian",
           "Notes"
-        ]
+        ],
+        "PUBLIC_URL": "https://dev.chrislawrence.ca/notes",
+        "LOCAL_URL": "http://192.168.50.70:8060",
+        "TAILSCALE_URL": "http://hephaestus.tailaa3ef2.ts.net:8060"
       },
       
       "minecraft-map": {
@@ -213,7 +265,7 @@
         "SERVICE_NAME": "Minecraft Dynmap",
         "CONTAINER_NAME": "minecraft-dynmap",
         "INTERNAL_PORT": 8123,
-        "EXTERNAL_PORT": 8123,
+        "EXTERNAL_PORT": 8159,
         "EXPECTED_CONTENT": "Dynmap",
         "CRITICAL": false,
         "TIMEOUT": 15,
@@ -225,7 +277,11 @@
         "CONTENT_CHECKS": [
           "Dynmap",
           "Minecraft"
-        ]
+        ],
+        "PUBLIC_URL": "https://minecraft-map.chrislawrence.ca",
+        "PUBLIC_URL_ALT": "https://minecraft.chrislawrence.ca/map",
+        "LOCAL_URL": "http://192.168.50.70:8159",
+        "TAILSCALE_URL": "http://hephaestus.tailaa3ef2.ts.net:8159"
       },
       
       "mqtt": {
@@ -233,7 +289,7 @@
         "SERVICE_NAME": "MQTT Explorer",
         "CONTAINER_NAME": "mqtt-explorer",
         "INTERNAL_PORT": 4000,
-        "EXTERNAL_PORT": 4000,
+        "EXTERNAL_PORT": 8152,
         "EXPECTED_CONTENT": "MQTT",
         "CRITICAL": false,
         "TIMEOUT": 10,
@@ -245,7 +301,10 @@
         "CONTENT_CHECKS": [
           "MQTT",
           "Explorer"
-        ]
+        ],
+        "PUBLIC_URL": "https://iot.chrislawrence.ca/mqtt",
+        "LOCAL_URL": "http://192.168.50.70:8152",
+        "TAILSCALE_URL": "http://hephaestus.tailaa3ef2.ts.net:8152"
       },
       
       "meshtastic": {
@@ -268,6 +327,28 @@
         ]
       },
       
+      "homeassistant": {
+        "PATH": "/homeassistant/",
+        "SERVICE_NAME": "Home Assistant",
+        "CONTAINER_NAME": "homeassistant",
+        "INTERNAL_PORT": 8123,
+        "EXTERNAL_PORT": 8154,
+        "EXPECTED_CONTENT": "Home Assistant",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart homeassistant",
+          "docker restart caddy"
+        ],
+        "CONTENT_CHECKS": [
+          "Home Assistant"
+        ],
+        "PUBLIC_URL": "https://iot.chrislawrence.ca/homeassistant",
+        "LOCAL_URL": "http://192.168.50.70:8154",
+        "TAILSCALE_URL": "http://hephaestus.tailaa3ef2.ts.net:8154"
+      },
+      
       "grafana-iot": {
         "PATH": "/grafana-iot/",
         "SERVICE_NAME": "Grafana IoT",
@@ -285,7 +366,8 @@
         "CONTENT_CHECKS": [
           "Grafana",
           "IoT"
-        ]
+        ],
+        "PUBLIC_URL": "https://iot.chrislawrence.ca/grafana"
       },
       
       "influxdb": {
@@ -293,7 +375,7 @@
         "SERVICE_NAME": "InfluxDB",
         "CONTAINER_NAME": "influxdb",
         "INTERNAL_PORT": 8086,
-        "EXTERNAL_PORT": 8086,
+        "EXTERNAL_PORT": 8157,
         "EXPECTED_CONTENT": "InfluxDB",
         "CRITICAL": false,
         "TIMEOUT": 10,
@@ -305,7 +387,10 @@
         "CONTENT_CHECKS": [
           "InfluxDB",
           "Database"
-        ]
+        ],
+        "PUBLIC_URL": "https://iot.chrislawrence.ca/influxdb",
+        "LOCAL_URL": "http://192.168.50.70:8157",
+        "TAILSCALE_URL": "http://hephaestus.tailaa3ef2.ts.net:8157"
       },
       
       "dashboard": {
@@ -325,7 +410,11 @@
         "CONTENT_CHECKS": [
           "Grafana",
           "Dashboard"
-        ]
+        ],
+        "PUBLIC_URL": "https://dev.chrislawrence.ca/metrics",
+        "PUBLIC_URL_ALT": "https://monitor.chrislawrence.ca/grafana",
+        "LOCAL_URL": "http://192.168.50.70:3000",
+        "TAILSCALE_URL": "http://hephaestus.tailaa3ef2.ts.net:3000"
       },
       
       "uptime": {
@@ -345,7 +434,12 @@
         "CONTENT_CHECKS": [
           "Uptime",
           "Kuma"
-        ]
+        ],
+        "PUBLIC_URL": "https://uptime.chrislawrence.ca",
+        "PUBLIC_URL_ALT": "https://dev.chrislawrence.ca/uptime",
+        "PUBLIC_URL_ALT2": "https://monitor.chrislawrence.ca/uptime",
+        "LOCAL_URL": "http://192.168.50.70:3001",
+        "TAILSCALE_URL": "http://hephaestus.tailaa3ef2.ts.net:3001"
       },
       
       "docker": {
@@ -365,7 +459,10 @@
         "CONTENT_CHECKS": [
           "Portainer",
           "Docker"
-        ]
+        ],
+        "PUBLIC_URL": "https://dev.chrislawrence.ca/docker",
+        "LOCAL_URL": "http://192.168.50.70:9000",
+        "TAILSCALE_URL": "http://hephaestus.tailaa3ef2.ts.net:9000"
       },
       
       "metrics": {
@@ -385,7 +482,235 @@
         "CONTENT_CHECKS": [
           "Prometheus",
           "Metrics"
-        ]
+        ],
+        "PUBLIC_URL": "https://dev.chrislawrence.ca/prometheus",
+        "PUBLIC_URL_ALT": "https://monitor.chrislawrence.ca/prometheus",
+        "LOCAL_URL": "http://192.168.50.70:9090",
+        "TAILSCALE_URL": "http://hephaestus.tailaa3ef2.ts.net:9090"
+      },
+      
+      "dashy": {
+        "PATH": "/",
+        "SERVICE_NAME": "Dashy",
+        "CONTAINER_NAME": "dashy",
+        "INTERNAL_PORT": 8082,
+        "EXTERNAL_PORT": 8082,
+        "EXPECTED_CONTENT": "Dashy",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart dashy",
+          "docker restart caddy"
+        ],
+        "CONTENT_CHECKS": [
+          "Dashy",
+          "Dashboard"
+        ],
+        "PUBLIC_URL": "https://dev.chrislawrence.ca",
+        "LOCAL_URL": "http://192.168.50.70:8082",
+        "TAILSCALE_URL": "http://hephaestus.tailaa3ef2.ts.net:8082"
+      },
+      
+      "organizr": {
+        "PATH": "/organizr/",
+        "SERVICE_NAME": "Organizr",
+        "CONTAINER_NAME": "organizr",
+        "INTERNAL_PORT": 80,
+        "EXTERNAL_PORT": 8086,
+        "EXPECTED_CONTENT": "Organizr",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart organizr",
+          "docker restart caddy"
+        ],
+        "CONTENT_CHECKS": [
+          "Organizr"
+        ],
+        "PUBLIC_URL": "https://dev.chrislawrence.ca/organizr",
+        "LOCAL_URL": "http://192.168.50.70:8086",
+        "TAILSCALE_URL": "http://hephaestus.tailaa3ef2.ts.net:8086"
+      },
+      
+      "it-tools": {
+        "PATH": "/tools/",
+        "SERVICE_NAME": "IT-Tools",
+        "CONTAINER_NAME": "it-tools",
+        "INTERNAL_PORT": 80,
+        "EXTERNAL_PORT": 8081,
+        "EXPECTED_CONTENT": "IT-Tools",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart it-tools",
+          "docker restart caddy"
+        ],
+        "CONTENT_CHECKS": [
+          "IT-Tools",
+          "Tools"
+        ],
+        "PUBLIC_URL": "https://dev.chrislawrence.ca/tools",
+        "LOCAL_URL": "http://192.168.50.70:8081",
+        "TAILSCALE_URL": "http://hephaestus.tailaa3ef2.ts.net:8081"
+      },
+      
+      "glances": {
+        "PATH": "/system/",
+        "SERVICE_NAME": "Glances",
+        "CONTAINER_NAME": "glances",
+        "INTERNAL_PORT": 61208,
+        "EXTERNAL_PORT": 61208,
+        "EXPECTED_CONTENT": "Glances",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart glances",
+          "docker restart caddy"
+        ],
+        "CONTENT_CHECKS": [
+          "Glances",
+          "System"
+        ],
+        "PUBLIC_URL": "https://dev.chrislawrence.ca/system",
+        "LOCAL_URL": "http://192.168.50.70:61208",
+        "TAILSCALE_URL": "http://hephaestus.tailaa3ef2.ts.net:61208"
+      },
+      
+      "cadvisor": {
+        "PATH": "/containers/",
+        "SERVICE_NAME": "cAdvisor",
+        "CONTAINER_NAME": "cadvisor",
+        "INTERNAL_PORT": 8080,
+        "EXTERNAL_PORT": 8080,
+        "EXPECTED_CONTENT": "cAdvisor",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart cadvisor",
+          "docker restart caddy"
+        ],
+        "CONTENT_CHECKS": [
+          "cAdvisor",
+          "Containers"
+        ],
+        "PUBLIC_URL": "https://dev.chrislawrence.ca/containers",
+        "LOCAL_URL": "http://192.168.50.70:8080",
+        "TAILSCALE_URL": "http://hephaestus.tailaa3ef2.ts.net:8080"
+      },
+      
+      "node-exporter": {
+        "PATH": "/node-exporter/",
+        "SERVICE_NAME": "Node Exporter",
+        "CONTAINER_NAME": "node-exporter",
+        "INTERNAL_PORT": 9100,
+        "EXTERNAL_PORT": 9100,
+        "EXPECTED_CONTENT": "Node Exporter",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart node-exporter",
+          "docker restart caddy"
+        ],
+        "CONTENT_CHECKS": [
+          "Node Exporter",
+          "Metrics"
+        ],
+        "LOCAL_URL": "http://192.168.50.70:9100",
+        "TAILSCALE_URL": "http://hephaestus.tailaa3ef2.ts.net:9100"
+      },
+      
+      "open-webui": {
+        "PATH": "/webui/",
+        "SERVICE_NAME": "Open WebUI",
+        "CONTAINER_NAME": "open-webui",
+        "INTERNAL_PORT": 8080,
+        "EXTERNAL_PORT": 8189,
+        "EXPECTED_CONTENT": "Open WebUI",
+        "CRITICAL": false,
+        "TIMEOUT": 15,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart open-webui",
+          "docker restart caddy"
+        ],
+        "CONTENT_CHECKS": [
+          "Open WebUI",
+          "AI"
+        ],
+        "PUBLIC_URL": "https://ai.chrislawrence.ca/webui",
+        "LOCAL_URL": "http://192.168.50.70:8189",
+        "TAILSCALE_URL": "http://hephaestus.tailaa3ef2.ts.net:8189"
+      },
+      
+      "comfyui": {
+        "PATH": "/comfyui/",
+        "SERVICE_NAME": "ComfyUI",
+        "CONTAINER_NAME": "comfyui",
+        "INTERNAL_PORT": 8188,
+        "EXTERNAL_PORT": 8188,
+        "EXPECTED_CONTENT": "ComfyUI",
+        "CRITICAL": false,
+        "TIMEOUT": 15,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart comfyui",
+          "docker restart caddy"
+        ],
+        "CONTENT_CHECKS": [
+          "ComfyUI",
+          "AI"
+        ],
+        "PUBLIC_URL": "https://ai.chrislawrence.ca/comfyui"
+      },
+      
+      "openrouter-proxy": {
+        "PATH": "/openrouter/",
+        "SERVICE_NAME": "OpenRouter Proxy",
+        "CONTAINER_NAME": "openrouter-proxy",
+        "INTERNAL_PORT": 8080,
+        "EXTERNAL_PORT": 8190,
+        "EXPECTED_CONTENT": "OpenRouter",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart openrouter-proxy",
+          "docker restart caddy"
+        ],
+        "CONTENT_CHECKS": [
+          "OpenRouter",
+          "Proxy"
+        ],
+        "PUBLIC_URL": "https://ai.chrislawrence.ca/openrouter",
+        "LOCAL_URL": "http://192.168.50.70:8190",
+        "TAILSCALE_URL": "http://hephaestus.tailaa3ef2.ts.net:8190"
+      },
+      
+      "model-manager": {
+        "PATH": "/models/",
+        "SERVICE_NAME": "Model Manager",
+        "CONTAINER_NAME": "model-manager",
+        "INTERNAL_PORT": 8080,
+        "EXTERNAL_PORT": 8191,
+        "EXPECTED_CONTENT": "Model Manager",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart model-manager",
+          "docker restart caddy"
+        ],
+        "CONTENT_CHECKS": [
+          "Model Manager",
+          "AI"
+        ],
+        "PUBLIC_URL": "https://ai.chrislawrence.ca/models"
       }
     },
     
