@@ -1,0 +1,702 @@
+{
+    "DOMAIN": "chrislawrence.ca",
+    "TUNNEL_ID": "3a9f1023-0d6c-49ff-900d-32403e4309f8",
+    "NETWORK": "homelab-web",
+    "CADDY_CONTAINER": "caddy",
+    "CLOUDFLARED_SERVICE": "cloudflared",
+    
+    "SERVICES": {
+      "portainer": {
+        "PATH": "https://dev.chrislawrence.ca/docker",
+        "SERVICE_NAME": "Portainer",
+        "CONTAINER_NAME": "portainer",
+        "INTERNAL_PORT": 9000,
+        "EXTERNAL_PORT": 9000,
+        "EXPECTED_CONTENT": "Portainer",
+        "CRITICAL": true,
+        "TIMEOUT": 10,
+        "RETRIES": 3,
+        "REPAIR_COMMANDS": [
+          "docker restart portainer",
+          "docker restart caddy",
+          "sudo systemctl restart cloudflared"
+        ],
+        "CONTENT_CHECKS": [
+          "Portainer",
+          "Docker"
+        ]
+      },
+      
+      "uptime-kuma": {
+        "PATH": "https://uptime.chrislawrence.ca",
+        "SERVICE_NAME": "Uptime Kuma",
+        "CONTAINER_NAME": "uptime-kuma",
+        "INTERNAL_PORT": 3001,
+        "EXTERNAL_PORT": 3001,
+        "EXPECTED_CONTENT": "Uptime",
+        "CRITICAL": true,
+        "TIMEOUT": 10,
+        "RETRIES": 3,
+        "REPAIR_COMMANDS": [
+          "docker restart uptime-kuma",
+          "docker restart caddy",
+          "sudo systemctl restart cloudflared"
+        ],
+        "CONTENT_CHECKS": [
+          "Uptime",
+          "Kuma"
+        ]
+      },
+      
+      "uptime-kuma-dev": {
+        "PATH": "https://dev.chrislawrence.ca/uptime",
+        "SERVICE_NAME": "Uptime Kuma (Dev)",
+        "CONTAINER_NAME": "uptime-kuma",
+        "INTERNAL_PORT": 3001,
+        "EXTERNAL_PORT": 3001,
+        "EXPECTED_CONTENT": "Uptime",
+        "CRITICAL": true,
+        "TIMEOUT": 10,
+        "RETRIES": 3,
+        "REPAIR_COMMANDS": [
+          "docker restart uptime-kuma",
+          "docker restart caddy",
+          "sudo systemctl restart cloudflared"
+        ],
+        "CONTENT_CHECKS": [
+          "Uptime",
+          "Kuma"
+        ]
+      },
+      
+      "uptime-kuma-monitor": {
+        "PATH": "https://monitor.chrislawrence.ca/uptime",
+        "SERVICE_NAME": "Uptime Kuma (Monitor)",
+        "CONTAINER_NAME": "uptime-kuma",
+        "INTERNAL_PORT": 3001,
+        "EXTERNAL_PORT": 3001,
+        "EXPECTED_CONTENT": "Uptime",
+        "CRITICAL": true,
+        "TIMEOUT": 10,
+        "RETRIES": 3,
+        "REPAIR_COMMANDS": [
+          "docker restart uptime-kuma",
+          "docker restart caddy",
+          "sudo systemctl restart cloudflared"
+        ],
+        "CONTENT_CHECKS": [
+          "Uptime",
+          "Kuma"
+        ]
+      },
+      
+      "dashy": {
+        "PATH": "https://dev.chrislawrence.ca",
+        "SERVICE_NAME": "Dashy",
+        "CONTAINER_NAME": "dashy",
+        "INTERNAL_PORT": 8082,
+        "EXTERNAL_PORT": 8082,
+        "EXPECTED_CONTENT": "Dashy",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart dashy",
+          "docker restart caddy",
+          "sudo systemctl restart cloudflared"
+        ],
+        "CONTENT_CHECKS": [
+          "Dashy",
+          "Dashboard"
+        ]
+      },
+      
+      "organizr": {
+        "PATH": "https://dev.chrislawrence.ca/organizr",
+        "SERVICE_NAME": "Organizr",
+        "CONTAINER_NAME": "organizr",
+        "INTERNAL_PORT": 80,
+        "EXTERNAL_PORT": 8086,
+        "EXPECTED_CONTENT": "Organizr",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart organizr",
+          "docker restart caddy",
+          "sudo systemctl restart cloudflared"
+        ],
+        "CONTENT_CHECKS": [
+          "Organizr"
+        ]
+      },
+      
+      "it-tools": {
+        "PATH": "https://dev.chrislawrence.ca/tools",
+        "SERVICE_NAME": "IT-Tools",
+        "CONTAINER_NAME": "it-tools",
+        "INTERNAL_PORT": 80,
+        "EXTERNAL_PORT": 8081,
+        "EXPECTED_CONTENT": "IT-Tools",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart it-tools",
+          "docker restart caddy",
+          "sudo systemctl restart cloudflared"
+        ],
+        "CONTENT_CHECKS": [
+          "IT-Tools"
+        ]
+      },
+      
+      "glances": {
+        "PATH": "https://dev.chrislawrence.ca/system",
+        "SERVICE_NAME": "Glances",
+        "CONTAINER_NAME": "glances",
+        "INTERNAL_PORT": 61208,
+        "EXTERNAL_PORT": 61208,
+        "EXPECTED_CONTENT": "Glances",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart glances",
+          "docker restart caddy",
+          "sudo systemctl restart cloudflared"
+        ],
+        "CONTENT_CHECKS": [
+          "Glances"
+        ]
+      },
+      
+      "grafana": {
+        "PATH": "https://dev.chrislawrence.ca/metrics",
+        "SERVICE_NAME": "Grafana",
+        "CONTAINER_NAME": "grafana",
+        "INTERNAL_PORT": 3000,
+        "EXTERNAL_PORT": 3000,
+        "EXPECTED_CONTENT": "Grafana",
+        "CRITICAL": true,
+        "TIMEOUT": 10,
+        "RETRIES": 3,
+        "REPAIR_COMMANDS": [
+          "docker restart grafana",
+          "docker restart caddy",
+          "sudo systemctl restart cloudflared"
+        ],
+        "CONTENT_CHECKS": [
+          "Grafana",
+          "Dashboard"
+        ]
+      },
+      
+      "grafana-monitor": {
+        "PATH": "https://monitor.chrislawrence.ca/grafana",
+        "SERVICE_NAME": "Grafana (Monitor)",
+        "CONTAINER_NAME": "grafana",
+        "INTERNAL_PORT": 3000,
+        "EXTERNAL_PORT": 3000,
+        "EXPECTED_CONTENT": "Grafana",
+        "CRITICAL": true,
+        "TIMEOUT": 10,
+        "RETRIES": 3,
+        "REPAIR_COMMANDS": [
+          "docker restart grafana",
+          "docker restart caddy",
+          "sudo systemctl restart cloudflared"
+        ],
+        "CONTENT_CHECKS": [
+          "Grafana",
+          "Dashboard"
+        ]
+      },
+      
+      "grafana-iot": {
+        "PATH": "https://iot.chrislawrence.ca/grafana",
+        "SERVICE_NAME": "Grafana IoT",
+        "CONTAINER_NAME": "grafana-iot",
+        "INTERNAL_PORT": 3000,
+        "EXTERNAL_PORT": 3002,
+        "EXPECTED_CONTENT": "Grafana",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart grafana-iot",
+          "docker restart caddy",
+          "sudo systemctl restart cloudflared"
+        ],
+        "CONTENT_CHECKS": [
+          "Grafana",
+          "IoT"
+        ]
+      },
+      
+      "prometheus": {
+        "PATH": "https://dev.chrislawrence.ca/prometheus",
+        "SERVICE_NAME": "Prometheus",
+        "CONTAINER_NAME": "prometheus",
+        "INTERNAL_PORT": 9090,
+        "EXTERNAL_PORT": 9090,
+        "EXPECTED_CONTENT": "Prometheus",
+        "CRITICAL": true,
+        "TIMEOUT": 10,
+        "RETRIES": 3,
+        "REPAIR_COMMANDS": [
+          "docker restart prometheus",
+          "docker restart caddy",
+          "sudo systemctl restart cloudflared"
+        ],
+        "CONTENT_CHECKS": [
+          "Prometheus",
+          "Metrics"
+        ]
+      },
+      
+      "prometheus-monitor": {
+        "PATH": "https://monitor.chrislawrence.ca/prometheus",
+        "SERVICE_NAME": "Prometheus (Monitor)",
+        "CONTAINER_NAME": "prometheus",
+        "INTERNAL_PORT": 9090,
+        "EXTERNAL_PORT": 9090,
+        "EXPECTED_CONTENT": "Prometheus",
+        "CRITICAL": true,
+        "TIMEOUT": 10,
+        "RETRIES": 3,
+        "REPAIR_COMMANDS": [
+          "docker restart prometheus",
+          "docker restart caddy",
+          "sudo systemctl restart cloudflared"
+        ],
+        "CONTENT_CHECKS": [
+          "Prometheus",
+          "Metrics"
+        ]
+      },
+      
+      "cadvisor": {
+        "PATH": "https://dev.chrislawrence.ca/containers",
+        "SERVICE_NAME": "cAdvisor",
+        "CONTAINER_NAME": "cadvisor",
+        "INTERNAL_PORT": 8080,
+        "EXTERNAL_PORT": 8080,
+        "EXPECTED_CONTENT": "cAdvisor",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart cadvisor",
+          "docker restart caddy",
+          "sudo systemctl restart cloudflared"
+        ],
+        "CONTENT_CHECKS": [
+          "cAdvisor",
+          "Container"
+        ]
+      },
+      
+      "portfolio": {
+        "PATH": "https://portfolio.chrislawrence.ca",
+        "SERVICE_NAME": "Portfolio",
+        "CONTAINER_NAME": "chrislawrence-portfolio-portfolio",
+        "INTERNAL_PORT": 5000,
+        "EXTERNAL_PORT": 8110,
+        "EXPECTED_CONTENT": "Chris Lawrence",
+        "CRITICAL": true,
+        "TIMEOUT": 5,
+        "RETRIES": 3,
+        "REPAIR_COMMANDS": [
+          "docker restart chrislawrence-portfolio-portfolio",
+          "docker restart caddy",
+          "sudo systemctl restart cloudflared"
+        ],
+        "CONTENT_CHECKS": [
+          "Chris Lawrence",
+          "Portfolio",
+          "Software Developer"
+        ]
+      },
+      
+      "schedshare": {
+        "PATH": "https://schedshare.chrislawrence.ca",
+        "SERVICE_NAME": "SchedShare",
+        "CONTAINER_NAME": "schedshare",
+        "INTERNAL_PORT": 3000,
+        "EXTERNAL_PORT": 8130,
+        "EXPECTED_CONTENT": "SchedShare",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart schedshare",
+          "docker restart caddy",
+          "sudo systemctl restart cloudflared"
+        ],
+        "CONTENT_CHECKS": [
+          "SchedShare",
+          "Schedule"
+        ]
+      },
+      
+      "capitolscope": {
+        "PATH": "https://capitolscope.chrislawrence.ca",
+        "SERVICE_NAME": "CapitolScope",
+        "CONTAINER_NAME": "capitolscope-frontend",
+        "INTERNAL_PORT": 3000,
+        "EXTERNAL_PORT": 8121,
+        "EXPECTED_CONTENT": "CapitolScope",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart capitolscope-frontend",
+          "docker restart caddy",
+          "sudo systemctl restart cloudflared"
+        ],
+        "CONTENT_CHECKS": [
+          "CapitolScope",
+          "Political Data"
+        ]
+      },
+      
+      "magicpages": {
+        "PATH": "https://magicpages.chrislawrence.ca",
+        "SERVICE_NAME": "MagicPages",
+        "CONTAINER_NAME": "magicpages-frontend",
+        "INTERNAL_PORT": 3000,
+        "EXTERNAL_PORT": 8101,
+        "EXPECTED_CONTENT": "MagicPages",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart magicpages-frontend",
+          "docker restart caddy",
+          "sudo systemctl restart cloudflared"
+        ],
+        "CONTENT_CHECKS": [
+          "MagicPages",
+          "Content Management"
+        ]
+      },
+      
+      "magicpages-api": {
+        "PATH": "https://magicpages-api.chrislawrence.ca",
+        "SERVICE_NAME": "MagicPages API",
+        "CONTAINER_NAME": "magicpages-api",
+        "INTERNAL_PORT": 8080,
+        "EXTERNAL_PORT": 8100,
+        "EXPECTED_CONTENT": "API",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart magicpages-api",
+          "docker restart caddy",
+          "sudo systemctl restart cloudflared"
+        ],
+        "CONTENT_CHECKS": [
+          "API",
+          "MagicPages"
+        ]
+      },
+      
+      "eventsphere": {
+        "PATH": "https://eventsphere.chrislawrence.ca",
+        "SERVICE_NAME": "EventSphere",
+        "CONTAINER_NAME": "eventsphere",
+        "INTERNAL_PORT": 3000,
+        "EXTERNAL_PORT": 8140,
+        "EXPECTED_CONTENT": "EventSphere",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart eventsphere",
+          "docker restart caddy",
+          "sudo systemctl restart cloudflared"
+        ],
+        "CONTENT_CHECKS": [
+          "EventSphere",
+          "Events"
+        ]
+      },
+      
+      "n8n": {
+        "PATH": "https://n8n.chrislawrence.ca",
+        "SERVICE_NAME": "n8n",
+        "CONTAINER_NAME": "n8n",
+        "INTERNAL_PORT": 5678,
+        "EXTERNAL_PORT": 5678,
+        "EXPECTED_CONTENT": "n8n",
+        "CRITICAL": true,
+        "TIMEOUT": 15,
+        "RETRIES": 3,
+        "REPAIR_COMMANDS": [
+          "docker restart n8n",
+          "docker restart caddy",
+          "sudo systemctl restart cloudflared"
+        ],
+        "CONTENT_CHECKS": [
+          "n8n",
+          "Workflow"
+        ]
+      },
+      
+      "obsidian": {
+        "PATH": "https://dev.chrislawrence.ca/notes",
+        "SERVICE_NAME": "Obsidian",
+        "CONTAINER_NAME": "obsidian",
+        "INTERNAL_PORT": 8080,
+        "EXTERNAL_PORT": 8060,
+        "EXPECTED_CONTENT": "Obsidian",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart obsidian",
+          "docker restart caddy",
+          "sudo systemctl restart cloudflared"
+        ],
+        "CONTENT_CHECKS": [
+          "Obsidian",
+          "Notes"
+        ]
+      },
+      
+      "homeassistant": {
+        "PATH": "https://iot.chrislawrence.ca/homeassistant",
+        "SERVICE_NAME": "Home Assistant",
+        "CONTAINER_NAME": "homeassistant",
+        "INTERNAL_PORT": 8123,
+        "EXTERNAL_PORT": 8154,
+        "EXPECTED_CONTENT": "Home Assistant",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart homeassistant",
+          "docker restart caddy",
+          "sudo systemctl restart cloudflared"
+        ],
+        "CONTENT_CHECKS": [
+          "Home Assistant"
+        ]
+      },
+      
+      "mqtt-explorer": {
+        "PATH": "https://iot.chrislawrence.ca/mqtt",
+        "SERVICE_NAME": "MQTT Explorer",
+        "CONTAINER_NAME": "mqtt-explorer",
+        "INTERNAL_PORT": 4000,
+        "EXTERNAL_PORT": 4000,
+        "EXPECTED_CONTENT": "MQTT",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart mqtt-explorer",
+          "docker restart caddy",
+          "sudo systemctl restart cloudflared"
+        ],
+        "CONTENT_CHECKS": [
+          "MQTT",
+          "Explorer"
+        ]
+      },
+      
+      "nodered": {
+        "PATH": "https://iot.chrislawrence.ca/nodered",
+        "SERVICE_NAME": "Node-RED",
+        "CONTAINER_NAME": "nodered",
+        "INTERNAL_PORT": 1880,
+        "EXTERNAL_PORT": 1880,
+        "EXPECTED_CONTENT": "Node-RED",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart nodered",
+          "docker restart caddy",
+          "sudo systemctl restart cloudflared"
+        ],
+        "CONTENT_CHECKS": [
+          "Node-RED",
+          "Flow"
+        ]
+      },
+      
+      "influxdb": {
+        "PATH": "https://iot.chrislawrence.ca/influxdb",
+        "SERVICE_NAME": "InfluxDB",
+        "CONTAINER_NAME": "influxdb",
+        "INTERNAL_PORT": 8086,
+        "EXTERNAL_PORT": 8086,
+        "EXPECTED_CONTENT": "InfluxDB",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart influxdb",
+          "docker restart caddy",
+          "sudo systemctl restart cloudflared"
+        ],
+        "CONTENT_CHECKS": [
+          "InfluxDB",
+          "Database"
+        ]
+      },
+      
+      "open-webui": {
+        "PATH": "https://ai.chrislawrence.ca/webui",
+        "SERVICE_NAME": "Open WebUI",
+        "CONTAINER_NAME": "open-webui",
+        "INTERNAL_PORT": 8080,
+        "EXTERNAL_PORT": 8189,
+        "EXPECTED_CONTENT": "Open WebUI",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart open-webui",
+          "docker restart caddy",
+          "sudo systemctl restart cloudflared"
+        ],
+        "CONTENT_CHECKS": [
+          "Open WebUI"
+        ]
+      },
+      
+      "comfyui": {
+        "PATH": "https://ai.chrislawrence.ca/comfyui",
+        "SERVICE_NAME": "ComfyUI",
+        "CONTAINER_NAME": "comfyui",
+        "INTERNAL_PORT": 8188,
+        "EXTERNAL_PORT": 8188,
+        "EXPECTED_CONTENT": "ComfyUI",
+        "CRITICAL": false,
+        "TIMEOUT": 15,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart comfyui",
+          "docker restart caddy",
+          "sudo systemctl restart cloudflared"
+        ],
+        "CONTENT_CHECKS": [
+          "ComfyUI"
+        ]
+      },
+      
+      "openrouter-proxy": {
+        "PATH": "https://ai.chrislawrence.ca/openrouter",
+        "SERVICE_NAME": "OpenRouter Proxy",
+        "CONTAINER_NAME": "openrouter-proxy",
+        "INTERNAL_PORT": 8080,
+        "EXTERNAL_PORT": 8190,
+        "EXPECTED_CONTENT": "OpenRouter",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart openrouter-proxy",
+          "docker restart caddy",
+          "sudo systemctl restart cloudflared"
+        ],
+        "CONTENT_CHECKS": [
+          "OpenRouter"
+        ]
+      },
+      
+      "model-manager": {
+        "PATH": "https://ai.chrislawrence.ca/models",
+        "SERVICE_NAME": "Model Manager",
+        "CONTAINER_NAME": "model-manager",
+        "INTERNAL_PORT": 8080,
+        "EXTERNAL_PORT": 8080,
+        "EXPECTED_CONTENT": "Model Manager",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart model-manager",
+          "docker restart caddy",
+          "sudo systemctl restart cloudflared"
+        ],
+        "CONTENT_CHECKS": [
+          "Model Manager"
+        ]
+      },
+      
+      "minecraft-map": {
+        "PATH": "https://minecraft-map.chrislawrence.ca",
+        "SERVICE_NAME": "Minecraft Map",
+        "CONTAINER_NAME": "minecraft-dynmap",
+        "INTERNAL_PORT": 8123,
+        "EXTERNAL_PORT": 8123,
+        "EXPECTED_CONTENT": "Dynmap",
+        "CRITICAL": false,
+        "TIMEOUT": 15,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart minecraft-dynmap",
+          "docker restart caddy",
+          "sudo systemctl restart cloudflared"
+        ],
+        "CONTENT_CHECKS": [
+          "Dynmap",
+          "Minecraft"
+        ]
+      },
+      
+      "minecraft-map-alt": {
+        "PATH": "https://minecraft.chrislawrence.ca/map",
+        "SERVICE_NAME": "Minecraft Map (Alt)",
+        "CONTAINER_NAME": "minecraft-dynmap",
+        "INTERNAL_PORT": 8123,
+        "EXTERNAL_PORT": 8123,
+        "EXPECTED_CONTENT": "Dynmap",
+        "CRITICAL": false,
+        "TIMEOUT": 15,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart minecraft-dynmap",
+          "docker restart caddy",
+          "sudo systemctl restart cloudflared"
+        ],
+        "CONTENT_CHECKS": [
+          "Dynmap",
+          "Minecraft"
+        ]
+      }
+    },
+    
+    "INFRASTRUCTURE": {
+      "caddy": {
+        "CONTAINER_NAME": "caddy",
+        "INTERNAL_PORT": 80,
+        "EXTERNAL_PORT": 80,
+        "CRITICAL": true
+      },
+      "cloudflared": {
+        "SERVICE_NAME": "cloudflared",
+        "CRITICAL": true
+      },
+      "docker": {
+        "SERVICE_NAME": "docker",
+        "CRITICAL": true
+      }
+    },
+    
+    "TELEGRAM": {
+      "CHAT_ID": "your_chat_id",
+      "BOT_TOKEN": "your_bot_token"
+    },
+    
+    "MANAGEMENT_SCRIPTS": {
+      "MANAGE_SERVICES": "/home/chris/manage-services.sh",
+      "START_HOMELAB": "/home/chris/start-homelab.sh"
+    }
+}
+

@@ -1,0 +1,429 @@
+{
+    "DOMAIN": "chrislawrence.ca",
+    "LOCAL_IP": "192.168.50.70",
+    "TAILSCALE_HOST": "hephaestus.tailaa3ef2.ts.net",
+    "TUNNEL_ID": "3a9f1023-0d6c-49ff-900d-32403e4309f8",
+    "NETWORK": "homelab-web",
+    "CADDY_CONTAINER": "caddy",
+    "CLOUDFLARED_SERVICE": "cloudflared",
+    
+    "SERVICES": {
+      "caddy-local": {
+        "PATH": "http://192.168.50.70:80",
+        "SERVICE_NAME": "Caddy (Local)",
+        "CONTAINER_NAME": "caddy",
+        "INTERNAL_PORT": 80,
+        "EXTERNAL_PORT": 80,
+        "EXPECTED_CONTENT": "Caddy",
+        "CRITICAL": true,
+        "TIMEOUT": 5,
+        "RETRIES": 3,
+        "REPAIR_COMMANDS": [
+          "docker restart caddy"
+        ],
+        "CONTENT_CHECKS": [
+          "Caddy"
+        ]
+      },
+      
+      "caddy-tailscale": {
+        "PATH": "http://hephaestus.tailaa3ef2.ts.net",
+        "SERVICE_NAME": "Caddy (Tailscale)",
+        "CONTAINER_NAME": "caddy",
+        "INTERNAL_PORT": 80,
+        "EXTERNAL_PORT": 80,
+        "EXPECTED_CONTENT": "Caddy",
+        "CRITICAL": true,
+        "TIMEOUT": 5,
+        "RETRIES": 3,
+        "REPAIR_COMMANDS": [
+          "docker restart caddy"
+        ],
+        "CONTENT_CHECKS": [
+          "Caddy"
+        ]
+      },
+      
+      "portainer-local": {
+        "PATH": "http://192.168.50.70:9000",
+        "SERVICE_NAME": "Portainer (Local)",
+        "CONTAINER_NAME": "portainer",
+        "INTERNAL_PORT": 9000,
+        "EXTERNAL_PORT": 9000,
+        "EXPECTED_CONTENT": "Portainer",
+        "CRITICAL": true,
+        "TIMEOUT": 10,
+        "RETRIES": 3,
+        "REPAIR_COMMANDS": [
+          "docker restart portainer"
+        ],
+        "CONTENT_CHECKS": [
+          "Portainer",
+          "Docker"
+        ]
+      },
+      
+      "portainer-tailscale": {
+        "PATH": "http://hephaestus.tailaa3ef2.ts.net:9000",
+        "SERVICE_NAME": "Portainer (Tailscale)",
+        "CONTAINER_NAME": "portainer",
+        "INTERNAL_PORT": 9000,
+        "EXTERNAL_PORT": 9000,
+        "EXPECTED_CONTENT": "Portainer",
+        "CRITICAL": true,
+        "TIMEOUT": 10,
+        "RETRIES": 3,
+        "REPAIR_COMMANDS": [
+          "docker restart portainer"
+        ],
+        "CONTENT_CHECKS": [
+          "Portainer",
+          "Docker"
+        ]
+      },
+      
+      "portainer-public": {
+        "PATH": "https://dev.chrislawrence.ca/docker",
+        "SERVICE_NAME": "Portainer (Public)",
+        "CONTAINER_NAME": "portainer",
+        "INTERNAL_PORT": 9000,
+        "EXTERNAL_PORT": 9000,
+        "EXPECTED_CONTENT": "Portainer",
+        "CRITICAL": true,
+        "TIMEOUT": 10,
+        "RETRIES": 3,
+        "REPAIR_COMMANDS": [
+          "docker restart portainer",
+          "docker restart caddy",
+          "sudo systemctl restart cloudflared"
+        ],
+        "CONTENT_CHECKS": [
+          "Portainer",
+          "Docker"
+        ]
+      },
+      
+      "uptime-kuma-local": {
+        "PATH": "http://192.168.50.70:3001",
+        "SERVICE_NAME": "Uptime Kuma (Local)",
+        "CONTAINER_NAME": "uptime-kuma",
+        "INTERNAL_PORT": 3001,
+        "EXTERNAL_PORT": 3001,
+        "EXPECTED_CONTENT": "Uptime",
+        "CRITICAL": true,
+        "TIMEOUT": 10,
+        "RETRIES": 3,
+        "REPAIR_COMMANDS": [
+          "docker restart uptime-kuma"
+        ],
+        "CONTENT_CHECKS": [
+          "Uptime",
+          "Kuma"
+        ]
+      },
+      
+      "uptime-kuma-tailscale": {
+        "PATH": "http://hephaestus.tailaa3ef2.ts.net:3001",
+        "SERVICE_NAME": "Uptime Kuma (Tailscale)",
+        "CONTAINER_NAME": "uptime-kuma",
+        "INTERNAL_PORT": 3001,
+        "EXTERNAL_PORT": 3001,
+        "EXPECTED_CONTENT": "Uptime",
+        "CRITICAL": true,
+        "TIMEOUT": 10,
+        "RETRIES": 3,
+        "REPAIR_COMMANDS": [
+          "docker restart uptime-kuma"
+        ],
+        "CONTENT_CHECKS": [
+          "Uptime",
+          "Kuma"
+        ]
+      },
+      
+      "uptime-kuma-public": {
+        "PATH": "https://uptime.chrislawrence.ca",
+        "SERVICE_NAME": "Uptime Kuma (Public)",
+        "CONTAINER_NAME": "uptime-kuma",
+        "INTERNAL_PORT": 3001,
+        "EXTERNAL_PORT": 3001,
+        "EXPECTED_CONTENT": "Uptime",
+        "CRITICAL": true,
+        "TIMEOUT": 10,
+        "RETRIES": 3,
+        "REPAIR_COMMANDS": [
+          "docker restart uptime-kuma",
+          "docker restart caddy",
+          "sudo systemctl restart cloudflared"
+        ],
+        "CONTENT_CHECKS": [
+          "Uptime",
+          "Kuma"
+        ]
+      },
+      
+      "dashy-local": {
+        "PATH": "http://192.168.50.70:8082",
+        "SERVICE_NAME": "Dashy (Local)",
+        "CONTAINER_NAME": "dashy",
+        "INTERNAL_PORT": 8082,
+        "EXTERNAL_PORT": 8082,
+        "EXPECTED_CONTENT": "Dashy",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart dashy"
+        ],
+        "CONTENT_CHECKS": [
+          "Dashy",
+          "Dashboard"
+        ]
+      },
+      
+      "dashy-tailscale": {
+        "PATH": "http://hephaestus.tailaa3ef2.ts.net:8082",
+        "SERVICE_NAME": "Dashy (Tailscale)",
+        "CONTAINER_NAME": "dashy",
+        "INTERNAL_PORT": 8082,
+        "EXTERNAL_PORT": 8082,
+        "EXPECTED_CONTENT": "Dashy",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart dashy"
+        ],
+        "CONTENT_CHECKS": [
+          "Dashy",
+          "Dashboard"
+        ]
+      },
+      
+      "dashy-public": {
+        "PATH": "https://dev.chrislawrence.ca",
+        "SERVICE_NAME": "Dashy (Public)",
+        "CONTAINER_NAME": "dashy",
+        "INTERNAL_PORT": 8082,
+        "EXTERNAL_PORT": 8082,
+        "EXPECTED_CONTENT": "Dashy",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart dashy",
+          "docker restart caddy",
+          "sudo systemctl restart cloudflared"
+        ],
+        "CONTENT_CHECKS": [
+          "Dashy",
+          "Dashboard"
+        ]
+      },
+      
+      "portfolio-local": {
+        "PATH": "http://192.168.50.70:8110",
+        "SERVICE_NAME": "Portfolio (Local)",
+        "CONTAINER_NAME": "chrislawrence-portfolio-portfolio",
+        "INTERNAL_PORT": 5000,
+        "EXTERNAL_PORT": 8110,
+        "EXPECTED_CONTENT": "Chris Lawrence",
+        "CRITICAL": true,
+        "TIMEOUT": 5,
+        "RETRIES": 3,
+        "REPAIR_COMMANDS": [
+          "docker restart chrislawrence-portfolio-portfolio"
+        ],
+        "CONTENT_CHECKS": [
+          "Chris Lawrence",
+          "Portfolio",
+          "Software Developer"
+        ]
+      },
+      
+      "portfolio-tailscale": {
+        "PATH": "http://hephaestus.tailaa3ef2.ts.net:8110",
+        "SERVICE_NAME": "Portfolio (Tailscale)",
+        "CONTAINER_NAME": "chrislawrence-portfolio-portfolio",
+        "INTERNAL_PORT": 5000,
+        "EXTERNAL_PORT": 8110,
+        "EXPECTED_CONTENT": "Chris Lawrence",
+        "CRITICAL": true,
+        "TIMEOUT": 5,
+        "RETRIES": 3,
+        "REPAIR_COMMANDS": [
+          "docker restart chrislawrence-portfolio-portfolio"
+        ],
+        "CONTENT_CHECKS": [
+          "Chris Lawrence",
+          "Portfolio",
+          "Software Developer"
+        ]
+      },
+      
+      "portfolio-public": {
+        "PATH": "https://portfolio.chrislawrence.ca",
+        "SERVICE_NAME": "Portfolio (Public)",
+        "CONTAINER_NAME": "chrislawrence-portfolio-portfolio",
+        "INTERNAL_PORT": 5000,
+        "EXTERNAL_PORT": 8110,
+        "EXPECTED_CONTENT": "Chris Lawrence",
+        "CRITICAL": true,
+        "TIMEOUT": 5,
+        "RETRIES": 3,
+        "REPAIR_COMMANDS": [
+          "docker restart chrislawrence-portfolio-portfolio",
+          "docker restart caddy",
+          "sudo systemctl restart cloudflared"
+        ],
+        "CONTENT_CHECKS": [
+          "Chris Lawrence",
+          "Portfolio",
+          "Software Developer"
+        ]
+      },
+      
+      "n8n-local": {
+        "PATH": "http://192.168.50.70:5678",
+        "SERVICE_NAME": "n8n (Local)",
+        "CONTAINER_NAME": "n8n",
+        "INTERNAL_PORT": 5678,
+        "EXTERNAL_PORT": 5678,
+        "EXPECTED_CONTENT": "n8n",
+        "CRITICAL": true,
+        "TIMEOUT": 15,
+        "RETRIES": 3,
+        "REPAIR_COMMANDS": [
+          "docker restart n8n"
+        ],
+        "CONTENT_CHECKS": [
+          "n8n",
+          "Workflow"
+        ]
+      },
+      
+      "n8n-tailscale": {
+        "PATH": "http://hephaestus.tailaa3ef2.ts.net:5678",
+        "SERVICE_NAME": "n8n (Tailscale)",
+        "CONTAINER_NAME": "n8n",
+        "INTERNAL_PORT": 5678,
+        "EXTERNAL_PORT": 5678,
+        "EXPECTED_CONTENT": "n8n",
+        "CRITICAL": true,
+        "TIMEOUT": 15,
+        "RETRIES": 3,
+        "REPAIR_COMMANDS": [
+          "docker restart n8n"
+        ],
+        "CONTENT_CHECKS": [
+          "n8n",
+          "Workflow"
+        ]
+      },
+      
+      "n8n-public": {
+        "PATH": "https://n8n.chrislawrence.ca",
+        "SERVICE_NAME": "n8n (Public)",
+        "CONTAINER_NAME": "n8n",
+        "INTERNAL_PORT": 5678,
+        "EXTERNAL_PORT": 5678,
+        "EXPECTED_CONTENT": "n8n",
+        "CRITICAL": true,
+        "TIMEOUT": 15,
+        "RETRIES": 3,
+        "REPAIR_COMMANDS": [
+          "docker restart n8n",
+          "docker restart caddy",
+          "sudo systemctl restart cloudflared"
+        ],
+        "CONTENT_CHECKS": [
+          "n8n",
+          "Workflow"
+        ]
+      },
+      
+      "homeassistant-local": {
+        "PATH": "http://192.168.50.70:8154",
+        "SERVICE_NAME": "Home Assistant (Local)",
+        "CONTAINER_NAME": "homeassistant",
+        "INTERNAL_PORT": 8123,
+        "EXTERNAL_PORT": 8154,
+        "EXPECTED_CONTENT": "Home Assistant",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart homeassistant"
+        ],
+        "CONTENT_CHECKS": [
+          "Home Assistant"
+        ]
+      },
+      
+      "homeassistant-tailscale": {
+        "PATH": "http://hephaestus.tailaa3ef2.ts.net:8154",
+        "SERVICE_NAME": "Home Assistant (Tailscale)",
+        "CONTAINER_NAME": "homeassistant",
+        "INTERNAL_PORT": 8123,
+        "EXTERNAL_PORT": 8154,
+        "EXPECTED_CONTENT": "Home Assistant",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart homeassistant"
+        ],
+        "CONTENT_CHECKS": [
+          "Home Assistant"
+        ]
+      },
+      
+      "homeassistant-public": {
+        "PATH": "https://iot.chrislawrence.ca/homeassistant",
+        "SERVICE_NAME": "Home Assistant (Public)",
+        "CONTAINER_NAME": "homeassistant",
+        "INTERNAL_PORT": 8123,
+        "EXTERNAL_PORT": 8154,
+        "EXPECTED_CONTENT": "Home Assistant",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart homeassistant",
+          "docker restart caddy",
+          "sudo systemctl restart cloudflared"
+        ],
+        "CONTENT_CHECKS": [
+          "Home Assistant"
+        ]
+      }
+    },
+    
+    "INFRASTRUCTURE": {
+      "caddy": {
+        "CONTAINER_NAME": "caddy",
+        "INTERNAL_PORT": 80,
+        "EXTERNAL_PORT": 80,
+        "CRITICAL": true
+      },
+      "cloudflared": {
+        "SERVICE_NAME": "cloudflared",
+        "CRITICAL": true
+      },
+      "docker": {
+        "SERVICE_NAME": "docker",
+        "CRITICAL": true
+      }
+    },
+    
+    "TELEGRAM": {
+      "CHAT_ID": "your_chat_id",
+      "BOT_TOKEN": "your_bot_token"
+    },
+    
+    "MANAGEMENT_SCRIPTS": {
+      "MANAGE_SERVICES": "/home/chris/manage-services.sh",
+      "START_HOMELAB": "/home/chris/start-homelab.sh"
+    }
+}
+

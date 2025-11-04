@@ -1,0 +1,537 @@
+{
+    "DOMAIN": "192.168.50.70",
+    "NETWORK": "homelab-web",
+    "CADDY_CONTAINER": "caddy",
+    
+    "SERVICES": {
+      "caddy": {
+        "PATH": "http://192.168.50.70:80",
+        "SERVICE_NAME": "Caddy",
+        "CONTAINER_NAME": "caddy",
+        "INTERNAL_PORT": 80,
+        "EXTERNAL_PORT": 80,
+        "EXPECTED_CONTENT": "Caddy",
+        "CRITICAL": true,
+        "TIMEOUT": 5,
+        "RETRIES": 3,
+        "REPAIR_COMMANDS": [
+          "docker restart caddy"
+        ],
+        "CONTENT_CHECKS": [
+          "Caddy"
+        ]
+      },
+      
+      "portainer": {
+        "PATH": "http://192.168.50.70:9000",
+        "SERVICE_NAME": "Portainer",
+        "CONTAINER_NAME": "portainer",
+        "INTERNAL_PORT": 9000,
+        "EXTERNAL_PORT": 9000,
+        "EXPECTED_CONTENT": "Portainer",
+        "CRITICAL": true,
+        "TIMEOUT": 10,
+        "RETRIES": 3,
+        "REPAIR_COMMANDS": [
+          "docker restart portainer"
+        ],
+        "CONTENT_CHECKS": [
+          "Portainer",
+          "Docker"
+        ]
+      },
+      
+      "uptime-kuma": {
+        "PATH": "http://192.168.50.70:3001",
+        "SERVICE_NAME": "Uptime Kuma",
+        "CONTAINER_NAME": "uptime-kuma",
+        "INTERNAL_PORT": 3001,
+        "EXTERNAL_PORT": 3001,
+        "EXPECTED_CONTENT": "Uptime",
+        "CRITICAL": true,
+        "TIMEOUT": 10,
+        "RETRIES": 3,
+        "REPAIR_COMMANDS": [
+          "docker restart uptime-kuma"
+        ],
+        "CONTENT_CHECKS": [
+          "Uptime",
+          "Kuma"
+        ]
+      },
+      
+      "dashy": {
+        "PATH": "http://192.168.50.70:8082",
+        "SERVICE_NAME": "Dashy",
+        "CONTAINER_NAME": "dashy",
+        "INTERNAL_PORT": 8082,
+        "EXTERNAL_PORT": 8082,
+        "EXPECTED_CONTENT": "Dashy",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart dashy"
+        ],
+        "CONTENT_CHECKS": [
+          "Dashy",
+          "Dashboard"
+        ]
+      },
+      
+      "organizr": {
+        "PATH": "http://192.168.50.70:8086",
+        "SERVICE_NAME": "Organizr",
+        "CONTAINER_NAME": "organizr",
+        "INTERNAL_PORT": 80,
+        "EXTERNAL_PORT": 8086,
+        "EXPECTED_CONTENT": "Organizr",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart organizr"
+        ],
+        "CONTENT_CHECKS": [
+          "Organizr"
+        ]
+      },
+      
+      "it-tools": {
+        "PATH": "http://192.168.50.70:8081",
+        "SERVICE_NAME": "IT-Tools",
+        "CONTAINER_NAME": "it-tools",
+        "INTERNAL_PORT": 80,
+        "EXTERNAL_PORT": 8081,
+        "EXPECTED_CONTENT": "IT-Tools",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart it-tools"
+        ],
+        "CONTENT_CHECKS": [
+          "IT-Tools"
+        ]
+      },
+      
+      "glances": {
+        "PATH": "http://192.168.50.70:61208",
+        "SERVICE_NAME": "Glances",
+        "CONTAINER_NAME": "glances",
+        "INTERNAL_PORT": 61208,
+        "EXTERNAL_PORT": 61208,
+        "EXPECTED_CONTENT": "Glances",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart glances"
+        ],
+        "CONTENT_CHECKS": [
+          "Glances"
+        ]
+      },
+      
+      "grafana": {
+        "PATH": "http://192.168.50.70:3000",
+        "SERVICE_NAME": "Grafana",
+        "CONTAINER_NAME": "grafana",
+        "INTERNAL_PORT": 3000,
+        "EXTERNAL_PORT": 3000,
+        "EXPECTED_CONTENT": "Grafana",
+        "CRITICAL": true,
+        "TIMEOUT": 10,
+        "RETRIES": 3,
+        "REPAIR_COMMANDS": [
+          "docker restart grafana"
+        ],
+        "CONTENT_CHECKS": [
+          "Grafana",
+          "Dashboard"
+        ]
+      },
+      
+      "prometheus": {
+        "PATH": "http://192.168.50.70:9090",
+        "SERVICE_NAME": "Prometheus",
+        "CONTAINER_NAME": "prometheus",
+        "INTERNAL_PORT": 9090,
+        "EXTERNAL_PORT": 9090,
+        "EXPECTED_CONTENT": "Prometheus",
+        "CRITICAL": true,
+        "TIMEOUT": 10,
+        "RETRIES": 3,
+        "REPAIR_COMMANDS": [
+          "docker restart prometheus"
+        ],
+        "CONTENT_CHECKS": [
+          "Prometheus",
+          "Metrics"
+        ]
+      },
+      
+      "cadvisor": {
+        "PATH": "http://192.168.50.70:8080",
+        "SERVICE_NAME": "cAdvisor",
+        "CONTAINER_NAME": "cadvisor",
+        "INTERNAL_PORT": 8080,
+        "EXTERNAL_PORT": 8080,
+        "EXPECTED_CONTENT": "cAdvisor",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart cadvisor"
+        ],
+        "CONTENT_CHECKS": [
+          "cAdvisor",
+          "Container"
+        ]
+      },
+      
+      "node-exporter": {
+        "PATH": "http://192.168.50.70:9100",
+        "SERVICE_NAME": "Node Exporter",
+        "CONTAINER_NAME": "node-exporter",
+        "INTERNAL_PORT": 9100,
+        "EXTERNAL_PORT": 9100,
+        "EXPECTED_CONTENT": "Node Exporter",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart node-exporter"
+        ],
+        "CONTENT_CHECKS": [
+          "Node Exporter"
+        ]
+      },
+      
+      "portfolio": {
+        "PATH": "http://192.168.50.70:8110",
+        "SERVICE_NAME": "Portfolio",
+        "CONTAINER_NAME": "chrislawrence-portfolio-portfolio",
+        "INTERNAL_PORT": 5000,
+        "EXTERNAL_PORT": 8110,
+        "EXPECTED_CONTENT": "Chris Lawrence",
+        "CRITICAL": true,
+        "TIMEOUT": 5,
+        "RETRIES": 3,
+        "REPAIR_COMMANDS": [
+          "docker restart chrislawrence-portfolio-portfolio"
+        ],
+        "CONTENT_CHECKS": [
+          "Chris Lawrence",
+          "Portfolio",
+          "Software Developer"
+        ]
+      },
+      
+      "schedshare": {
+        "PATH": "http://192.168.50.70:8130",
+        "SERVICE_NAME": "SchedShare",
+        "CONTAINER_NAME": "schedshare",
+        "INTERNAL_PORT": 3000,
+        "EXTERNAL_PORT": 8130,
+        "EXPECTED_CONTENT": "SchedShare",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart schedshare"
+        ],
+        "CONTENT_CHECKS": [
+          "SchedShare",
+          "Schedule"
+        ]
+      },
+      
+      "capitolscope-api": {
+        "PATH": "http://192.168.50.70:8120",
+        "SERVICE_NAME": "CapitolScope API",
+        "CONTAINER_NAME": "capitolscope-api",
+        "INTERNAL_PORT": 8080,
+        "EXTERNAL_PORT": 8120,
+        "EXPECTED_CONTENT": "API",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart capitolscope-api"
+        ],
+        "CONTENT_CHECKS": [
+          "API",
+          "CapitolScope"
+        ]
+      },
+      
+      "capitolscope-frontend": {
+        "PATH": "http://192.168.50.70:8121",
+        "SERVICE_NAME": "CapitolScope Frontend",
+        "CONTAINER_NAME": "capitolscope-frontend",
+        "INTERNAL_PORT": 3000,
+        "EXTERNAL_PORT": 8121,
+        "EXPECTED_CONTENT": "CapitolScope",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart capitolscope-frontend"
+        ],
+        "CONTENT_CHECKS": [
+          "CapitolScope",
+          "Political Data"
+        ]
+      },
+      
+      "magicpages-frontend": {
+        "PATH": "http://192.168.50.70:8101",
+        "SERVICE_NAME": "MagicPages Frontend",
+        "CONTAINER_NAME": "magicpages-frontend",
+        "INTERNAL_PORT": 3000,
+        "EXTERNAL_PORT": 8101,
+        "EXPECTED_CONTENT": "MagicPages",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart magicpages-frontend"
+        ],
+        "CONTENT_CHECKS": [
+          "MagicPages",
+          "Content Management"
+        ]
+      },
+      
+      "magicpages-api": {
+        "PATH": "http://192.168.50.70:8100",
+        "SERVICE_NAME": "MagicPages API",
+        "CONTAINER_NAME": "magicpages-api",
+        "INTERNAL_PORT": 8080,
+        "EXTERNAL_PORT": 8100,
+        "EXPECTED_CONTENT": "API",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart magicpages-api"
+        ],
+        "CONTENT_CHECKS": [
+          "API",
+          "MagicPages"
+        ]
+      },
+      
+      "eventsphere": {
+        "PATH": "http://192.168.50.70:8140",
+        "SERVICE_NAME": "EventSphere",
+        "CONTAINER_NAME": "eventsphere",
+        "INTERNAL_PORT": 3000,
+        "EXTERNAL_PORT": 8140,
+        "EXPECTED_CONTENT": "EventSphere",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart eventsphere"
+        ],
+        "CONTENT_CHECKS": [
+          "EventSphere",
+          "Events"
+        ]
+      },
+      
+      "n8n": {
+        "PATH": "http://192.168.50.70:5678",
+        "SERVICE_NAME": "n8n",
+        "CONTAINER_NAME": "n8n",
+        "INTERNAL_PORT": 5678,
+        "EXTERNAL_PORT": 5678,
+        "EXPECTED_CONTENT": "n8n",
+        "CRITICAL": true,
+        "TIMEOUT": 15,
+        "RETRIES": 3,
+        "REPAIR_COMMANDS": [
+          "docker restart n8n"
+        ],
+        "CONTENT_CHECKS": [
+          "n8n",
+          "Workflow"
+        ]
+      },
+      
+      "obsidian": {
+        "PATH": "http://192.168.50.70:8060",
+        "SERVICE_NAME": "Obsidian",
+        "CONTAINER_NAME": "obsidian",
+        "INTERNAL_PORT": 8080,
+        "EXTERNAL_PORT": 8060,
+        "EXPECTED_CONTENT": "Obsidian",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart obsidian"
+        ],
+        "CONTENT_CHECKS": [
+          "Obsidian",
+          "Notes"
+        ]
+      },
+      
+      "homeassistant": {
+        "PATH": "http://192.168.50.70:8154",
+        "SERVICE_NAME": "Home Assistant",
+        "CONTAINER_NAME": "homeassistant",
+        "INTERNAL_PORT": 8123,
+        "EXTERNAL_PORT": 8154,
+        "EXPECTED_CONTENT": "Home Assistant",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart homeassistant"
+        ],
+        "CONTENT_CHECKS": [
+          "Home Assistant"
+        ]
+      },
+      
+      "mqtt-explorer": {
+        "PATH": "http://192.168.50.70:8152",
+        "SERVICE_NAME": "MQTT Explorer",
+        "CONTAINER_NAME": "mqtt-explorer",
+        "INTERNAL_PORT": 4000,
+        "EXTERNAL_PORT": 8152,
+        "EXPECTED_CONTENT": "MQTT",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart mqtt-explorer"
+        ],
+        "CONTENT_CHECKS": [
+          "MQTT",
+          "Explorer"
+        ]
+      },
+      
+      "nodered": {
+        "PATH": "http://192.168.50.70:8155",
+        "SERVICE_NAME": "Node-RED",
+        "CONTAINER_NAME": "nodered",
+        "INTERNAL_PORT": 1880,
+        "EXTERNAL_PORT": 8155,
+        "EXPECTED_CONTENT": "Node-RED",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart nodered"
+        ],
+        "CONTENT_CHECKS": [
+          "Node-RED",
+          "Flow"
+        ]
+      },
+      
+      "influxdb": {
+        "PATH": "http://192.168.50.70:8157",
+        "SERVICE_NAME": "InfluxDB",
+        "CONTAINER_NAME": "influxdb",
+        "INTERNAL_PORT": 8086,
+        "EXTERNAL_PORT": 8157,
+        "EXPECTED_CONTENT": "InfluxDB",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart influxdb"
+        ],
+        "CONTENT_CHECKS": [
+          "InfluxDB",
+          "Database"
+        ]
+      },
+      
+      "open-webui": {
+        "PATH": "http://192.168.50.70:8189",
+        "SERVICE_NAME": "Open WebUI",
+        "CONTAINER_NAME": "open-webui",
+        "INTERNAL_PORT": 8080,
+        "EXTERNAL_PORT": 8189,
+        "EXPECTED_CONTENT": "Open WebUI",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart open-webui"
+        ],
+        "CONTENT_CHECKS": [
+          "Open WebUI"
+        ]
+      },
+      
+      "openrouter-proxy": {
+        "PATH": "http://192.168.50.70:8190",
+        "SERVICE_NAME": "OpenRouter Proxy",
+        "CONTAINER_NAME": "openrouter-proxy",
+        "INTERNAL_PORT": 8080,
+        "EXTERNAL_PORT": 8190,
+        "EXPECTED_CONTENT": "OpenRouter",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart openrouter-proxy"
+        ],
+        "CONTENT_CHECKS": [
+          "OpenRouter"
+        ]
+      },
+      
+      "minecraft-map": {
+        "PATH": "http://192.168.50.70:8159",
+        "SERVICE_NAME": "Minecraft Map",
+        "CONTAINER_NAME": "minecraft-dynmap",
+        "INTERNAL_PORT": 8123,
+        "EXTERNAL_PORT": 8159,
+        "EXPECTED_CONTENT": "Dynmap",
+        "CRITICAL": false,
+        "TIMEOUT": 15,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart minecraft-dynmap"
+        ],
+        "CONTENT_CHECKS": [
+          "Dynmap",
+          "Minecraft"
+        ]
+      }
+    },
+    
+    "INFRASTRUCTURE": {
+      "caddy": {
+        "CONTAINER_NAME": "caddy",
+        "INTERNAL_PORT": 80,
+        "EXTERNAL_PORT": 80,
+        "CRITICAL": true
+      },
+      "docker": {
+        "SERVICE_NAME": "docker",
+        "CRITICAL": true
+      }
+    },
+    
+    "TELEGRAM": {
+      "CHAT_ID": "your_chat_id",
+      "BOT_TOKEN": "your_bot_token"
+    },
+    
+    "MANAGEMENT_SCRIPTS": {
+      "MANAGE_SERVICES": "/home/chris/manage-services.sh",
+      "START_HOMELAB": "/home/chris/start-homelab.sh"
+    }
+}
+

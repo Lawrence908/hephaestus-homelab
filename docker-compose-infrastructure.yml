@@ -136,7 +136,7 @@ services:
     networks:
       - homelab-web
     ports:
-      - "8082:80"
+      - "8082:8080"
     environment:
       - NODE_ENV=production
     volumes:

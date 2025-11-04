@@ -2,8 +2,6 @@ pageInfo:
   title: Hephaestus Dashboard
   description: Central hub for homelab services
   navLinks:
-    - title: Home
-      path: /
     - title: Docs
       path: https://dashy.to
 
@@ -12,61 +10,319 @@ appConfig:
   layout: auto
   language: en
   iconSize: large
-  # headerStyle: clean
-  # footerText: "Hephaestus • Ubuntu 24.04 • Docker"
 
 sections:
-  - name: Admin Services
+  # ============================================================================
+  # LOCAL NETWORK ACCESS (192.168.50.70)
+  # ============================================================================
+  - name: 🏠 Local Network - Infrastructure & Monitoring
     icon: 🛠️
     items:
-      - title: Grafana
-        url: https://monitor.chrislawrence.ca/grafana
-        icon: 📊
-      - title: Prometheus
-        url: https://monitor.chrislawrence.ca/prometheus
-        icon: 📈
-      - title: Uptime Kuma
-        url: https://monitor.chrislawrence.ca/uptime
-        icon: ❤️
+      - title: Caddy
+        url: http://192.168.50.70:80
+        icon: favicon
       - title: Portainer
-        url: https://dev.chrislawrence.ca/docker
-        icon: 🐳
-      - title: Glances
-        url: https://dev.chrislawrence.ca/system
-        icon: 🧭
+        url: http://192.168.50.70:9000
+        icon: favicon
+      - title: Uptime Kuma
+        url: http://192.168.50.70:3001
+        icon: favicon
+      - title: Dashy
+        url: http://192.168.50.70:8082
+        icon: favicon
+      - title: Organizr
+        url: http://192.168.50.70:8086
+        icon: favicon
       - title: IT-Tools
-        url: https://dev.chrislawrence.ca/tools
-        icon: 🧰
-      - title: n8n
-        url: https://n8n.chrislawrence.ca/
-        icon: 🔄
-      - title: Node-RED
-        url: https://iot.chrislawrence.ca/nodered
-        icon: 🧱
-      - title: MQTT Explorer
-        url: https://iot.chrislawrence.ca/mqtt
-        icon: 📡
-      - title: Meshtastic (Docs)
-        url: https://meshtastic.org/
-        icon: 🌐
+        url: http://192.168.50.70:8081
+        icon: favicon
+      - title: Glances
+        url: http://192.168.50.70:61208
+        icon: favicon
+      - title: Grafana
+        url: http://192.168.50.70:3000
+        icon: favicon
+      - title: Prometheus
+        url: http://192.168.50.70:9090
+        icon: favicon
+      - title: cAdvisor
+        url: http://192.168.50.70:8080
+        icon: favicon
+      - title: Node Exporter
+        url: http://192.168.50.70:9100
+        icon: favicon
 
-  - name: Applications
+  - name: 🏠 Local Network - Applications
     icon: 🚀
     items:
-      - title: MagicPages
-        url: https://magicpages.chrislawrence.ca/
-        icon: 📖
-      - title: CapitolScope
-        url: https://capitolscope.chrislawrence.ca/
-        icon: 🏛️
       - title: Portfolio
-        url: https://portfolio.chrislawrence.ca/
-        icon: 💼
+        url: http://192.168.50.70:8110
+        icon: favicon
       - title: SchedShare
-        url: https://schedshare.chrislawrence.ca/
-        icon: 📅
+        url: http://192.168.50.70:8130
+        icon: favicon
+      - title: CapitolScope API
+        url: http://192.168.50.70:8120
+        icon: favicon
+      - title: CapitolScope Frontend
+        url: http://192.168.50.70:8121
+        icon: favicon
+      - title: MagicPages Frontend
+        url: http://192.168.50.70:8101
+        icon: favicon
+      - title: MagicPages API
+        url: http://192.168.50.70:8100
+        icon: favicon
+      - title: EventSphere
+        url: http://192.168.50.70:8140
+        icon: favicon
 
+  - name: 🏠 Local Network - Development Tools
+    icon: 🔒
+    items:
+      - title: n8n
+        url: http://192.168.50.70:5678
+        icon: favicon
+      - title: Obsidian
+        url: http://192.168.50.70:8060
+        icon: favicon
 
+  - name: 🏠 Local Network - Specialized Services
+    icon: ⚡
+    items:
+      - title: Home Assistant
+        url: http://192.168.50.70:8154
+        icon: favicon
+      - title: MQTT Explorer
+        url: http://192.168.50.70:8152
+        icon: favicon
+      - title: Node-RED
+        url: http://192.168.50.70:8155
+        icon: favicon
+      - title: InfluxDB
+        url: http://192.168.50.70:8157
+        icon: favicon
+      - title: Open WebUI
+        url: http://192.168.50.70:8189
+        icon: favicon
+      - title: OpenRouter Proxy
+        url: http://192.168.50.70:8190
+        icon: favicon
+      - title: Minecraft Map
+        url: http://192.168.50.70:8159
+        icon: favicon
 
+  # ============================================================================
+  # TAILSCALE ACCESS
+  # ============================================================================
+  - name: 🔐 Tailscale - Infrastructure & Monitoring
+    icon: 🛠️
+    items:
+      - title: Caddy
+        url: http://hephaestus.tailaa3ef2.ts.net
+        icon: favicon
+      - title: Portainer
+        url: http://hephaestus.tailaa3ef2.ts.net:9000
+        icon: favicon
+      - title: Uptime Kuma
+        url: http://hephaestus.tailaa3ef2.ts.net:3001
+        icon: favicon
+      - title: Dashy
+        url: http://hephaestus.tailaa3ef2.ts.net:8082
+        icon: favicon
+      - title: Organizr
+        url: http://hephaestus.tailaa3ef2.ts.net:8086
+        icon: favicon
+      - title: IT-Tools
+        url: http://hephaestus.tailaa3ef2.ts.net:8081
+        icon: favicon
+      - title: Glances
+        url: http://hephaestus.tailaa3ef2.ts.net:61208
+        icon: favicon
+      - title: Grafana
+        url: http://hephaestus.tailaa3ef2.ts.net:3000
+        icon: favicon
+      - title: Prometheus
+        url: http://hephaestus.tailaa3ef2.ts.net:9090
+        icon: favicon
+      - title: cAdvisor
+        url: http://hephaestus.tailaa3ef2.ts.net:8080
+        icon: favicon
+      - title: Node Exporter
+        url: http://hephaestus.tailaa3ef2.ts.net:9100
+        icon: favicon
 
+  - name: 🔐 Tailscale - Applications
+    icon: 🚀
+    items:
+      - title: Portfolio
+        url: http://hephaestus.tailaa3ef2.ts.net:8110
+        icon: favicon
+      - title: SchedShare
+        url: http://hephaestus.tailaa3ef2.ts.net:8130
+        icon: favicon
+      - title: CapitolScope API
+        url: http://hephaestus.tailaa3ef2.ts.net:8120
+        icon: favicon
+      - title: CapitolScope Frontend
+        url: http://hephaestus.tailaa3ef2.ts.net:8121
+        icon: favicon
+      - title: MagicPages Frontend
+        url: http://hephaestus.tailaa3ef2.ts.net:8101
+        icon: favicon
+      - title: MagicPages API
+        url: http://hephaestus.tailaa3ef2.ts.net:8100
+        icon: favicon
+      - title: EventSphere
+        url: http://hephaestus.tailaa3ef2.ts.net:8140
+        icon: favicon
 
+  - name: 🔐 Tailscale - Development Tools
+    icon: 🔒
+    items:
+      - title: n8n
+        url: http://hephaestus.tailaa3ef2.ts.net:5678
+        icon: favicon
+      - title: Obsidian
+        url: http://hephaestus.tailaa3ef2.ts.net:8060
+        icon: favicon
+
+  - name: 🔐 Tailscale - Specialized Services
+    icon: ⚡
+    items:
+      - title: Home Assistant
+        url: http://hephaestus.tailaa3ef2.ts.net:8154
+        icon: favicon
+      - title: MQTT Explorer
+        url: http://hephaestus.tailaa3ef2.ts.net:8152
+        icon: favicon
+      - title: Node-RED
+        url: http://hephaestus.tailaa3ef2.ts.net:8155
+        icon: favicon
+      - title: InfluxDB
+        url: http://hephaestus.tailaa3ef2.ts.net:8157
+        icon: favicon
+      - title: Open WebUI
+        url: http://hephaestus.tailaa3ef2.ts.net:8189
+        icon: favicon
+      - title: OpenRouter Proxy
+        url: http://hephaestus.tailaa3ef2.ts.net:8190
+        icon: favicon
+      - title: Minecraft Map
+        url: http://hephaestus.tailaa3ef2.ts.net:8159
+        icon: favicon
+
+  # ============================================================================
+  # PUBLIC DOMAIN ACCESS
+  # ============================================================================
+  - name: 🌐 Public Domains - Infrastructure & Monitoring
+    icon: 🛠️
+    items:
+      - title: Portainer
+        url: https://dev.chrislawrence.ca/docker
+        icon: favicon
+      - title: Uptime Kuma
+        url: https://uptime.chrislawrence.ca
+        icon: favicon
+      - title: Dashy
+        url: https://dev.chrislawrence.ca
+        icon: favicon
+      - title: Organizr
+        url: https://dev.chrislawrence.ca/organizr
+        icon: favicon
+      - title: IT-Tools
+        url: https://dev.chrislawrence.ca/tools
+        icon: favicon
+      - title: Glances
+        url: https://dev.chrislawrence.ca/system
+        icon: favicon
+      - title: Grafana
+        url: https://dev.chrislawrence.ca/metrics
+        icon: favicon
+      - title: Prometheus
+        url: https://dev.chrislawrence.ca/prometheus
+        icon: favicon
+      - title: cAdvisor
+        url: https://dev.chrislawrence.ca/containers
+        icon: favicon
+      - title: Grafana (Monitor)
+        url: https://monitor.chrislawrence.ca/grafana
+        icon: favicon
+      - title: Prometheus (Monitor)
+        url: https://monitor.chrislawrence.ca/prometheus
+        icon: favicon
+      - title: Uptime Kuma (Monitor)
+        url: https://monitor.chrislawrence.ca/uptime
+        icon: favicon
+      - title: Uptime Kuma (Dev)
+        url: https://dev.chrislawrence.ca/uptime
+        icon: favicon
+
+  - name: 🌐 Public Domains - Applications
+    icon: 🚀
+    items:
+      - title: Portfolio
+        url: https://portfolio.chrislawrence.ca
+        icon: favicon
+      - title: SchedShare
+        url: https://schedshare.chrislawrence.ca
+        icon: favicon
+      - title: CapitolScope
+        url: https://capitolscope.chrislawrence.ca
+        icon: favicon
+      - title: MagicPages
+        url: https://magicpages.chrislawrence.ca
+        icon: favicon
+      - title: MagicPages API
+        url: https://magicpages-api.chrislawrence.ca
+        icon: favicon
+      - title: EventSphere
+        url: https://eventsphere.chrislawrence.ca
+        icon: favicon
+
+  - name: 🌐 Public Domains - Development Tools
+    icon: 🔒
+    items:
+      - title: n8n
+        url: https://n8n.chrislawrence.ca
+        icon: favicon
+      - title: Obsidian
+        url: https://dev.chrislawrence.ca/notes
+        icon: favicon
+
+  - name: 🌐 Public Domains - Specialized Services
+    icon: ⚡
+    items:
+      - title: Home Assistant
+        url: https://iot.chrislawrence.ca/homeassistant
+        icon: favicon
+      - title: MQTT Explorer
+        url: https://iot.chrislawrence.ca/mqtt
+        icon: favicon
+      - title: Node-RED
+        url: https://iot.chrislawrence.ca/nodered
+        icon: favicon
+      - title: Grafana IoT
+        url: https://iot.chrislawrence.ca/grafana
+        icon: favicon
+      - title: InfluxDB
+        url: https://iot.chrislawrence.ca/influxdb
+        icon: favicon
+      - title: Open WebUI
+        url: https://ai.chrislawrence.ca/webui
+        icon: favicon
+      - title: ComfyUI
+        url: https://ai.chrislawrence.ca/comfyui
+        icon: favicon
+      - title: OpenRouter Proxy
+        url: https://ai.chrislawrence.ca/openrouter
+        icon: favicon
+      - title: Model Manager
+        url: https://ai.chrislawrence.ca/models
+        icon: favicon
+      - title: Minecraft Map
+        url: https://minecraft-map.chrislawrence.ca
+        icon: favicon
+      - title: Minecraft Map (Alt)
+        url: https://minecraft.chrislawrence.ca/map
+        icon: favicon
