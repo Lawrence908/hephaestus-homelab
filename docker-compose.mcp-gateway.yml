@@ -1,0 +1,48 @@
+services:
+  mcp-gateway:
+    image: docker:cli
+    container_name: mcp-gateway
+    restart: unless-stopped
+    
+    # Network configuration - expose port for remote access
+    ports:
+      - "3000:3000"  # MCP Gateway HTTP port
+    
+    # Mount Docker socket for container management
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ~/.docker/mcp:/root/.docker/mcp
+      - ~/.mcp_env:/root/.mcp_env:ro
+    
+    # Environment variables for authentication
+    env_file:
+      - ~/.mcp_env
+    
+    # Health check
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    
+    # Command to run the gateway
+    command: >
+      sh -c "
+        # Install docker CLI plugin if not present
+        if ! docker mcp --help > /dev/null 2>&1; then
+          echo 'Docker MCP CLI not found. Please install Docker Desktop or MCP CLI plugin.';
+          exit 1;
+        fi
+        
+        # Run the gateway with network access
+        docker mcp gateway run --port 3000 --enable-all-servers
+      "
+    
+    networks:
+      - homelab
+
+networks:
+  homelab:
+    external: true
+
