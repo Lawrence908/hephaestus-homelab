@@ -1,0 +1,72 @@
+pageInfo:
+  title: Hephaestus Dashboard
+  description: Central hub for homelab services
+  navLinks:
+    - title: Home
+      path: /
+    - title: Docs
+      path: https://dashy.to
+
+appConfig:
+  theme: midnight
+  layout: auto
+  language: en
+  iconSize: large
+  # headerStyle: clean
+  # footerText: "Hephaestus • Ubuntu 24.04 • Docker"
+
+sections:
+  - name: Admin Services
+    icon: 🛠️
+    items:
+      - title: Grafana
+        url: https://monitor.chrislawrence.ca/grafana
+        icon: 📊
+      - title: Prometheus
+        url: https://monitor.chrislawrence.ca/prometheus
+        icon: 📈
+      - title: Uptime Kuma
+        url: https://monitor.chrislawrence.ca/uptime
+        icon: ❤️
+      - title: Portainer
+        url: https://dev.chrislawrence.ca/docker
+        icon: 🐳
+      - title: Glances
+        url: https://dev.chrislawrence.ca/system
+        icon: 🧭
+      - title: IT-Tools
+        url: https://dev.chrislawrence.ca/tools
+        icon: 🧰
+      - title: n8n
+        url: https://n8n.chrislawrence.ca/
+        icon: 🔄
+      - title: Node-RED
+        url: https://iot.chrislawrence.ca/nodered
+        icon: 🧱
+      - title: MQTT Explorer
+        url: https://iot.chrislawrence.ca/mqtt
+        icon: 📡
+      - title: Meshtastic (Docs)
+        url: https://meshtastic.org/
+        icon: 🌐
+
+  - name: Applications
+    icon: 🚀
+    items:
+      - title: MagicPages
+        url: https://magicpages.chrislawrence.ca/
+        icon: 📖
+      - title: CapitolScope
+        url: https://capitolscope.chrislawrence.ca/
+        icon: 🏛️
+      - title: Portfolio
+        url: https://portfolio.chrislawrence.ca/
+        icon: 💼
+      - title: SchedShare
+        url: https://schedshare.chrislawrence.ca/
+        icon: 📅
+
+
+
+
+

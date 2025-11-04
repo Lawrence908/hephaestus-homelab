@@ -116,13 +116,31 @@ services:
     networks:
       - homelab-web
     ports:
-      - "8082:80"
+      - "8086:80"
     volumes:
       - ./data/organizr:/config
     environment:
       - PUID=1000
       - PGID=1000
       - TZ=${TZ:-America/New_York}
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    security_opt:
+      - no-new-privileges:true
+
+  # Dashy - New homelab dashboard (replacing Organizr at /dashboard)
+  dashy:
+    image: lissy93/dashy:latest
+    container_name: dashy
+    restart: unless-stopped
+    networks:
+      - homelab-web
+    ports:
+      - "8082:80"
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - /home/chris/github/hephaestus-infra/dashy:/app/user-data
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
     security_opt:

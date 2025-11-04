@@ -184,28 +184,53 @@ minecraft-map.chrislawrence.ca:80 {
 # PROTECTED SUBDOMAINS (Cloudflare Access Required)
 # ============================================================================
 
+# n8n subdomain
+n8n.chrislawrence.ca:80 {
+    reverse_proxy n8n-stack-n8n-1:5678 {
+        header_up Host {host}
+        header_up X-Forwarded-Proto {scheme}
+        header_up X-Forwarded-For {remote}
+        header_up X-Real-IP {remote}
+        header_up Connection {http.request.header.Connection}
+        header_up Upgrade {http.request.header.Upgrade}
+    }
+
+    log {
+        level INFO
+        format json
+        output file /data/logs/n8n.json {
+            roll_size 15mb
+            roll_keep 8
+            roll_keep_for 168h
+        }
+    }
+}
+
+# uptime subdomain
+uptime.chrislawrence.ca:80 {
+    reverse_proxy uptime-kuma:3001 {
+        header_down -X-Frame-Options
+    }
+    log {
+        level INFO
+        format json
+        output file /data/logs/uptime-chrislawrence-ca.json {
+            roll_size 15mb
+            roll_keep 8
+            roll_keep_for 168h
+        }
+    }
+}
+
 # Development subdomain
 dev.chrislawrence.ca:80 {
-    # Dashboard/Organizr
-    handle_path /dashboard {
-        redir / 301
-    }
-    
-    handle_path /dashboard/* {
+    # Organizr (legacy dashboard, available at /organizr)
+    handle_path /organizr {
         reverse_proxy organizr:80
     }
     
-    # Infrastructure services
-    handle_path /uptime {
-        reverse_proxy uptime-kuma:3001 {
-            header_down -X-Frame-Options
-        }
-    }
-    
-    handle_path /uptime/* {
-        reverse_proxy uptime-kuma:3001 {
-            header_down -X-Frame-Options
-        }
+    handle_path /organizr/* {
+        reverse_proxy organizr:80
     }
 
     handle_path /docker {
@@ -247,15 +272,6 @@ dev.chrislawrence.ca:80 {
     handle_path /tools/* {
         reverse_proxy it-tools:80
     }
-    
-    # Application services
-    handle_path /n8n/* {
-        reverse_proxy n8n-stack-n8n-1:5678 {
-            header_up Connection {http.request.header.Connection}
-            header_up Upgrade {http.request.header.Upgrade}
-            header_down -X-Frame-Options
-        }
-    }
 
     handle_path /notes/* {
         reverse_proxy obsidian-notes:3000 {
@@ -266,9 +282,9 @@ dev.chrislawrence.ca:80 {
         }
     }
     
-    # Fallback for any unmatched paths -> send to Organizr
+    # Fallback for any unmatched paths -> send to Dashy (main dashboard)
     handle {
-        reverse_proxy organizr:80
+        reverse_proxy dashy:80
     }
     
     log {
@@ -465,243 +481,8 @@ ai.chrislawrence.ca:80 {
 }
 
 # ============================================================================
-# PORT-BASED PROXIES (for Organizr embedding)
+# PORT-BASED PROXIES - REMOVED
 # ============================================================================
-
-# Uptime Kuma proxy for Organizr embedding (port 8083)
-:8083 {
-    reverse_proxy uptime-kuma:3001 {
-        header_down -X-Frame-Options
-        header_down -Content-Security-Policy
-    }
-    header {
-        -X-Frame-Options
-        Content-Security-Policy "frame-ancestors *"
-    }
-}
-
-# Portainer proxy for Organizr embedding (port 8084)
-:8084 {
-    reverse_proxy portainer:9000 {
-        header_down -X-Frame-Options
-        header_down -Content-Security-Policy
-    }
-    header {
-        -X-Frame-Options
-        Content-Security-Policy "frame-ancestors *"
-    }
-}
-
-# Grafana proxy for Organizr embedding (port 8085)
-:8085 {
-    reverse_proxy grafana:3000 {
-        header_down -X-Frame-Options
-        header_down -Content-Security-Policy
-    }
-    header {
-        -X-Frame-Options
-        Content-Security-Policy "frame-ancestors *"
-    }
-}
-
-# Prometheus proxy for Organizr embedding (port 8086)
-:8086 {
-    reverse_proxy prometheus:9090 {
-        header_down -X-Frame-Options
-        header_down -Content-Security-Policy
-    }
-    header {
-        -X-Frame-Options
-        Content-Security-Policy "frame-ancestors *"
-    }
-}
-
-# cAdvisor proxy for Organizr embedding (port 8087)
-:8087 {
-    reverse_proxy cadvisor:8080 {
-        header_down -X-Frame-Options
-        header_down -Content-Security-Policy
-    }
-    header {
-        -X-Frame-Options
-        Content-Security-Policy "frame-ancestors *"
-    }
-}
-
-# Glances proxy for Organizr embedding (port 8088)
-:8088 {
-    reverse_proxy glances:61208 {
-        header_down -X-Frame-Options
-        header_down -Content-Security-Policy
-    }
-    header {
-        -X-Frame-Options
-        Content-Security-Policy "frame-ancestors *"
-    }
-}
-
-# IT-Tools proxy for Organizr embedding (port 8089)
-:8089 {
-    reverse_proxy it-tools:80 {
-        header_down -X-Frame-Options
-        header_down -Content-Security-Policy
-    }
-    header {
-        -X-Frame-Options
-        Content-Security-Policy "frame-ancestors *"
-    }
-}
-
-# Obsidian Notes proxy for Organizr embedding (port 8090)
-:8090 {
-    reverse_proxy obsidian-notes:3000 {
-        header_up Connection {http.request.header.Connection}
-        header_up Upgrade {http.request.header.Upgrade}
-        header_down -X-Frame-Options
-        header_down -Content-Security-Policy
-        header_up X-Forwarded-Proto http
-        header_up X-Forwarded-Ssl off
-    }
-    header {
-        -X-Frame-Options
-        Content-Security-Policy "frame-ancestors *"
-    }
-}
-
-# Magic Pages API proxy for Organizr embedding (port 8091)
-:8091 {
-    reverse_proxy magicpages-api:8000 {
-        header_up Host localhost
-        header_down -X-Frame-Options
-        header_down -Content-Security-Policy
-    }
-    header {
-        -X-Frame-Options
-        Content-Security-Policy "frame-ancestors *"
-    }
-}
-
-# n8n proxy for Organizr embedding (port 8092)
-:8092 {
-    reverse_proxy n8n-stack-n8n-1:5678 {
-        header_up Connection {http.request.header.Connection}
-        header_up Upgrade {http.request.header.Upgrade}
-        header_down -X-Frame-Options
-        header_down -Content-Security-Policy
-    }
-    header {
-        -X-Frame-Options
-        Content-Security-Policy "frame-ancestors *"
-    }
-}
-
-# MQTT Explorer proxy for Organizr embedding (port 8093)
-:8093 {
-    reverse_proxy mqtt-explorer:4000 {
-        header_down -X-Frame-Options
-        header_down -Content-Security-Policy
-    }
-    header {
-        -X-Frame-Options
-        Content-Security-Policy "frame-ancestors *"
-    }
-}
-
-# Home Assistant proxy for Organizr embedding (port 8094)
-:8094 {
-    basic_auth {
-        admin $2a$14$w9sGeM752W5OBJfOXiRSWupEl2w75yu5WNIuNF9KMjBz42B4rrR7S
-    }
-
-    reverse_proxy homeassistant:8123 {
-        header_down -X-Frame-Options
-        header_down -Content-Security-Policy
-    }
-    header {
-        -X-Frame-Options
-        Content-Security-Policy "frame-ancestors *"
-    }
-}
-
-# Node-RED proxy for Organizr embedding (port 8095)
-:8095 {
-    reverse_proxy node-red:1880 {
-        header_up Connection {http.request.header.Connection}
-        header_up Upgrade {http.request.header.Upgrade}
-        header_down -X-Frame-Options
-        header_down -Content-Security-Policy
-    }
-    header {
-        -X-Frame-Options
-        Content-Security-Policy "frame-ancestors *"
-    }
-}
-
-# Grafana IoT proxy for Organizr embedding (port 8096)
-:8096 {
-    reverse_proxy grafana-iot:3000 {
-        header_down -X-Frame-Options
-        header_down -Content-Security-Policy
-    }
-    header {
-        -X-Frame-Options
-        Content-Security-Policy "frame-ancestors *"
-    }
-}
-
-# daedalOS proxy for Organizr embedding (port 8158)
-:8158 {
-    reverse_proxy daedalos:3000 {
-        header_down -X-Frame-Options
-        header_down -Content-Security-Policy
-    }
-    header {
-        -X-Frame-Options
-        Content-Security-Policy "frame-ancestors *"
-    }
-}
-
-# AI Services proxy ports (816X ports - for Organizr embedding)
-:8161 {
-    reverse_proxy ai-openwebui:8080 {
-        header_down -X-Frame-Options
-        header_down -Content-Security-Policy
-    }
-    header {
-        -X-Frame-Options
-        Content-Security-Policy "frame-ancestors *"
-    }
-}
-
-:8162 {
-    reverse_proxy ai-comfyui:8188 {
-        header_down -X-Frame-Options
-        header_down -Content-Security-Policy
-    }
-    header {
-        -X-Frame-Options
-        Content-Security-Policy "frame-ancestors *"
-    }
-}
-
-:8163 {
-    reverse_proxy ai-openrouter-proxy:8190 {
-        header_down -X-Frame-Options
-        header_down -Content-Security-Policy
-    }
-    header {
-        -X-Frame-Options
-        Content-Security-Policy "frame-ancestors *"
-    }
-}
-
-:8164 {
-    reverse_proxy ai-model-manager:8191 {
-        header_down -X-Frame-Options
-        header_down -Content-Security-Policy
-    }
-    header {
-        -X-Frame-Options
-        Content-Security-Policy "frame-ancestors *"
-    }
-}
+# Old Organizr embedding ports (8083-8164) have been removed.
+# Access services directly via Tailscale using their port mappings,
+# or through domain-based routing via Caddy.

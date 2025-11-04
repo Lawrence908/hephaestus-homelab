@@ -45,6 +45,7 @@ Custom applications and services:
 - **IoT Services**: IoT device management (`https://iot.chrislawrence.ca`)
 - **Minecraft**: Game server (`https://minecraft.chrislawrence.ca`)
 - **AI Services**: AI inference (`https://ai.chrislawrence.ca`)
+- **n8n**: n8n automation (`https://n8n.chrislawrence.ca`)
 - **Dashboard**: Organizr dashboard (`https://dev.chrislawrence.ca/dashboard`)
 - **Docker**: Portainer (`https://dev.chrislawrence.ca/docker`)
 - **Uptime**: Uptime Kuma (`https://dev.chrislawrence.ca/uptime`)
