@@ -669,6 +669,27 @@
           "Dynmap",
           "Minecraft"
         ]
+      },
+
+      "plex": {
+        "PATH": "https://plex.chrislawrence.ca",
+        "SERVICE_NAME": "Plex",
+        "CONTAINER_NAME": "plex",
+        "INTERNAL_PORT": 32400,
+        "EXTERNAL_PORT": 8170,
+        "EXPECTED_CONTENT": "Plex",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart plex",
+          "docker restart caddy",
+          "sudo systemctl restart cloudflared"
+        ],
+        "CONTENT_CHECKS": [
+          "Plex",
+          "plex"
+        ]
       }
     },
     

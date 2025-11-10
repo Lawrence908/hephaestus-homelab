@@ -508,6 +508,25 @@
           "Dynmap",
           "Minecraft"
         ]
+      },
+
+      "plex": {
+        "PATH": "http://hephaestus.tailaa3ef2.ts.net:8170",
+        "SERVICE_NAME": "Plex",
+        "CONTAINER_NAME": "plex",
+        "INTERNAL_PORT": 32400,
+        "EXTERNAL_PORT": 8170,
+        "EXPECTED_CONTENT": "Plex",
+        "CRITICAL": false,
+        "TIMEOUT": 10,
+        "RETRIES": 2,
+        "REPAIR_COMMANDS": [
+          "docker restart plex"
+        ],
+        "CONTENT_CHECKS": [
+          "Plex",
+          "plex"
+        ]
       }
     },
     

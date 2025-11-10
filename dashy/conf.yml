@@ -76,6 +76,9 @@ sections:
       - title: EventSphere
         url: http://192.168.50.70:8140
         icon: favicon
+      - title: Plex
+        url: http://192.168.50.70:8170
+        icon: favicon
 
   - name: 🏠 Local Network - Development Tools
     icon: 🔒
@@ -175,6 +178,9 @@ sections:
         icon: favicon
       - title: EventSphere
         url: http://hephaestus.tailaa3ef2.ts.net:8140
+        icon: favicon
+      - title: Plex
+        url: http://hephaestus.tailaa3ef2.ts.net:8170
         icon: favicon
 
   - name: 🔐 Tailscale - Development Tools
@@ -278,6 +284,9 @@ sections:
         icon: favicon
       - title: EventSphere
         url: https://eventsphere.chrislawrence.ca
+        icon: favicon
+      - title: Plex
+        url: https://plex.chrislawrence.ca
         icon: favicon
 
   - name: 🌐 Public Domains - Development Tools
