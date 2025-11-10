@@ -56,12 +56,9 @@ services:
     restart: unless-stopped
     networks:
       - homelab-web
-    command: tunnel --config /etc/cloudflared/config.yml run
+    command: tunnel --no-autoupdate run
     environment:
-      - TUNNEL_ORIGIN_CERT=/etc/cloudflared/cert.pem
-    volumes:
-      - /home/chris/.cloudflared/config.yml:/etc/cloudflared/config.yml:ro
-      - /home/chris/.cloudflared/cert.pem:/etc/cloudflared/cert.pem:ro
+      - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
     depends_on:
